@@ -5,7 +5,7 @@ public class Book {
     private String nameBook;
     private String nameAuthor;
     private StatusBook statusBook;
-    private int request;
+
 
     public Book(int id, String nameBook, String nameAuthor, StatusBook statusBook) {
         this.nameBook = nameBook;

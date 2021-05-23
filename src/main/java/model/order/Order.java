@@ -34,6 +34,18 @@ public class Order {
         return book;
     }
 
+    public int getCost() {
+        return cost;
+    }
+
+    public LocalDate getDateComplete() {
+        return dateComplete;
+    }
+
+    public StatusOrder getStatusOrder() {
+        return statusOrder;
+    }
+
     public void setDateComplete(LocalDate dateComplete) {
         this.dateComplete = dateComplete;
     }

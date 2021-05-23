@@ -8,8 +8,9 @@ public interface IOrderDao {
 
     void addOrder(Order order);
     void deleteOrder(Order order);
-    ArrayList<Order> printOrder();
+    ArrayList<Order> orders();
     Order getOrder(int id);
     void setOrder(Order order);
+
 
 }

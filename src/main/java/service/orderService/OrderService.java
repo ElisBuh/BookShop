@@ -1,4 +1,4 @@
-package service;
+package service.orderService;
 
 import api.dao.IOrderDao;
 import api.service.IOrderService;
@@ -9,6 +9,8 @@ import model.book.StatusBook;
 import model.order.Order;
 import model.order.StatusOrder;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 
 public class OrderService implements IOrderService {
@@ -63,6 +65,17 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public void sortOrder(TypeSortOrder typeSortOrder) {
+        if (typeSortOrder.equals(TypeSortOrder.DATA_COMPLETE)){
+            iOrderDao.orders().stream().filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED).sorted(Comparator.comparing(Order::getDateComplete)).forEach(System.out::println);
+        }else if (typeSortOrder.equals(TypeSortOrder.COST)){
+            iOrderDao.orders().stream().sorted(Comparator.comparing(Order::getCost)).forEach(System.out::println);
+        }else if (typeSortOrder.equals(TypeSortOrder.STATUS)){
+            iOrderDao.orders().stream().sorted(Comparator.comparing(Order::getStatusOrder)).forEach(System.out::println);
+        }
+    }
+
+    @Override
     public void deleteOrder(int id) {
         iOrderDao.deleteOrder(iOrderDao.getOrder(id));
     }
@@ -74,7 +87,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public void printOrder() {
-        for (Order order : iOrderDao.printOrder()) System.out.println(order);
+        for (Order order : iOrderDao.orders()) System.out.println(order);
     }
 
 }

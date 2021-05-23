@@ -20,7 +20,7 @@ public class OrderDao implements IOrderDao {
     }
 
     @Override
-    public ArrayList<Order> printOrder() {
+    public ArrayList<Order> orders() {
         return orders;
     }
 

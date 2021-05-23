@@ -3,6 +3,7 @@ package api.service;
 import model.book.Book;
 import model.order.Order;
 import model.order.StatusOrder;
+import service.orderService.TypeSortOrder;
 
 public interface IOrderService {
 
@@ -12,4 +13,5 @@ public interface IOrderService {
     void printOrder();
     void deleteOrder(int id);
     Order getOrder(int id);
+    void sortOrder(TypeSortOrder typeSortOrder);
 }

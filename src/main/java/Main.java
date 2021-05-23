@@ -1,15 +1,17 @@
 
-import api.dao.IStorageDao;
 import api.service.IBookService;
 import api.service.IOrderService;
 import api.service.IRequestService;
 import api.service.IStorageService;
-import dao.StorageDao;
 import model.order.StatusOrder;
 import service.BookService;
 import service.OrderService;
 import service.RequestService;
 import service.StorageService;
+
+
+import java.time.LocalDate;
+
 
 public class Main {
 
@@ -17,12 +19,12 @@ public class Main {
         IBookService book =  new BookService();
         IRequestService request = new RequestService();
         IStorageService storageService = new StorageService(request);
-        book.addBook("War and Peace","Leo Tolstoy");
-        book.addBook("War and Peace2","Leo Tolstoy");
-        book.addBook("War and Peace3","Leo Tolstoy");
-        book.addBook("War and Peace4","Leo Tolstoy");
-        book.addBook("War and Peace5","Leo Tolstoy");
-        book.addBook("War and Peace6","Leo Tolstoy");
+        book.addBook("War and Peace","Leo Tolstoy",25, LocalDate.of(2001,05,25));
+        book.addBook("War and Peace2","Leo Tolstoy",38, LocalDate.of(2001,05,25));
+        book.addBook("War and Peace3","Leo Tolstoy",52, LocalDate.of(2001,05,25));
+        book.addBook("War and Peace4","Leo Tolstoy",55, LocalDate.of(2001,05,25));
+        book.addBook("War and Peace5","Leo Tolstoy",21, LocalDate.of(2001,05,25));
+        book.addBook("War and Peace6","Leo Tolstoy",26, LocalDate.of(2001,05,25));
 
         storageService.addBook(book.getBook(1));
         storageService.addBook(book.getBook(3));
@@ -50,7 +52,7 @@ public class Main {
 //        storageService.addBook(book.getBook(2));
 
 //        order.cancelOrder(2);
-//        order.changeStatusOrder(3, StatusOrder.COMPLETED);
+        order.changeStatusOrder(3, StatusOrder.COMPLETED);
         request.addRequest(book.getBook(5));
         request.addRequest(book.getBook(5));
 

@@ -7,14 +7,18 @@ import dao.BookDao;
 import model.book.Book;
 import model.book.StatusBook;
 
+
+import java.time.LocalDate;
+
+
 public class BookService implements IBookService {
     private int id;
     private IBookDao iBookDao = new BookDao();
 
     @Override
-    public void addBook(String nameBook, String nameAuthor) {
+    public void addBook(String nameBook, String nameAuthor, int price, LocalDate date) {
         id++;
-        iBookDao.addBook(new Book(id, nameBook, nameAuthor, StatusBook.ABSENT));
+        iBookDao.addBook(new Book(id, nameBook, nameAuthor, date, price, StatusBook.ABSENT));
     }
 
     @Override

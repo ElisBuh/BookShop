@@ -9,6 +9,8 @@ import model.book.StatusBook;
 import model.order.Order;
 import model.order.StatusOrder;
 
+import java.time.LocalDate;
+
 public class OrderService implements IOrderService {
     private int idOrder;
     private Order order;
@@ -49,6 +51,7 @@ public class OrderService implements IOrderService {
         order = iOrderDao.getOrder(id);
         if (statusOrder.equals(StatusOrder.COMPLETED)) {
             Book book = order.getBook();
+            order.setDateComplete(LocalDate.now());
             if (iRequestService.isRequest(book)) {
                 System.out.println("Статус изменить нельзя, так как книги нет на складе");
                 return;

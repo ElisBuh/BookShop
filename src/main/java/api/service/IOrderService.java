@@ -17,4 +17,5 @@ public interface IOrderService {
     Order getOrder(int id);
     void sortOrder(TypeSortOrder typeSortOrder);
     void printOrderCompleteForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
+    void printAmountOfMoneyForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
 }

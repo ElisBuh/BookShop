@@ -67,6 +67,7 @@ public class Main {
         System.out.println("");
 //        order.sortOrder(TypeSortOrder.DATA_COMPLETE);
         order.printOrderCompleteForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1));
+        order.printAmountOfMoneyForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1));
         System.out.println("");
         request.print();
         System.out.println("");

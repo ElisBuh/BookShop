@@ -8,9 +8,12 @@ import model.book.Book;
 import model.book.StatusBook;
 import model.order.Order;
 import model.order.StatusOrder;
+import service.TimeUtil;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 
@@ -83,17 +86,26 @@ public class OrderService implements IOrderService {
         }
     }
 
-    public boolean isBetweenHalfOpen(LocalDate lt, LocalDate startTime, LocalDate endTime) {
-        return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
-    }
-
     @Override
     public void printOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         iOrderDao.orders().stream()
                 .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
-                .filter(order ->isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
+                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
                 .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
                 .forEach(System.out::println);
+    }
+
+    @Override
+    public void printAmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+        int sum = 0;
+        for (Order order: iOrderDao.orders()){
+            if (order.getStatusOrder() == StatusOrder.COMPLETED){
+                if (TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd)){
+                    sum = sum + order.getCost();
+                }
+            }
+        }
+        System.out.println(sum);
     }
 
     @Override

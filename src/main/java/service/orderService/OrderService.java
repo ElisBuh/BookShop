@@ -109,6 +109,14 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
+        return (int) iOrderDao.orders().stream()
+                .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
+                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
+                .count();
+    }
+
+    @Override
     public void deleteOrder(int id) {
         iOrderDao.deleteOrder(iOrderDao.getOrder(id));
     }

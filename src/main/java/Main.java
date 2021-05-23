@@ -29,9 +29,9 @@ public class Main {
         book.addBook("War and Peace6","Leo Tolstoy4",26, LocalDate.of(2021,6,12));
 
 
-        storageService.addBook(book.getBook(1));
-        storageService.addBook(book.getBook(3));
-        storageService.addBook(book.getBook(6));
+        storageService.addBook(book.getBook(1),LocalDate.of(2021,5,12));
+        storageService.addBook(book.getBook(3),LocalDate.of(2021,3,12));
+        storageService.addBook(book.getBook(6),LocalDate.of(2020,1,12));
 
 
         book.print();
@@ -74,7 +74,7 @@ public class Main {
         System.out.println("");
 //        request.sortRequest(TypeSortRequest.COUNT_REQUEST);
 //        storageService.printStorageBook();
-
+        storageService.printBookNotSellMoreSixMonth();
 
 
 

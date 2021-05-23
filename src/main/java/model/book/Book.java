@@ -11,6 +11,7 @@ public class Book {
     private LocalDate date;
     private int price;
     private StatusBook statusBook;
+    private LocalDate dateReceipt;
 
 
     public Book(int id, String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook) {
@@ -32,6 +33,14 @@ public class Book {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public LocalDate getDateReceipt() {
+        return dateReceipt;
+    }
+
+    public void setDateReceipt(LocalDate dateReceipt) {
+        this.dateReceipt = dateReceipt;
     }
 
     public int getId() {

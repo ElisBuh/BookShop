@@ -8,9 +8,8 @@ import model.book.Book;
 import model.book.StatusBook;
 import model.order.Order;
 import model.order.StatusOrder;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 public class OrderService implements IOrderService {
     private int idOrder;
@@ -66,6 +65,11 @@ public class OrderService implements IOrderService {
     @Override
     public void deleteOrder(int id) {
         iOrderDao.deleteOrder(iOrderDao.getOrder(id));
+    }
+
+    @Override
+    public Order getOrder(int id) {
+        return iOrderDao.getOrder(id);
     }
 
     @Override

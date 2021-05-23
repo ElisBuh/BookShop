@@ -30,6 +30,10 @@ public class Book {
         return nameAuthor;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
     public int getId() {
         return id;
     }

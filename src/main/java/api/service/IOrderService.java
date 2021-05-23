@@ -1,6 +1,7 @@
 package api.service;
 
 import model.book.Book;
+import model.order.Order;
 import model.order.StatusOrder;
 
 public interface IOrderService {
@@ -10,4 +11,5 @@ public interface IOrderService {
     void changeStatusOrder(int id, StatusOrder statusOrder);
     void printOrder();
     void deleteOrder(int id);
+    Order getOrder(int id);
 }

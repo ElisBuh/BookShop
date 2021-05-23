@@ -22,6 +22,11 @@ public class BookDao implements IBookDao {
     }
 
     @Override
+    public ArrayList<Book> getBooks() {
+        return books;
+    }
+
+    @Override
     public void print() {
         books.forEach(System.out::println);
     }

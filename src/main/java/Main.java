@@ -4,10 +4,11 @@ import api.service.IOrderService;
 import api.service.IRequestService;
 import api.service.IStorageService;
 import model.order.StatusOrder;
-import service.BookService;
+import service.bookSevvice.BookService;
 import service.OrderService;
 import service.RequestService;
 import service.StorageService;
+import service.bookSevvice.TypeSortBook;
 
 
 import java.time.LocalDate;
@@ -19,12 +20,13 @@ public class Main {
         IBookService book =  new BookService();
         IRequestService request = new RequestService();
         IStorageService storageService = new StorageService(request);
-        book.addBook("War and Peace","Leo Tolstoy",25, LocalDate.of(2001,05,25));
-        book.addBook("War and Peace2","Leo Tolstoy",38, LocalDate.of(2001,05,25));
-        book.addBook("War and Peace3","Leo Tolstoy",52, LocalDate.of(2001,05,25));
-        book.addBook("War and Peace4","Leo Tolstoy",55, LocalDate.of(2001,05,25));
-        book.addBook("War and Peace5","Leo Tolstoy",21, LocalDate.of(2001,05,25));
-        book.addBook("War and Peace6","Leo Tolstoy",26, LocalDate.of(2001,05,25));
+        book.addBook("War and Peace","Leo Tolstoy",25, LocalDate.of(2001,5,25));
+        book.addBook("War and Peace3","Leo Tolstoy1",38, LocalDate.of(2011,1,22));
+        book.addBook("War and Peace1","Leo Tolstoy3",52, LocalDate.of(2041,2,15));
+        book.addBook("War and Peace5","Leo Tolstoy2",55, LocalDate.of(2061,4,23));
+        book.addBook("War and Peace4","Leo Tolstoy5",21, LocalDate.of(2012,10,1));
+        book.addBook("War and Peace6","Leo Tolstoy4",26, LocalDate.of(2021,6,12));
+
 
         storageService.addBook(book.getBook(1));
         storageService.addBook(book.getBook(3));
@@ -32,6 +34,8 @@ public class Main {
 
 
         book.print();
+        System.out.println("");
+        book.sortBooks(TypeSortBook.IN_STOCK);
         System.out.println("");
         storageService.printStorageBook();
 
@@ -62,6 +66,7 @@ public class Main {
         request.print();
         System.out.println("");
 //        storageService.printStorageBook();
+
 
 
 

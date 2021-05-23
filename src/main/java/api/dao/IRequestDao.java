@@ -3,6 +3,8 @@ package api.dao;
 import model.book.Book;
 import model.storage.Request;
 
+import java.util.ArrayList;
+
 public interface IRequestDao {
 
     void add(Request request);
@@ -18,6 +20,8 @@ public interface IRequestDao {
     void deleteRequest(Request request);
 
     Request getRequest(Book book);
+
+    ArrayList<Request> getRequests();
 
     void print();
 }

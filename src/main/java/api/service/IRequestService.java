@@ -2,6 +2,7 @@ package api.service;
 
 import model.book.Book;
 import model.storage.Request;
+import service.requestService.TypeSortRequest;
 
 public interface IRequestService {
 
@@ -15,6 +16,7 @@ public interface IRequestService {
 
     Request getRequest(Book book);
 
+    void sortRequest(TypeSortRequest typeSortRequest);
 
     void print();
 }

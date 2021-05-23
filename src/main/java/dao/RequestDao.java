@@ -34,6 +34,11 @@ public class RequestDao implements IRequestDao {
     }
 
     @Override
+    public ArrayList<Request> getRequests() {
+        return requests;
+    }
+
+    @Override
     public Integer indexRequest(Request request) {
         return requests.indexOf(request);
     }

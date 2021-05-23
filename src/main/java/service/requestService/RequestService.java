@@ -1,10 +1,12 @@
-package service;
+package service.requestService;
 
 import api.dao.IRequestDao;
 import api.service.IRequestService;
 import dao.RequestDao;
 import model.book.Book;
 import model.storage.Request;
+
+import java.util.Comparator;
 
 public class RequestService implements IRequestService {
     private int idRequest;
@@ -47,5 +49,14 @@ public class RequestService implements IRequestService {
     @Override
     public void print() {
         iRequestDao.print();
+    }
+
+    @Override
+    public void sortRequest(TypeSortRequest typeSortRequest) {
+        if (typeSortRequest.equals(TypeSortRequest.NAME_BOOK)){
+            iRequestDao.getRequests().stream().sorted(Comparator.comparing(o -> o.getBook().getNameBook())).forEach(System.out::println);
+        }else if (typeSortRequest.equals(TypeSortRequest.COUNT_REQUEST)){
+            iRequestDao.getRequests().stream().sorted(Comparator.comparing(Request::getCountRequest)).forEach(System.out::println);
+        }
     }
 }

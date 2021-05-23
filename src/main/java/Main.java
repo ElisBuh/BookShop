@@ -6,9 +6,10 @@ import api.service.IStorageService;
 import model.order.StatusOrder;
 import service.bookSevvice.BookService;
 import service.orderService.OrderService;
-import service.RequestService;
+import service.requestService.RequestService;
 import service.StorageService;
 import service.orderService.TypeSortOrder;
+import service.requestService.TypeSortRequest;
 
 
 import java.time.LocalDate;
@@ -58,15 +59,16 @@ public class Main {
 //        order.cancelOrder(2);
         order.changeStatusOrder(1, StatusOrder.COMPLETED);
         request.addRequest(book.getBook(5));
-        request.addRequest(book.getBook(5));
+        request.addRequest(book.getBook(3));
 
         System.out.println("");
         order.printOrder();
         System.out.println("");
-        order.sortOrder(TypeSortOrder.DATA_COMPLETE);
+//        order.sortOrder(TypeSortOrder.DATA_COMPLETE);
         System.out.println("");
         request.print();
         System.out.println("");
+//        request.sortRequest(TypeSortRequest.COUNT_REQUEST);
 //        storageService.printStorageBook();
 
 

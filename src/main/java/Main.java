@@ -58,6 +58,7 @@ public class Main {
 
 //        order.cancelOrder(2);
         order.changeStatusOrder(1, StatusOrder.COMPLETED);
+        order.changeStatusOrder(2, StatusOrder.COMPLETED);
         request.addRequest(book.getBook(5));
         request.addRequest(book.getBook(3));
 
@@ -65,6 +66,7 @@ public class Main {
         order.printOrder();
         System.out.println("");
 //        order.sortOrder(TypeSortOrder.DATA_COMPLETE);
+        order.printOrderCompleteForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1));
         System.out.println("");
         request.print();
         System.out.println("");

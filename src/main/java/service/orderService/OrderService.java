@@ -9,6 +9,7 @@ import model.book.StatusBook;
 import model.order.Order;
 import model.order.StatusOrder;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
@@ -67,12 +68,32 @@ public class OrderService implements IOrderService {
     @Override
     public void sortOrder(TypeSortOrder typeSortOrder) {
         if (typeSortOrder.equals(TypeSortOrder.DATA_COMPLETE)){
-            iOrderDao.orders().stream().filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED).sorted(Comparator.comparing(Order::getDateComplete)).forEach(System.out::println);
+            iOrderDao.orders().stream()
+                    .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
+                    .sorted(Comparator.comparing(Order::getDateComplete))
+                    .forEach(System.out::println);
         }else if (typeSortOrder.equals(TypeSortOrder.COST)){
-            iOrderDao.orders().stream().sorted(Comparator.comparing(Order::getCost)).forEach(System.out::println);
+            iOrderDao.orders().stream()
+                    .sorted(Comparator.comparing(Order::getCost))
+                    .forEach(System.out::println);
         }else if (typeSortOrder.equals(TypeSortOrder.STATUS)){
-            iOrderDao.orders().stream().sorted(Comparator.comparing(Order::getStatusOrder)).forEach(System.out::println);
+            iOrderDao.orders().stream()
+                    .sorted(Comparator.comparing(Order::getStatusOrder))
+                    .forEach(System.out::println);
         }
+    }
+
+    public boolean isBetweenHalfOpen(LocalDate lt, LocalDate startTime, LocalDate endTime) {
+        return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
+    }
+
+    @Override
+    public void printOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+        iOrderDao.orders().stream()
+                .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
+                .filter(order ->isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
+                .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
+                .forEach(System.out::println);
     }
 
     @Override

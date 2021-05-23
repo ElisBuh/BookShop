@@ -5,6 +5,8 @@ import model.order.Order;
 import model.order.StatusOrder;
 import service.orderService.TypeSortOrder;
 
+import java.time.LocalDate;
+
 public interface IOrderService {
 
     void creatOrder(String nameClient, Book book);
@@ -14,4 +16,5 @@ public interface IOrderService {
     void deleteOrder(int id);
     Order getOrder(int id);
     void sortOrder(TypeSortOrder typeSortOrder);
+    void printOrderCompleteForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
 }

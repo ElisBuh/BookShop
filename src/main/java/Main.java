@@ -56,6 +56,7 @@ public class Main {
 
 //        storageService.addBook(book.getBook(2));
 
+
 //        order.cancelOrder(2);
         order.changeStatusOrder(1, StatusOrder.COMPLETED);
         order.changeStatusOrder(2, StatusOrder.COMPLETED);

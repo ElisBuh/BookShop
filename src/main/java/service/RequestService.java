@@ -3,8 +3,13 @@ package service;
 import api.dao.IRequestDao;
 import api.service.IRequestService;
 import dao.RequestDao;
-import model.book.Book;
-import model.storage.Request;
+import model.Book;
+import model.Request;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RequestService implements IRequestService {
     private int idRequest;
@@ -45,7 +50,20 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public void print() {
-        iRequestDao.print();
+    public List<Request> listRequests() {
+        return new ArrayList<>(iRequestDao.getRequests());
+    }
+
+    @Override
+    public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
+        return iRequestDao.getRequests().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
+
+    }
+    private Comparator<Request> comparator(TypeSortRequest typeSortRequest){
+        if (typeSortRequest.equals(TypeSortRequest.NAME_BOOK)){
+            return Comparator.comparing(o -> o.getBook().getNameBook());
+        }else{
+            return Comparator.comparing(Request::getCountRequest);
+        }
     }
 }

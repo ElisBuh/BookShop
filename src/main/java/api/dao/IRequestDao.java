@@ -1,7 +1,9 @@
 package api.dao;
 
-import model.book.Book;
-import model.storage.Request;
+import model.Book;
+import model.Request;
+
+import java.util.List;
 
 public interface IRequestDao {
 
@@ -19,5 +21,6 @@ public interface IRequestDao {
 
     Request getRequest(Book book);
 
-    void print();
+    List<Request> getRequests();
+
 }

@@ -1,12 +1,13 @@
 package dao;
 
 import api.dao.IOrderDao;
-import model.order.Order;
+import model.Order;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDao implements IOrderDao {
-    private final ArrayList<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
 
     @Override
     public void addOrder(Order order) {
@@ -20,8 +21,8 @@ public class OrderDao implements IOrderDao {
     }
 
     @Override
-    public ArrayList<Order> printOrder() {
-        return orders;
+    public List<Order> orders() {
+        return new ArrayList<>(orders);
     }
 
     @Override

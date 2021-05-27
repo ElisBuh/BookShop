@@ -1,4 +1,4 @@
-package model.order;
+package model;
 
 public enum StatusOrder {
     NEW,

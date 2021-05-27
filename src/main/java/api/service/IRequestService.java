@@ -1,7 +1,10 @@
 package api.service;
 
-import model.book.Book;
-import model.storage.Request;
+import model.Book;
+import model.Request;
+import service.TypeSortRequest;
+
+import java.util.List;
 
 public interface IRequestService {
 
@@ -15,6 +18,7 @@ public interface IRequestService {
 
     Request getRequest(Book book);
 
+    List<Request> sortRequest(TypeSortRequest typeSortRequest);
 
-    void print();
+    List<Request> listRequests();
 }

@@ -4,8 +4,10 @@ import api.dao.IStorageDao;
 import api.service.IRequestService;
 import api.service.IStorageService;
 import dao.StorageDao;
-import model.book.Book;
-import model.book.StatusBook;
+import model.Book;
+import model.StatusBook;
+
+import java.time.LocalDate;
 
 public class StorageService implements IStorageService {
 
@@ -17,8 +19,9 @@ public class StorageService implements IStorageService {
     }
 
     @Override
-    public void addBook(Book book) {
+    public void addBook(Book book,LocalDate localDate) {
         book.setStatusBook(StatusBook.INSTOCK);
+        book.setDateReceipt(localDate);
         storageDao.addBook(book);
         if (iRequestService.isRequest(book)) {
             iRequestService.deleteRequest(iRequestService.getRequest(book));
@@ -29,6 +32,13 @@ public class StorageService implements IStorageService {
     public void deleteBook(Book book) {
         book.setStatusBook(StatusBook.ABSENT);
         storageDao.delete(book);
+    }
+
+    @Override
+    public void printBookNotSellMoreSixMonth() {
+        storageDao.getBooks().stream()
+                .filter(book ->LocalDate.now().minusMonths(6).isAfter(book.getDateReceipt()))
+                .forEach(System.out::println);
     }
 
     @Override

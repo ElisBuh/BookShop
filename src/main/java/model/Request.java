@@ -1,6 +1,4 @@
-package model.storage;
-
-import model.book.Book;
+package model;
 
 public class Request {
     private Integer id;

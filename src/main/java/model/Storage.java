@@ -1,4 +1,4 @@
-package model.storage;
+package model;
 
 
 public class Storage {

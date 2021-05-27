@@ -4,11 +4,10 @@ import api.dao.IStorageDao;
 import api.service.IRequestService;
 import api.service.IStorageService;
 import dao.StorageDao;
-import model.book.Book;
-import model.book.StatusBook;
+import model.Book;
+import model.StatusBook;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
 public class StorageService implements IStorageService {
 

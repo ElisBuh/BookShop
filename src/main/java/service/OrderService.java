@@ -1,27 +1,26 @@
-package service.orderService;
+package service;
 
 import api.dao.IOrderDao;
 import api.service.IOrderService;
 import api.service.IRequestService;
 import dao.OrderDao;
-import model.book.Book;
-import model.book.StatusBook;
-import model.order.Order;
-import model.order.StatusOrder;
-import service.TimeUtil;
+import model.Book;
+import model.StatusBook;
+import model.Order;
+import model.StatusOrder;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Optional;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 public class OrderService implements IOrderService {
     private int idOrder;
-    private Order order;
-    private IRequestService iRequestService;
-    private IOrderDao iOrderDao = new OrderDao();
+    private final IRequestService iRequestService;
+    private final IOrderDao iOrderDao = new OrderDao();
 
 
     public OrderService(IRequestService iRequestService) {
@@ -33,7 +32,7 @@ public class OrderService implements IOrderService {
     public void creatOrder(String nameClient, Book book) {
         if (book.getStatusBook().equals(StatusBook.INSTOCK)) {
             idOrder++;
-            order = new Order(idOrder, nameClient, book, StatusOrder.NEW);
+            Order order = new Order(idOrder, nameClient, book, StatusOrder.NEW);
             iOrderDao.addOrder(order);
         } else {
             if (iRequestService.isRequest(book)) {
@@ -54,7 +53,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public void changeStatusOrder(int id, StatusOrder statusOrder) {
-        order = iOrderDao.getOrder(id);
+        Order order = iOrderDao.getOrder(id);
         if (statusOrder.equals(StatusOrder.COMPLETED)) {
             Book book = order.getBook();
             order.setDateComplete(LocalDate.now());
@@ -69,34 +68,42 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void sortOrder(TypeSortOrder typeSortOrder) {
-        if (typeSortOrder.equals(TypeSortOrder.DATA_COMPLETE)){
-            iOrderDao.orders().stream()
-                    .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
-                    .sorted(Comparator.comparing(Order::getDateComplete))
-                    .forEach(System.out::println);
-        }else if (typeSortOrder.equals(TypeSortOrder.COST)){
-            iOrderDao.orders().stream()
-                    .sorted(Comparator.comparing(Order::getCost))
-                    .forEach(System.out::println);
-        }else if (typeSortOrder.equals(TypeSortOrder.STATUS)){
-            iOrderDao.orders().stream()
-                    .sorted(Comparator.comparing(Order::getStatusOrder))
-                    .forEach(System.out::println);
+    public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
+        return iOrderDao.orders().stream()
+                .filter(predicate(typeSortOrder))
+                .sorted(comparator(typeSortOrder))
+                .collect(Collectors.toList());
+
+    }
+    private Predicate<Order> predicate(TypeSortOrder typeSortOrder){
+        if (typeSortOrder == TypeSortOrder.DATA_COMPLETE){
+        return order -> order.getStatusOrder() == StatusOrder.COMPLETED;
         }
+        else return order -> true;
+    }
+
+    private Comparator<Order> comparator(TypeSortOrder typeSortOrder){
+        if (typeSortOrder.equals(TypeSortOrder.DATA_COMPLETE)){
+            return Comparator.comparing(Order::getDateComplete);
+        }else if (typeSortOrder.equals(TypeSortOrder.COST)){
+            return Comparator.comparing(Order::getCost);
+        }else if (typeSortOrder.equals(TypeSortOrder.STATUS)){
+            return Comparator.comparing(Order::getStatusOrder);
+        }
+        return null;
     }
 
     @Override
-    public void printOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
-        iOrderDao.orders().stream()
+    public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+        return iOrderDao.orders().stream()
                 .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
                 .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
-                .forEach(System.out::println);
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void printAmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+    public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         int sum = 0;
         for (Order order: iOrderDao.orders()){
             if (order.getStatusOrder() == StatusOrder.COMPLETED){
@@ -105,7 +112,7 @@ public class OrderService implements IOrderService {
                 }
             }
         }
-        System.out.println(sum);
+        return sum;
     }
 
     @Override
@@ -127,8 +134,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void printOrder() {
-        for (Order order : iOrderDao.orders()) System.out.println(order);
+    public List<Order> ListOrders() {
+        return new ArrayList<>(iOrderDao.orders());
+
     }
 
 }

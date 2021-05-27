@@ -1,14 +1,13 @@
 package api.dao;
 
-import model.book.Book;
+import model.Book;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IBookDao {
 
     void addBook(Book book);
     Book getBook(int id);
-    ArrayList<Book> getBooks();
+    List<Book> getBooks();
 
-    void print();
 }

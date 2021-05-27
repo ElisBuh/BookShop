@@ -1,4 +1,4 @@
-package model.book;
+package model;
 
 public enum StatusBook {
     INSTOCK,

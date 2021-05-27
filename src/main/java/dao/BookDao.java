@@ -1,12 +1,13 @@
 package dao;
 
 import api.dao.IBookDao;
-import model.book.Book;
+import model.Book;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BookDao implements IBookDao {
-    private final ArrayList<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
 
     @Override
     public void addBook(Book book) {
@@ -22,12 +23,9 @@ public class BookDao implements IBookDao {
     }
 
     @Override
-    public ArrayList<Book> getBooks() {
-        return books;
+    public List<Book> getBooks() {
+        return new ArrayList<>(books);
     }
 
-    @Override
-    public void print() {
-        books.forEach(System.out::println);
-    }
+
 }

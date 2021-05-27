@@ -1,4 +1,4 @@
-package service.requestService;
+package service;
 
 public enum TypeSortRequest {
     COUNT_REQUEST,

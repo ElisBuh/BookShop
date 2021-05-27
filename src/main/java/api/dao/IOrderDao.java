@@ -1,14 +1,14 @@
 package api.dao;
 
-import model.order.Order;
+import model.Order;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IOrderDao {
 
     void addOrder(Order order);
     void deleteOrder(Order order);
-    ArrayList<Order> orders();
+    List<Order> orders();
     Order getOrder(int id);
     void setOrder(Order order);
 

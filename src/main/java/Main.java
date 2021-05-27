@@ -3,13 +3,8 @@ import api.service.IBookService;
 import api.service.IOrderService;
 import api.service.IRequestService;
 import api.service.IStorageService;
-import model.order.StatusOrder;
-import service.bookSevvice.BookService;
-import service.orderService.OrderService;
-import service.requestService.RequestService;
-import service.StorageService;
-import service.orderService.TypeSortOrder;
-import service.requestService.TypeSortRequest;
+import model.StatusOrder;
+import service.*;
 
 
 import java.time.LocalDate;
@@ -33,15 +28,15 @@ public class Main {
         storageService.addBook(book.getBook(6),LocalDate.of(2020,1,12));
 
 
-        book.print();
+        book.getListBooks().forEach(System.out::println);
         System.out.println("");
-//        book.sortBooks(TypeSortBook.IN_STOCK);
+        book.ListSortBooks(TypeSortBook.IN_STOCK).forEach(System.out::println);
         System.out.println("");
         storageService.printStorageBook();
 
         storageService.deleteBook(book.getBook(3));
         System.out.println("");
-        book.print();
+        book.getListBooks().forEach(System.out::println);
 
         IOrderService order = new OrderService(request);
         order.creatOrder("Bill",book.getBook(1));
@@ -63,18 +58,18 @@ public class Main {
         request.addRequest(book.getBook(3));
 
         System.out.println("");
-        order.printOrder();
+        order.ListOrders().forEach(System.out::println);
         System.out.println("");
-//        order.sortOrder(TypeSortOrder.DATA_COMPLETE);
-//        order.printOrderCompleteForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1));
-//        order.printAmountOfMoneyForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1));
+//        order.listSortOrder(TypeSortOrder.STATUS).forEach(System.out::println);
+//        order.listOrderCompleteForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1)).forEach(System.out::println);
+        System.out.println(order.AmountOfMoneyForPeriodForTime(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1)));
 //        System.out.println(order.countCompleteOrders(LocalDate.of(2021,1,1),LocalDate.of(2022,1,1)));
-        System.out.println("");
-        request.print();
-        System.out.println("");
-//        request.sortRequest(TypeSortRequest.COUNT_REQUEST);
+//        System.out.println("");
+        request.listRequests().forEach(System.out::println);
+//        System.out.println("");
+//        request.sortRequest(TypeSortRequest.NAME_BOOK).forEach(System.out::println);
 //        storageService.printStorageBook();
-        storageService.printBookNotSellMoreSixMonth();
+//        storageService.printBookNotSellMoreSixMonth();
 
 
 

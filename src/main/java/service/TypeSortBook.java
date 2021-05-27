@@ -1,4 +1,4 @@
-package service.bookSevvice;
+package service;
 
 public enum TypeSortBook {
     NAME_BOOK,

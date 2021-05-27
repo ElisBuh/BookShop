@@ -1,14 +1,15 @@
 package dao;
 
 import api.dao.IRequestDao;
-import model.book.Book;
-import model.storage.Request;
+import model.Book;
+import model.Request;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RequestDao implements IRequestDao {
 
-    private final ArrayList<Request> requests = new ArrayList<>();
+    private final List<Request> requests = new ArrayList<>();
 
     @Override
     public void add(Request request) {
@@ -34,8 +35,8 @@ public class RequestDao implements IRequestDao {
     }
 
     @Override
-    public ArrayList<Request> getRequests() {
-        return requests;
+    public List<Request> getRequests() {
+        return new ArrayList<>(requests);
     }
 
     @Override
@@ -61,8 +62,4 @@ public class RequestDao implements IRequestDao {
         return null;
     }
 
-    @Override
-    public void print() {
-        requests.forEach(System.out::println);
-    }
 }

@@ -1,15 +1,18 @@
-package service.bookSevvice;
+package service;
 
 
 import api.dao.IBookDao;
 import api.service.IBookService;
 import dao.BookDao;
-import model.book.Book;
-import model.book.StatusBook;
+import model.Book;
+import model.StatusBook;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class BookService implements IBookService {
@@ -23,16 +26,21 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void sortBooks(TypeSortBook typeSortBook) {
+    public List<Book> ListSortBooks(TypeSortBook typeSortBook) {
+        return iBookDao.getBooks().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
+    }
+
+    private Comparator<Book> comparator(TypeSortBook typeSortBook){
         if (typeSortBook.equals(TypeSortBook.NAME_BOOK)){
-            iBookDao.getBooks().stream().sorted(Comparator.comparing(Book::getNameBook)).forEach(System.out::println);
+            return Comparator.comparing(Book::getNameBook);
         }else if (typeSortBook.equals(TypeSortBook.DATE)){
-            iBookDao.getBooks().stream().sorted(Comparator.comparing(Book::getDate)).forEach(System.out::println);
+            return Comparator.comparing(Book::getDate);
         }else if (typeSortBook.equals(TypeSortBook.PRICE)){
-            iBookDao.getBooks().stream().sorted(Comparator.comparing(Book::getPrice)).forEach(System.out::println);
+            return Comparator.comparing(Book::getPrice);
         }else if (typeSortBook.equals(TypeSortBook.IN_STOCK)){
-            iBookDao.getBooks().stream().sorted(Comparator.comparing(Book::getStatusBook)).forEach(System.out::println);
+            return Comparator.comparing(Book::getStatusBook);
         }
+        else return null;
     }
 
     @Override
@@ -41,9 +49,8 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void print() {
-        iBookDao.print();
+    public List<Book> getListBooks() {
+       return new ArrayList<>(iBookDao.getBooks());
     }
-
 
 }

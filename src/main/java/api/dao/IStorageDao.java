@@ -1,14 +1,14 @@
 package api.dao;
 
-import model.book.Book;
+import model.Book;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IStorageDao {
 
     void addBook(Book book);
     void delete(Book book);
-    ArrayList<Book> getBooks();
+    List<Book> getBooks();
 
     void print();
 }

@@ -1,16 +1,17 @@
 package dao;
 
 import api.dao.IStorageDao;
-import model.book.Book;
+import model.Book;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StorageDao implements IStorageDao {
-    private final ArrayList<Book> bookStorage = new ArrayList<>();
+    private final List<Book> bookStorage = new ArrayList<>();
 
     @Override
-    public ArrayList<Book> getBooks() {
-        return bookStorage;
+    public List<Book> getBooks() {
+        return new ArrayList<>(bookStorage);
     }
 
     @Override

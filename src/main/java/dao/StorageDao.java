@@ -24,8 +24,4 @@ public class StorageDao implements IStorageDao {
         bookStorage.remove(book);
     }
 
-    @Override
-    public void print() {
-        bookStorage.forEach(System.out::println);
-    }
 }

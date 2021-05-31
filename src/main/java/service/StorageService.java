@@ -8,6 +8,8 @@ import model.Book;
 import model.StatusBook;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StorageService implements IStorageService {
 
@@ -42,8 +44,8 @@ public class StorageService implements IStorageService {
     }
 
     @Override
-    public void printStorageBook() {
-        storageDao.print();
+    public List<Book> getStorageBooks() {
+        return new ArrayList<>(storageDao.getBooks());
     }
 
 }

@@ -30,9 +30,9 @@ public class Main {
 
         book.getListBooks().forEach(System.out::println);
         System.out.println("");
-        book.ListSortBooks(TypeSortBook.IN_STOCK).forEach(System.out::println);
+//        book.ListSortBooks(TypeSortBook.IN_STOCK).forEach(System.out::println);
         System.out.println("");
-        storageService.printStorageBook();
+        storageService.getStorageBooks().forEach(System.out::println);
 
         storageService.deleteBook(book.getBook(3));
         System.out.println("");

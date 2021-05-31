@@ -10,5 +10,4 @@ public interface IStorageDao {
     void delete(Book book);
     List<Book> getBooks();
 
-    void print();
 }

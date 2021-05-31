@@ -3,6 +3,7 @@ package api.service;
 import model.Book;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface IStorageService {
 
@@ -10,5 +11,5 @@ public interface IStorageService {
     void deleteBook(Book book);
     void printBookNotSellMoreSixMonth();
 
-    void printStorageBook();
+    List<Book> getStorageBooks();
 }

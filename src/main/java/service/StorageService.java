@@ -13,15 +13,23 @@ import java.util.List;
 
 public class StorageService implements IStorageService {
 
-    private IStorageDao storageDao = new StorageDao();
+    private IStorageDao storageDao = StorageDao.getStorageDaoInstance();
     private IRequestService iRequestService;
+    private static volatile StorageService storageServiceInstance;
 
-    public StorageService(IRequestService iRequestService) {
-        this.iRequestService = iRequestService;
+    public StorageService() {
+        this.iRequestService = RequestService.getRequestServiceInstance();
+    }
+
+    public static StorageService getStorageServiceInstance() {
+        if (storageServiceInstance == null) {
+            storageServiceInstance = new StorageService();
+        }
+        return storageServiceInstance;
     }
 
     @Override
-    public void addBook(Book book,LocalDate localDate) {
+    public void addBook(Book book, LocalDate localDate) {
         book.setStatusBook(StatusBook.INSTOCK);
         book.setDateReceipt(localDate);
         storageDao.addBook(book);
@@ -39,7 +47,7 @@ public class StorageService implements IStorageService {
     @Override
     public void printBookNotSellMoreSixMonth() {
         storageDao.getBooks().stream()
-                .filter(book ->LocalDate.now().minusMonths(6).isAfter(book.getDateReceipt()))
+                .filter(book -> LocalDate.now().minusMonths(6).isAfter(book.getDateReceipt()))
                 .forEach(System.out::println);
     }
 

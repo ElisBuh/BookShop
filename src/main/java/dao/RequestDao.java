@@ -10,6 +10,17 @@ import java.util.List;
 public class RequestDao implements IRequestDao {
 
     private final List<Request> requests = new ArrayList<>();
+    private static volatile RequestDao requestDaoInstance;
+
+    private RequestDao() {
+    }
+
+    public static RequestDao getRequestDaoInstance() {
+        if (requestDaoInstance == null) {
+            requestDaoInstance = new RequestDao();
+        }
+        return requestDaoInstance;
+    }
 
     @Override
     public void add(Request request) {
@@ -18,20 +29,12 @@ public class RequestDao implements IRequestDao {
 
     @Override
     public Boolean isBook(Book book) {
-        for (Request request : requests) {
-            if (request.getBook().equals(book)) return true;
-        }
-        return false;
+        return requests.stream().anyMatch(request -> request.getBook().equals(book));
     }
 
     @Override
     public Request changeCountRequest(Book book) {
-        for (Request request : requests) {
-            if (request.getBook().equals(book)) {
-                return request;
-            }
-        }
-        return null;
+        return requests.stream().filter(request -> request.getBook().equals(book)).findFirst().orElse(null);
     }
 
     @Override
@@ -56,10 +59,7 @@ public class RequestDao implements IRequestDao {
 
     @Override
     public Request getRequest(Book book) {
-        for (Request request : requests) {
-            if (isBook(book)) return request;
-        }
-        return null;
+        return requests.stream().filter(request -> isBook(book)).findFirst().orElse(null);
     }
 
 }

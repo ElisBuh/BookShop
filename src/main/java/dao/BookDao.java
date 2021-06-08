@@ -8,6 +8,18 @@ import java.util.List;
 
 public class BookDao implements IBookDao {
     private final List<Book> books = new ArrayList<>();
+    private static volatile BookDao bookDaoInstance;
+
+    private BookDao() {
+    }
+
+
+    public static BookDao getBookDaoInstance() {
+        if (bookDaoInstance == null) {
+            bookDaoInstance = new BookDao();
+        }
+        return bookDaoInstance;
+    }
 
     @Override
     public void addBook(Book book) {
@@ -16,10 +28,7 @@ public class BookDao implements IBookDao {
 
     @Override
     public Book getBook(int id) {
-        for (Book book : books) {
-            if (book.getId() == id) return book;
-        }
-        return null;
+        return books.stream().filter(book -> book.getId() == id).findFirst().orElse(null);
     }
 
     @Override

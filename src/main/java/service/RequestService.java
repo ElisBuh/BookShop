@@ -13,8 +13,18 @@ import java.util.stream.Collectors;
 
 public class RequestService implements IRequestService {
     private int idRequest;
-    private IRequestDao iRequestDao = new RequestDao();
+    private IRequestDao iRequestDao = RequestDao.getRequestDaoInstance();
+    private static volatile RequestService requestServiceInstance;
 
+    private RequestService() {
+    }
+
+    public static RequestService getRequestServiceInstance() {
+        if (requestServiceInstance == null) {
+            requestServiceInstance = new RequestService();
+        }
+        return requestServiceInstance;
+    }
 
     @Override
     public void addRequest(Book book) {
@@ -59,10 +69,11 @@ public class RequestService implements IRequestService {
         return iRequestDao.getRequests().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
 
     }
-    private Comparator<Request> comparator(TypeSortRequest typeSortRequest){
-        if (typeSortRequest.equals(TypeSortRequest.NAME_BOOK)){
+
+    private Comparator<Request> comparator(TypeSortRequest typeSortRequest) {
+        if (typeSortRequest.equals(TypeSortRequest.NAME_BOOK)) {
             return Comparator.comparing(o -> o.getBook().getNameBook());
-        }else{
+        } else {
             return Comparator.comparing(Request::getCountRequest);
         }
     }

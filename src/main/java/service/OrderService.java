@@ -20,12 +20,18 @@ import java.util.stream.Collectors;
 public class OrderService implements IOrderService {
     private int idOrder;
     private final IRequestService iRequestService;
-    private final IOrderDao iOrderDao = new OrderDao();
+    private final IOrderDao iOrderDao = OrderDao.getOrderDaoInstance();
+    private static volatile OrderService orderServiceInstance;
 
+    private OrderService() {
+        this.iRequestService = RequestService.getRequestServiceInstance();
+    }
 
-    public OrderService(IRequestService iRequestService) {
-        this.iRequestService = iRequestService;
-
+    public static OrderService getOrderServiceInstance() {
+        if (orderServiceInstance == null) {
+            orderServiceInstance = new OrderService();
+        }
+        return orderServiceInstance;
     }
 
     @Override
@@ -75,19 +81,19 @@ public class OrderService implements IOrderService {
                 .collect(Collectors.toList());
 
     }
-    private Predicate<Order> predicate(TypeSortOrder typeSortOrder){
-        if (typeSortOrder == TypeSortOrder.DATA_COMPLETE){
-        return order -> order.getStatusOrder() == StatusOrder.COMPLETED;
-        }
-        else return order -> true;
+
+    private Predicate<Order> predicate(TypeSortOrder typeSortOrder) {
+        if (typeSortOrder == TypeSortOrder.DATA_COMPLETE) {
+            return order -> order.getStatusOrder() == StatusOrder.COMPLETED;
+        } else return order -> true;
     }
 
-    private Comparator<Order> comparator(TypeSortOrder typeSortOrder){
-        if (typeSortOrder.equals(TypeSortOrder.DATA_COMPLETE)){
+    private Comparator<Order> comparator(TypeSortOrder typeSortOrder) {
+        if (typeSortOrder.equals(TypeSortOrder.DATA_COMPLETE)) {
             return Comparator.comparing(Order::getDateComplete);
-        }else if (typeSortOrder.equals(TypeSortOrder.COST)){
+        } else if (typeSortOrder.equals(TypeSortOrder.COST)) {
             return Comparator.comparing(Order::getCost);
-        }else if (typeSortOrder.equals(TypeSortOrder.STATUS)){
+        } else if (typeSortOrder.equals(TypeSortOrder.STATUS)) {
             return Comparator.comparing(Order::getStatusOrder);
         }
         return null;
@@ -96,30 +102,25 @@ public class OrderService implements IOrderService {
     @Override
     public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         return iOrderDao.orders().stream()
-                .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
-                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
+                .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
-        int sum = 0;
-        for (Order order: iOrderDao.orders()){
-            if (order.getStatusOrder() == StatusOrder.COMPLETED){
-                if (TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd)){
-                    sum = sum + order.getCost();
-                }
-            }
-        }
-        return sum;
+        return iOrderDao.orders().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                .mapToInt(Order::getCost)
+                .sum();
     }
 
     @Override
     public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
         return (int) iOrderDao.orders().stream()
-                .filter(order -> order.getStatusOrder()==StatusOrder.COMPLETED)
-                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(),localDateStart,localDateEnd))
+                .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .count();
     }
 

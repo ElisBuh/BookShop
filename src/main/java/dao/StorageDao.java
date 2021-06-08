@@ -8,6 +8,17 @@ import java.util.List;
 
 public class StorageDao implements IStorageDao {
     private final List<Book> bookStorage = new ArrayList<>();
+    private static volatile StorageDao storageDaoInstance;
+
+    private StorageDao() {
+    }
+
+    public static StorageDao getStorageDaoInstance() {
+        if (storageDaoInstance == null) {
+            storageDaoInstance = new StorageDao();
+        }
+        return storageDaoInstance;
+    }
 
     @Override
     public List<Book> getBooks() {

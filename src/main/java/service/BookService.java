@@ -17,7 +17,18 @@ import java.util.stream.Collectors;
 
 public class BookService implements IBookService {
     private int id;
-    private IBookDao iBookDao = new BookDao();
+    private final IBookDao iBookDao = BookDao.getBookDaoInstance();
+    private static volatile BookService bookServiceInstance;
+
+    private BookService() {
+    }
+
+    public static BookService getBookServiceInstance() {
+        if (bookServiceInstance == null) {
+            bookServiceInstance = new BookService();
+        }
+        return bookServiceInstance;
+    }
 
     @Override
     public void addBook(String nameBook, String nameAuthor, int price, LocalDate date) {
@@ -30,17 +41,16 @@ public class BookService implements IBookService {
         return iBookDao.getBooks().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
     }
 
-    private Comparator<Book> comparator(TypeSortBook typeSortBook){
-        if (typeSortBook.equals(TypeSortBook.NAME_BOOK)){
+    private Comparator<Book> comparator(TypeSortBook typeSortBook) {
+        if (typeSortBook.equals(TypeSortBook.NAME_BOOK)) {
             return Comparator.comparing(Book::getNameBook);
-        }else if (typeSortBook.equals(TypeSortBook.DATE)){
+        } else if (typeSortBook.equals(TypeSortBook.DATE)) {
             return Comparator.comparing(Book::getDate);
-        }else if (typeSortBook.equals(TypeSortBook.PRICE)){
+        } else if (typeSortBook.equals(TypeSortBook.PRICE)) {
             return Comparator.comparing(Book::getPrice);
-        }else if (typeSortBook.equals(TypeSortBook.IN_STOCK)){
+        } else if (typeSortBook.equals(TypeSortBook.IN_STOCK)) {
             return Comparator.comparing(Book::getStatusBook);
-        }
-        else return null;
+        } else return null;
     }
 
     @Override
@@ -50,7 +60,7 @@ public class BookService implements IBookService {
 
     @Override
     public List<Book> getListBooks() {
-       return new ArrayList<>(iBookDao.getBooks());
+        return new ArrayList<>(iBookDao.getBooks());
     }
 
 }

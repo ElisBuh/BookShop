@@ -13,9 +13,9 @@ import java.time.LocalDate;
 public class Main {
 
     public static void main(String[] args) {
-        IBookService book =  new BookService();
-        IRequestService request = new RequestService();
-        IStorageService storageService = new StorageService(request);
+        IBookService book =  BookService.getBookServiceInstance();
+        IRequestService request = RequestService.getRequestServiceInstance();
+        IStorageService storageService = StorageService.getStorageServiceInstance();
         book.addBook("War and Peace","Leo Tolstoy",25, LocalDate.of(2001,5,25));
         book.addBook("War and Peace3","Leo Tolstoy1",38, LocalDate.of(2011,1,22));
         book.addBook("War and Peace1","Leo Tolstoy3",52, LocalDate.of(2041,2,15));
@@ -38,7 +38,7 @@ public class Main {
         System.out.println("");
         book.getListBooks().forEach(System.out::println);
 
-        IOrderService order = new OrderService(request);
+        IOrderService order = OrderService.getOrderServiceInstance();
         order.creatOrder("Bill",book.getBook(1));
         order.creatOrder("Gill",book.getBook(2));
         order.creatOrder("Dill",book.getBook(2));

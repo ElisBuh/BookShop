@@ -23,8 +23,8 @@ public class RequestDao implements IRequestDao {
     }
 
     @Override
-    public void add(Request request) {
-        requests.add(request);
+    public boolean add(Request request) {
+        return requests.add(request);
     }
 
     @Override

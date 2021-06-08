@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IRequestDao {
 
-    void add(Request request);
+    boolean add(Request request);
 
     Boolean isBook(Book book);
 

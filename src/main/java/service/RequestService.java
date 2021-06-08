@@ -2,6 +2,7 @@ package service;
 
 import api.dao.IRequestDao;
 import api.service.IRequestService;
+import api.service.IStorageService;
 import dao.RequestDao;
 import model.Book;
 import model.Request;
@@ -13,10 +14,12 @@ import java.util.stream.Collectors;
 
 public class RequestService implements IRequestService {
     private int idRequest;
-    private IRequestDao iRequestDao = RequestDao.getRequestDaoInstance();
+    private final IRequestDao iRequestDao;
+
     private static volatile RequestService requestServiceInstance;
 
     private RequestService() {
+        iRequestDao = RequestDao.getRequestDaoInstance();
     }
 
     public static RequestService getRequestServiceInstance() {
@@ -27,13 +30,16 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public void addRequest(Book book) {
+    public boolean addRequest(Book book) {
+        boolean isReq;
         if (isRequest(book)) {
             changeCountRequest(book);
+            isReq = true;
         } else {
             idRequest++;
-            iRequestDao.add(new Request(idRequest, book));
+            isReq = iRequestDao.add(new Request(idRequest, book));
         }
+        return isReq;
     }
 
     @Override

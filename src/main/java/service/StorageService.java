@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 public class StorageService implements IStorageService {
 
     private final IStorageDao storageDao = StorageDao.getStorageDaoInstance();
-    private final IRequestService iRequestService;
+    private final IRequestService requestService;
     private static volatile StorageService storageServiceInstance;
 
     private StorageService() {
-        this.iRequestService = RequestService.getRequestServiceInstance();
+        this.requestService = RequestService.getRequestServiceInstance();
     }
 
     public static StorageService getStorageServiceInstance() {
@@ -33,12 +33,14 @@ public class StorageService implements IStorageService {
     public boolean addBook(Book book, LocalDate localDate) {
         boolean isBook = false;
         try {
-            if (storageDao.getBooks().contains(book)) return false;
+            if (storageDao.getBooks().contains(book)) {
+                return false;
+            }
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
             storageDao.addBook(book);
-            if (iRequestService.isRequest(book)) {
-                iRequestService.deleteRequest(iRequestService.getRequest(book));
+            if (requestService.isRequest(book)) {
+                requestService.deleteRequest(requestService.getRequest(book));
             }
             isBook = true;
         } catch (NullPointerException e) {

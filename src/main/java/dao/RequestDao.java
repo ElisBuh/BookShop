@@ -29,12 +29,16 @@ public class RequestDao implements IRequestDao {
 
     @Override
     public Boolean isBook(Book book) {
-        return requests.stream().anyMatch(request -> request.getBook().equals(book));
+        return requests.stream()
+                .anyMatch(request -> request.getBook().equals(book));
     }
 
     @Override
     public Request changeCountRequest(Book book) {
-        return requests.stream().filter(request -> request.getBook().equals(book)).findFirst().orElse(null);
+        return requests.stream().filter(request -> request.getBook()
+                .equals(book))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -59,7 +63,9 @@ public class RequestDao implements IRequestDao {
 
     @Override
     public Request getRequest(Book book) {
-        return requests.stream().filter(request -> isBook(book)).findFirst().orElse(null);
+        return requests.stream().filter(request -> isBook(book))
+                .findFirst()
+                .orElse(null);
     }
 
 }

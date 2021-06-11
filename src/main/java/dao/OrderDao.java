@@ -38,11 +38,17 @@ public class OrderDao implements IOrderDao {
 
     @Override
     public Order getOrder(int id) {
-        return orders.stream().filter(order -> order.getId() == id).findFirst().orElse(null);
+        return orders.stream()
+                .filter(order -> order.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public void setOrder(Order order) {
-        orders.stream().filter(e -> e.getId() == order.getId()).mapToInt(orders::indexOf).forEach(i -> orders.set(i, order));
+        orders.stream()
+                .filter(e -> e.getId() == order.getId())
+                .mapToInt(orders::indexOf)
+                .forEach(i -> orders.set(i, order));
     }
 }

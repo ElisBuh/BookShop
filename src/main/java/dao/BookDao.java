@@ -28,7 +28,10 @@ public class BookDao implements IBookDao {
 
     @Override
     public Book getBook(int id) {
-        return books.stream().filter(book -> book.getId() == id).findFirst().orElse(null);
+        return books.stream()
+                .filter(book -> book.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

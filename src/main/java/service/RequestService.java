@@ -2,7 +2,6 @@ package service;
 
 import api.dao.IRequestDao;
 import api.service.IRequestService;
-import api.service.IStorageService;
 import dao.RequestDao;
 import model.Book;
 import model.Request;
@@ -14,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class RequestService implements IRequestService {
     private int idRequest;
-    private final IRequestDao iRequestDao;
+    private final IRequestDao requestDao;
 
     private static volatile RequestService requestServiceInstance;
 
     private RequestService() {
-        iRequestDao = RequestDao.getRequestDaoInstance();
+        requestDao = RequestDao.getRequestDaoInstance();
     }
 
     public static RequestService getRequestServiceInstance() {
@@ -37,42 +36,42 @@ public class RequestService implements IRequestService {
             isReq = true;
         } else {
             idRequest++;
-            isReq = iRequestDao.add(new Request(idRequest, book));
+            isReq = requestDao.add(new Request(idRequest, book));
         }
         return isReq;
     }
 
     @Override
     public Boolean isRequest(Book book) {
-        return iRequestDao.isBook(book);
+        return requestDao.isBook(book);
     }
 
     @Override
     public void changeCountRequest(Book book) {
-        Request request = iRequestDao.changeCountRequest(book);
-        Integer index = iRequestDao.indexRequest(request);
+        Request request = requestDao.changeCountRequest(book);
+        Integer index = requestDao.indexRequest(request);
         request.setCountRequest(request.getCountRequest() + 1);
-        iRequestDao.setRequest(index, request);
+        requestDao.setRequest(index, request);
     }
 
     @Override
     public Request getRequest(Book book) {
-        return iRequestDao.getRequest(book);
+        return requestDao.getRequest(book);
     }
 
     @Override
     public void deleteRequest(Request request) {
-        iRequestDao.deleteRequest(request);
+        requestDao.deleteRequest(request);
     }
 
     @Override
     public List<Request> listRequests() {
-        return new ArrayList<>(iRequestDao.getRequests());
+        return new ArrayList<>(requestDao.getRequests());
     }
 
     @Override
     public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
-        return iRequestDao.getRequests().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
+        return requestDao.getRequests().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
 
     }
 

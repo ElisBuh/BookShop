@@ -1,10 +1,11 @@
 package ui.actions.order;
 
-import ui.Starter;
 import ui.actions.AbstractAction;
 import ui.actions.ConsoleHelper;
 import ui.actions.IAction;
 import ui.menu.Builder;
+import ui.menu.Menu;
+import ui.menu.MenuController;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,8 +31,7 @@ public class TimeForPeriodForTime extends AbstractAction implements IAction {
         } else if (point == 3) {
             ConsoleHelper.writeMessage(orderService.countCompleteOrders(dateStart, dateEnd) + "");
         } else {
-            Builder builder = new Builder(Starter.orderMenu());
-            builder.buildMenu();
+            MenuController.getMenuControllerInstance().run();
         }
     }
 }

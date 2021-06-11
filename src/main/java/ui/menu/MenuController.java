@@ -1,22 +1,31 @@
 package ui.menu;
 
-public class MenuController {
-    private final Builder builder;
-    private final Navigator navigator;
+import ui.actions.ConsoleHelper;
 
-    public MenuController(Navigator navigator) {
-        this.navigator = navigator;
-        this.builder = new Builder(navigator.getCurrentMenu());
+public class MenuController {
+    private final Builder builder = Builder.getBuilderInstance();
+    private final Navigator navigator = Navigator.getNavigatorInstance();
+
+    private static volatile MenuController menuControllerInstance;
+
+    private MenuController() {
+    }
+
+    public static MenuController getMenuControllerInstance() {
+        if (menuControllerInstance == null) {
+            menuControllerInstance = new MenuController();
+        }
+        return menuControllerInstance;
     }
 
     public void run() {
-        int point = navigator.navigate();
-        try {
-            navigator.getCurrentMenu().getMenuItem()[point].getAction().execute();
-            builder.buildMenu();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Не вверный ввод.");
-            run();
+        builder.buildMenu();
+        navigator.setCurrentMenu(builder.getRootMenu());
+        navigator.printMenu();
+        while (true) {
+            navigator.navigate(ConsoleHelper.readInt());
+            navigator.printMenu();
+
         }
     }
 

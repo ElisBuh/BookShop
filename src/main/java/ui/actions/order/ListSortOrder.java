@@ -1,11 +1,10 @@
 package ui.actions.order;
 
 import service.TypeSortOrder;
-import ui.Starter;
 import ui.actions.AbstractAction;
 import ui.actions.ConsoleHelper;
 import ui.actions.IAction;
-import ui.menu.Builder;
+
 
 public class ListSortOrder extends AbstractAction implements IAction {
     @Override
@@ -26,8 +25,7 @@ public class ListSortOrder extends AbstractAction implements IAction {
             typeSortOrder = TypeSortOrder.STATUS;
         } else {
             ConsoleHelper.writeMessage("Не вверный ввод");
-            Builder builder = new Builder(Starter.orderMenu());
-            builder.buildMenu();
+
         }
         orderService.listSortOrder(typeSortOrder).forEach(System.out::println);
     }

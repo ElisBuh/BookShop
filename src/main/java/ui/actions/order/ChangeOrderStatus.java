@@ -1,11 +1,11 @@
 package ui.actions.order;
 
 import model.StatusOrder;
-import ui.Starter;
 import ui.actions.AbstractAction;
 import ui.actions.ConsoleHelper;
 import ui.actions.IAction;
 import ui.menu.Builder;
+import ui.menu.MenuController;
 
 public class ChangeOrderStatus extends AbstractAction implements IAction {
     @Override
@@ -28,8 +28,7 @@ public class ChangeOrderStatus extends AbstractAction implements IAction {
             statusOrder = StatusOrder.CANCEL;
         } else {
             ConsoleHelper.writeMessage("Не вверный ввод");
-            Builder builder = new Builder(Starter.orderMenu());
-            builder.buildMenu();
+            MenuController.getMenuControllerInstance().run();
         }
         orderService.changeStatusOrder(id, statusOrder);
     }

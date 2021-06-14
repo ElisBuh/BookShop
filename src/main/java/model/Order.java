@@ -51,24 +51,21 @@ public class Order {
 
     @Override
     public String toString() {
-        if (dateComplete==null){
-            return "Order{" +
-                    "id=" + id +
-                    ", nameClient='" + nameClient + '\'' +
-                    ", book=" + book +
-                    ", cost=" + cost +
-                    ", statusOrder=" + statusOrder +
-                    '}';
+        if (dateComplete == null) {
+            return "Заказ" +
+                    "id: " + id +
+                    ", Имя Клиента " + nameClient + '\'' +
+                    ", " + book +
+                    ", Стоимость: " + cost +
+                    ", Статус заказа: " + statusOrder;
+        } else {
+            return "Заказ" +
+                    "id: " + id +
+                    ", Имя Клиента " + nameClient + '\'' +
+                    ", " + book +
+                    ", Стоимость: " + cost +
+                    ", Дата выполнения: " + dateComplete +
+                    ", Статус заказа: " + statusOrder;
         }
-        else {
-        return "Order{" +
-                "id=" + id +
-                ", nameClient='" + nameClient + '\'' +
-                ", book=" + book +
-                ", cost=" + cost +
-                ", dateComplete=" + dateComplete +
-                ", statusOrder=" + statusOrder +
-                '}';
-    }
     }
 }

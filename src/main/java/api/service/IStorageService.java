@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface IStorageService {
 
-    void addBook(Book book, LocalDate localDate);
-    void deleteBook(Book book);
-    void printBookNotSellMoreSixMonth();
+    boolean addBook(Book book, LocalDate localDate);
+
+    boolean deleteBook(Book book);
+
+    List<Book> printBookNotSellMoreSixMonth();
 
     List<Book> getStorageBooks();
 }

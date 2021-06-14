@@ -10,37 +10,63 @@ import model.StatusBook;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StorageService implements IStorageService {
 
-    private IStorageDao storageDao = new StorageDao();
-    private IRequestService iRequestService;
+    private final IStorageDao storageDao = StorageDao.getStorageDaoInstance();
+    private final IRequestService requestService;
+    private static volatile StorageService storageServiceInstance;
 
-    public StorageService(IRequestService iRequestService) {
-        this.iRequestService = iRequestService;
+    private StorageService() {
+        this.requestService = RequestService.getRequestServiceInstance();
     }
 
-    @Override
-    public void addBook(Book book,LocalDate localDate) {
-        book.setStatusBook(StatusBook.INSTOCK);
-        book.setDateReceipt(localDate);
-        storageDao.addBook(book);
-        if (iRequestService.isRequest(book)) {
-            iRequestService.deleteRequest(iRequestService.getRequest(book));
+    public static StorageService getStorageServiceInstance() {
+        if (storageServiceInstance == null) {
+            storageServiceInstance = new StorageService();
         }
+        return storageServiceInstance;
     }
 
     @Override
-    public void deleteBook(Book book) {
-        book.setStatusBook(StatusBook.ABSENT);
-        storageDao.delete(book);
+    public boolean addBook(Book book, LocalDate localDate) {
+        boolean isBook = false;
+        try {
+            if (storageDao.getBooks().contains(book)) {
+                return false;
+            }
+            book.setStatusBook(StatusBook.INSTOCK);
+            book.setDateReceipt(localDate);
+            storageDao.addBook(book);
+            if (requestService.isRequest(book)) {
+                requestService.deleteRequest(requestService.getRequest(book));
+            }
+            isBook = true;
+        } catch (NullPointerException e) {
+            System.err.println("Такой книги нет");
+        }
+        return isBook;
     }
 
     @Override
-    public void printBookNotSellMoreSixMonth() {
-        storageDao.getBooks().stream()
-                .filter(book ->LocalDate.now().minusMonths(6).isAfter(book.getDateReceipt()))
-                .forEach(System.out::println);
+    public boolean deleteBook(Book book) {
+        boolean isBook = false;
+        try {
+            book.setStatusBook(StatusBook.ABSENT);
+            storageDao.delete(book);
+            isBook = true;
+        } catch (NullPointerException e) {
+            System.err.println("Такой книги нет");
+        }
+        return isBook;
+    }
+
+    @Override
+    public List<Book> printBookNotSellMoreSixMonth() {
+        return storageDao.getBooks().stream()
+                .filter(book -> LocalDate.now().minusMonths(6).isAfter(book.getDateReceipt()))
+                .collect(Collectors.toList());
     }
 
     @Override

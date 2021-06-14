@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IRequestService {
 
-    void addRequest(Book book);
+    boolean addRequest(Book book);
 
     Boolean isRequest(Book book);
 

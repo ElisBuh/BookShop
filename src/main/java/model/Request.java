@@ -30,10 +30,9 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" +
-                "id=" + id +
-                ", book=" + book +
-                ", countRequest=" + countRequest +
-                '}';
+        return "Запрос " +
+                "id:" + id +
+                ", Книга " + book +
+                ", Количество запросов: " + countRequest;
     }
 }

@@ -10,8 +10,11 @@ import java.util.List;
 
 public interface IBookService {
 
-    void addBook(String nameBook, String nameAuthor,int price, LocalDate date);
+    void addBook(String nameBook, String nameAuthor, int price, LocalDate date);
+
     Book getBook(int id);
-    List<Book> ListSortBooks(TypeSortBook typeSortBook);
+
+    List<Book> listSortBooks(TypeSortBook typeSortBook);
+
     List<Book> getListBooks();
 }

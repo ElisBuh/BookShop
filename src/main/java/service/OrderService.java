@@ -8,16 +8,21 @@ import model.Book;
 import model.StatusBook;
 import model.Order;
 import model.StatusOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
 public class OrderService implements IOrderService {
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+
     private int idOrder;
     private final IRequestService requestService;
     private final IOrderDao orderDao = OrderDao.getOrderDaoInstance();
@@ -53,12 +58,17 @@ public class OrderService implements IOrderService {
 
     @Override
     public void cancelOrder(int id) {
+        try {
         changeStatusOrder(id, StatusOrder.CANCEL);
+        } catch (NoSuchElementException e){
+            log.error("cancelOrder id: {}, {}", id, e.toString());
+        }
 
     }
 
     @Override
     public void changeStatusOrder(int id, StatusOrder statusOrder) {
+        try {
         Order order = orderDao.getOrder(id);
         if (statusOrder.equals(StatusOrder.COMPLETED)) {
             Book book = order.getBook();
@@ -70,6 +80,9 @@ public class OrderService implements IOrderService {
         }
         order.setStatus(statusOrder);
         orderDao.setOrder(order);
+        }catch (NoSuchElementException e){
+            log.error("changeOrder id: {}, {}", id, e.toString());
+        }
 
     }
 
@@ -126,12 +139,22 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteOrder(int id) {
+        try {
         orderDao.deleteOrder(orderDao.getOrder(id));
+
+        }catch (NoSuchElementException e){
+            log.error("deleteOrder id: {}, {}", id, e.toString());
+        }
     }
 
     @Override
     public Order getOrder(int id) {
+        try {
         return orderDao.getOrder(id);
+        } catch (NoSuchElementException e){
+            log.error("getOrder id: {}, {}", id, e.toString());
+            return null;
+        }
     }
 
     @Override

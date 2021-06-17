@@ -5,13 +5,18 @@ import api.service.IRequestService;
 import dao.RequestDao;
 import model.Book;
 import model.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class RequestService implements IRequestService {
+    private static final Logger log = LoggerFactory.getLogger(RequestService.class);
+
     private int idRequest;
     private final IRequestDao requestDao;
 
@@ -48,15 +53,25 @@ public class RequestService implements IRequestService {
 
     @Override
     public void changeCountRequest(Book book) {
+        try {
         Request request = requestDao.changeCountRequest(book);
         Integer index = requestDao.indexRequest(request);
         request.setCountRequest(request.getCountRequest() + 1);
         requestDao.setRequest(index, request);
+        }catch (NoSuchElementException e){
+            log.error("changeCountRequest: {}, {}", book, e.toString());
+
+        }
     }
 
     @Override
     public Request getRequest(Book book) {
+        try {
         return requestDao.getRequest(book);
+        }catch (NoSuchElementException e){
+            log.error("getRequest: {}, {}", book, e.toString());
+            return null;
+        }
     }
 
     @Override

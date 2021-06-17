@@ -38,7 +38,8 @@ public class RequestDao implements IRequestDao {
         return requests.stream().filter(request -> request.getBook()
                 .equals(book))
                 .findFirst()
-                .orElse(null);
+                .get();
+//                .orElse(null);
     }
 
     @Override
@@ -65,7 +66,8 @@ public class RequestDao implements IRequestDao {
     public Request getRequest(Book book) {
         return requests.stream().filter(request -> isBook(book))
                 .findFirst()
-                .orElse(null);
+                .get();
+//                .orElse(null);
     }
 
 }

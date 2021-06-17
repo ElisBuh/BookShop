@@ -6,16 +6,21 @@ import api.service.IBookService;
 import dao.BookDao;
 import model.Book;
 import model.StatusBook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
 public class BookService implements IBookService {
+    private static final Logger log = LoggerFactory.getLogger(BookService.class);
+
     private int id;
     private final IBookDao bookDao = BookDao.getBookDaoInstance();
     private static volatile BookService bookServiceInstance;
@@ -58,10 +63,10 @@ public class BookService implements IBookService {
     public Book getBook(int id) {
         try {
             return bookDao.getBook(id);
-        } catch (NullPointerException e) {
-            System.err.println("Такой книги нет");
+        } catch (NoSuchElementException e) {
+            log.error("getBook id: {}, {}", id, e.toString());
+            return null;
         }
-        return null;
     }
 
     @Override

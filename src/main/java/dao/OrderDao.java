@@ -41,7 +41,8 @@ public class OrderDao implements IOrderDao {
         return orders.stream()
                 .filter(order -> order.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .get();
+//                .orElse(null);
     }
 
     @Override

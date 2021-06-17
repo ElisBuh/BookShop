@@ -31,8 +31,8 @@ public class StorageDao implements IStorageDao {
     }
 
     @Override
-    public void delete(Book book) {
-        bookStorage.remove(book);
+    public boolean delete(Book book) {
+        return bookStorage.remove(book);
     }
 
 }

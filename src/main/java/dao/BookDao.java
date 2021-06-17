@@ -31,7 +31,7 @@ public class BookDao implements IBookDao {
         return books.stream()
                 .filter(book -> book.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .get();
     }
 
     @Override

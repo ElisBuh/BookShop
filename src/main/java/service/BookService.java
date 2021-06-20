@@ -4,6 +4,8 @@ package service;
 import api.dao.IBookDao;
 import api.service.IBookService;
 import dao.BookDao;
+import exceptions.DaoException;
+import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -25,8 +26,8 @@ public class BookService implements IBookService {
     private final IBookDao bookDao = BookDao.getBookDaoInstance();
     private static volatile BookService bookServiceInstance;
 
-    private BookService() {    }
-
+    private BookService() {
+    }
 
 
     public static BookService getBookServiceInstance() {
@@ -62,10 +63,11 @@ public class BookService implements IBookService {
     @Override
     public Book getBook(int id) {
         try {
+            log.info("Get_Book_BY_Id: {}", id);
             return bookDao.getBook(id);
-        } catch (NoSuchElementException e) {
+        } catch (DaoException e) {
             log.error("getBook id: {}, {}", id, e.toString());
-            return null;
+            throw new ServiceException(id + "Not found");
         }
     }
 

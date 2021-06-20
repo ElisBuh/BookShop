@@ -4,6 +4,8 @@ import api.dao.IStorageDao;
 import api.service.IRequestService;
 import api.service.IStorageService;
 import dao.StorageDao;
+import exceptions.DaoException;
+import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
 import org.slf4j.Logger;
@@ -34,6 +36,8 @@ public class StorageService implements IStorageService {
 
     @Override
     public boolean addBook(Book book, LocalDate localDate) {
+        log.info("Add_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
+        try {
             if (storageDao.getBooks().contains(book)) {
                 return false;
             }
@@ -44,12 +48,23 @@ public class StorageService implements IStorageService {
                 requestService.deleteRequest(requestService.getRequest(book));
             }
             return true;
+        } catch (ServiceException e) {
+            log.error("addBook book-id: {}, {}", book, book.getId());
+            throw new ServiceException(book.getNameBook() + "Not found");
+        }
     }
 
     @Override
     public boolean deleteBook(Book book) {
+        try {
+            log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
             book.setStatusBook(StatusBook.ABSENT);
             return storageDao.delete(book);
+        } catch (DaoException e) {
+            log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
+            throw new ServiceException(book.getNameBook() + "Not found");
+
+        }
 
 
     }

@@ -34,7 +34,8 @@ public class Navigator {
             currentItem.getAction().execute();
             currentMenu = currentItem.getNextMenu();
             } catch (ArrayIndexOutOfBoundsException e){
-                log.error("navigate: {}, {}", point, e.toString());;
+                log.error("navigate: {}, {}", point, e.toString());
+                System.err.println("Не верно веден пункт выбора");
             }
         }
     }

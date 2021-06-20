@@ -1,17 +1,27 @@
 package ui.actions.order;
 
+import exceptions.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.actions.AbstractAction;
 import ui.actions.ConsoleHelper;
 import ui.actions.IAction;
 
 public class AddOrder extends AbstractAction implements IAction {
+    private static final Logger log = LoggerFactory.getLogger(AddOrder.class);
+
     @Override
     public void execute() {
-        ConsoleHelper.writeMessage("Введите имя заказчика");
-        String name = ConsoleHelper.readString();
-        ConsoleHelper.writeMessage("Введите id книги");
-        int id = ConsoleHelper.readInt();
-        orderService.creatOrder(name, bookService.getBook(id));
-        ConsoleHelper.writeMessage("Заказ добавлен");
+        try {
+            ConsoleHelper.writeMessage("Введите имя заказчика");
+            String name = ConsoleHelper.readString();
+            ConsoleHelper.writeMessage("Введите id книги");
+            int id = ConsoleHelper.readInt();
+            orderService.creatOrder(name, bookService.getBook(id));
+            ConsoleHelper.writeMessage("Заказ добавлен");
+        } catch (ServiceException e) {
+            log.error(e.toString());
+            System.err.println("Такого id нет");
+        }
     }
 }

@@ -58,7 +58,7 @@ public class OrderService implements IOrderService {
             }
         } catch (ServiceException e) {
             log.error("creatOrder Client--Book: {}, {}", nameClient, book.getNameBook());
-            throw new ServiceException(book.getNameBook() + " Not found");
+            throw e;
         }
 
     }

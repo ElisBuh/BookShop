@@ -50,7 +50,7 @@ public class StorageService implements IStorageService {
             return true;
         } catch (ServiceException e) {
             log.error("addBook book-id: {}, {}", book, book.getId());
-            throw new ServiceException(book.getNameBook() + "Not found");
+            throw e;
         }
     }
 

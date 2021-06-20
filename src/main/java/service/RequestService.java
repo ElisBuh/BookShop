@@ -49,7 +49,7 @@ public class RequestService implements IRequestService {
             return isReq;
         } catch (ServiceException e) {
             log.error("addRequest book-id: {}, {}", book, book.getId());
-            throw new ServiceException(book.getNameBook() + "Not found");
+            throw e;
         }
     }
 

@@ -1,6 +1,6 @@
 package ui.actions.request;
 
-import exceptions.ServiceException;
+import exceptions.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.actions.AbstractAction;
@@ -19,7 +19,7 @@ public class AddRequest extends AbstractAction implements IAction {
             if (isRequest) {
                 ConsoleHelper.writeMessage("Запрос добавлен.");
             } else ConsoleHelper.writeMessage("Книга есть на складе.");
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");
         }

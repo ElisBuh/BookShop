@@ -1,6 +1,6 @@
 package ui.actions.order;
 
-import exceptions.ServiceException;
+import exceptions.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.actions.AbstractAction;
@@ -17,7 +17,7 @@ public class DeleteOrder extends AbstractAction implements IAction {
             int id = ConsoleHelper.readInt();
             orderService.deleteOrder(id);
             ConsoleHelper.writeMessage("Заказ удален.");
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");
         }

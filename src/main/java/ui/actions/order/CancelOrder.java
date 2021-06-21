@@ -1,5 +1,6 @@
 package ui.actions.order;
 
+import exceptions.DaoException;
 import exceptions.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ public class CancelOrder extends AbstractAction implements IAction {
         try {
             ConsoleHelper.writeMessage("Введите id заказа для отмены");
             orderService.cancelOrder(ConsoleHelper.readInt());
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");
         }

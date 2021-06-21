@@ -48,7 +48,7 @@ public class StorageService implements IStorageService {
                 requestService.deleteRequest(requestService.getRequest(book));
             }
             return true;
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error("addBook book-id: {}, {}", book, book.getId());
             throw e;
         }
@@ -62,7 +62,7 @@ public class StorageService implements IStorageService {
             return storageDao.delete(book);
         } catch (DaoException e) {
             log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
-            throw new ServiceException(book.getNameBook() + "Not found");
+            throw e;
 
         }
 

@@ -5,7 +5,6 @@ import api.dao.IBookDao;
 import api.service.IBookService;
 import dao.BookDao;
 import exceptions.DaoException;
-import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
 import org.slf4j.Logger;
@@ -67,7 +66,7 @@ public class BookService implements IBookService {
             return bookDao.getBook(id);
         } catch (DaoException e) {
             log.error("getBook id: {}, {}", id, e.toString());
-            throw new ServiceException(id + "Not found");
+            throw e;
         }
     }
 

@@ -56,7 +56,7 @@ public class OrderService implements IOrderService {
                     requestService.addRequest(book);
                 }
             }
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error("creatOrder Client--Book: {}, {}", nameClient, book.getNameBook());
             throw e;
         }
@@ -70,7 +70,7 @@ public class OrderService implements IOrderService {
             changeStatusOrder(id, StatusOrder.CANCEL);
         } catch (DaoException e) {
             log.error("cancelOrder id: {}, {}", id, e.toString());
-            throw new ServiceException(id + "Not found");
+            throw e;
         }
 
     }
@@ -92,7 +92,7 @@ public class OrderService implements IOrderService {
             orderDao.setOrder(order);
         } catch (DaoException e) {
             log.error("changeOrder id: {}, {}", id, e.toString());
-            throw new ServiceException(id + " Not found");
+            throw e;
         }
 
     }
@@ -155,7 +155,7 @@ public class OrderService implements IOrderService {
             orderDao.deleteOrder(orderDao.getOrder(id));
         } catch (DaoException e) {
             log.error("deleteOrder id: {}, {}", id, e.toString());
-            throw new ServiceException(id + "Not found");
+            throw e;
         }
     }
 
@@ -166,7 +166,7 @@ public class OrderService implements IOrderService {
             return orderDao.getOrder(id);
         } catch (DaoException e) {
             log.error("getOrder id: {}, {}", id, e.toString());
-            throw new ServiceException(id + "Not found");
+            throw e;
         }
     }
 

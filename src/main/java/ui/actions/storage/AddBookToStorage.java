@@ -1,6 +1,6 @@
 package ui.actions.storage;
 
-import exceptions.ServiceException;
+import exceptions.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.actions.AbstractAction;
@@ -27,7 +27,7 @@ public class AddBookToStorage extends AbstractAction implements IAction {
             } else {
                 ConsoleHelper.writeMessage("Книга уже добавлена на склад.");
             }
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");
         }

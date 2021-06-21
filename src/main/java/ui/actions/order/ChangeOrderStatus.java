@@ -1,6 +1,6 @@
 package ui.actions.order;
 
-import exceptions.ServiceException;
+import exceptions.DaoException;
 import model.StatusOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class ChangeOrderStatus extends AbstractAction implements IAction {
                 MenuController.getMenuControllerInstance().run();
             }
             orderService.changeStatusOrder(id, statusOrder);
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");
         }

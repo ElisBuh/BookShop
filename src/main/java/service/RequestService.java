@@ -47,7 +47,7 @@ public class RequestService implements IRequestService {
                 isReq = requestDao.add(new Request(idRequest, book));
             }
             return isReq;
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error("addRequest book-id: {}, {}", book, book.getId());
             throw e;
         }
@@ -68,7 +68,7 @@ public class RequestService implements IRequestService {
             requestDao.setRequest(index, request);
         } catch (DaoException e) {
             log.error("changeCountRequest book-id: {}, {}", book, book.getId());
-            throw new ServiceException(book.getNameBook() + "Not found");
+            throw e;
 
         }
     }
@@ -80,7 +80,7 @@ public class RequestService implements IRequestService {
             return requestDao.getRequest(book);
         } catch (DaoException e) {
             log.error("getRequest book-id: {}, {}", book, book.getId());
-            throw new ServiceException(book.getNameBook() + "Not found");
+            throw e;
         }
     }
 

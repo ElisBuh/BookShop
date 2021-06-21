@@ -1,6 +1,6 @@
 package ui.actions.order;
 
-import exceptions.ServiceException;
+import exceptions.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.actions.AbstractAction;
@@ -19,7 +19,7 @@ public class AddOrder extends AbstractAction implements IAction {
             int id = ConsoleHelper.readInt();
             orderService.creatOrder(name, bookService.getBook(id));
             ConsoleHelper.writeMessage("Заказ добавлен");
-        } catch (ServiceException e) {
+        } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");
         }

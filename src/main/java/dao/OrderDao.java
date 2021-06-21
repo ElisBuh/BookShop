@@ -1,12 +1,17 @@
 package dao;
 
 import api.dao.IOrderDao;
+import exceptions.DaoException;
 import model.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDao implements IOrderDao {
+    private static final Logger log = LoggerFactory.getLogger(OrderDao.class);
+
     private final List<Order> orders = new ArrayList<>();
     private static volatile OrderDao orderDaoInstance;
 
@@ -38,10 +43,11 @@ public class OrderDao implements IOrderDao {
 
     @Override
     public Order getOrder(int id) {
+        log.info("Get_Order_By_ID: {}", id);
         return orders.stream()
                 .filter(order -> order.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new DaoException("id:" + id + "-not found"));
     }
 
     @Override

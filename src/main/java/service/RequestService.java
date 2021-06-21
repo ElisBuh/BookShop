@@ -3,8 +3,12 @@ package service;
 import api.dao.IRequestDao;
 import api.service.IRequestService;
 import dao.RequestDao;
+import exceptions.DaoException;
+import exceptions.ServiceException;
 import model.Book;
 import model.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RequestService implements IRequestService {
+    private static final Logger log = LoggerFactory.getLogger(RequestService.class);
+
     private int idRequest;
     private final IRequestDao requestDao;
 
@@ -30,15 +36,21 @@ public class RequestService implements IRequestService {
 
     @Override
     public boolean addRequest(Book book) {
-        boolean isReq;
-        if (isRequest(book)) {
-            changeCountRequest(book);
-            isReq = true;
-        } else {
-            idRequest++;
-            isReq = requestDao.add(new Request(idRequest, book));
+        try {
+            log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
+            boolean isReq;
+            if (isRequest(book)) {
+                changeCountRequest(book);
+                isReq = true;
+            } else {
+                idRequest++;
+                isReq = requestDao.add(new Request(idRequest, book));
+            }
+            return isReq;
+        } catch (DaoException e) {
+            log.error("addRequest book-id: {}, {}", book, book.getId());
+            throw e;
         }
-        return isReq;
     }
 
     @Override
@@ -48,15 +60,28 @@ public class RequestService implements IRequestService {
 
     @Override
     public void changeCountRequest(Book book) {
-        Request request = requestDao.changeCountRequest(book);
-        Integer index = requestDao.indexRequest(request);
-        request.setCountRequest(request.getCountRequest() + 1);
-        requestDao.setRequest(index, request);
+        try {
+            log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
+            Request request = requestDao.changeCountRequest(book);
+            Integer index = requestDao.indexRequest(request);
+            request.setCountRequest(request.getCountRequest() + 1);
+            requestDao.setRequest(index, request);
+        } catch (DaoException e) {
+            log.error("changeCountRequest book-id: {}, {}", book, book.getId());
+            throw e;
+
+        }
     }
 
     @Override
     public Request getRequest(Book book) {
-        return requestDao.getRequest(book);
+        try {
+            log.info("Get_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
+            return requestDao.getRequest(book);
+        } catch (DaoException e) {
+            log.error("getRequest book-id: {}, {}", book, book.getId());
+            throw e;
+        }
     }
 
     @Override

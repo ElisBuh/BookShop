@@ -4,8 +4,12 @@ import api.dao.IStorageDao;
 import api.service.IRequestService;
 import api.service.IStorageService;
 import dao.StorageDao;
+import exceptions.DaoException;
+import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StorageService implements IStorageService {
+    private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
     private final IStorageDao storageDao = StorageDao.getStorageDaoInstance();
     private final IRequestService requestService;
@@ -31,7 +36,7 @@ public class StorageService implements IStorageService {
 
     @Override
     public boolean addBook(Book book, LocalDate localDate) {
-        boolean isBook = false;
+        log.info("Add_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
         try {
             if (storageDao.getBooks().contains(book)) {
                 return false;
@@ -42,24 +47,26 @@ public class StorageService implements IStorageService {
             if (requestService.isRequest(book)) {
                 requestService.deleteRequest(requestService.getRequest(book));
             }
-            isBook = true;
-        } catch (NullPointerException e) {
-            System.err.println("Такой книги нет");
+            return true;
+        } catch (DaoException e) {
+            log.error("addBook book-id: {}, {}", book, book.getId());
+            throw e;
         }
-        return isBook;
     }
 
     @Override
     public boolean deleteBook(Book book) {
-        boolean isBook = false;
         try {
+            log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
             book.setStatusBook(StatusBook.ABSENT);
-            storageDao.delete(book);
-            isBook = true;
-        } catch (NullPointerException e) {
-            System.err.println("Такой книги нет");
+            return storageDao.delete(book);
+        } catch (DaoException e) {
+            log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
+            throw e;
+
         }
-        return isBook;
+
+
     }
 
     @Override

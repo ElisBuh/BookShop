@@ -4,8 +4,11 @@ package service;
 import api.dao.IBookDao;
 import api.service.IBookService;
 import dao.BookDao;
+import exceptions.DaoException;
 import model.Book;
 import model.StatusBook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.time.LocalDate;
@@ -16,12 +19,14 @@ import java.util.stream.Collectors;
 
 
 public class BookService implements IBookService {
+    private static final Logger log = LoggerFactory.getLogger(BookService.class);
+
     private int id;
     private final IBookDao bookDao = BookDao.getBookDaoInstance();
     private static volatile BookService bookServiceInstance;
 
-    private BookService() {    }
-
+    private BookService() {
+    }
 
 
     public static BookService getBookServiceInstance() {
@@ -57,11 +62,12 @@ public class BookService implements IBookService {
     @Override
     public Book getBook(int id) {
         try {
+            log.info("Get_Book_BY_Id: {}", id);
             return bookDao.getBook(id);
-        } catch (NullPointerException e) {
-            System.err.println("Такой книги нет");
+        } catch (DaoException e) {
+            log.error("getBook id: {}, {}", id, e.toString());
+            throw e;
         }
-        return null;
     }
 
     @Override

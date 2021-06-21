@@ -4,10 +4,14 @@ import api.dao.IOrderDao;
 import api.service.IOrderService;
 import api.service.IRequestService;
 import dao.OrderDao;
+import exceptions.DaoException;
+import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
 import model.Order;
 import model.StatusOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 
 
 public class OrderService implements IOrderService {
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+
     private int idOrder;
     private final IRequestService requestService;
     private final IOrderDao orderDao = OrderDao.getOrderDaoInstance();
@@ -36,40 +42,58 @@ public class OrderService implements IOrderService {
 
     @Override
     public void creatOrder(String nameClient, Book book) {
-        if (book.getStatusBook().equals(StatusBook.INSTOCK)) {
-            idOrder++;
-            Order order = new Order(idOrder, nameClient, book, StatusOrder.NEW);
-            orderDao.addOrder(order);
-        } else {
-            if (requestService.isRequest(book)) {
-                requestService.changeCountRequest(book);
+        try {
+            log.info("creat_Order_BY_Book: {}, id{}", book.getNameBook(), book.getId());
+            if (book.getStatusBook().equals(StatusBook.INSTOCK)) {
+                idOrder++;
+                Order order = new Order(idOrder, nameClient, book, StatusOrder.NEW);
+                orderDao.addOrder(order);
             } else {
+                if (requestService.isRequest(book)) {
+                    requestService.changeCountRequest(book);
+                } else {
 
-                requestService.addRequest(book);
+                    requestService.addRequest(book);
+                }
             }
+        } catch (DaoException e) {
+            log.error("creatOrder Client--Book: {}, {}", nameClient, book.getNameBook());
+            throw e;
         }
 
     }
 
     @Override
     public void cancelOrder(int id) {
-        changeStatusOrder(id, StatusOrder.CANCEL);
+        try {
+            log.info("Cancel_Order_BY_Id: {}", id);
+            changeStatusOrder(id, StatusOrder.CANCEL);
+        } catch (DaoException e) {
+            log.error("cancelOrder id: {}, {}", id, e.toString());
+            throw e;
+        }
 
     }
 
     @Override
     public void changeStatusOrder(int id, StatusOrder statusOrder) {
-        Order order = orderDao.getOrder(id);
-        if (statusOrder.equals(StatusOrder.COMPLETED)) {
-            Book book = order.getBook();
-            order.setDateComplete(LocalDate.now());
-            if (requestService.isRequest(book)) {
-                System.out.println("Статус изменить нельзя, так как книги нет на складе");
-                return;
+        try {
+            log.info("Change_Status_Order_BY_Id: {}", id);
+            Order order = orderDao.getOrder(id);
+            if (statusOrder.equals(StatusOrder.COMPLETED)) {
+                Book book = order.getBook();
+                order.setDateComplete(LocalDate.now());
+                if (requestService.isRequest(book)) {
+                    System.out.println("Статус изменить нельзя, так как книги нет на складе");
+                    return;
+                }
             }
+            order.setStatus(statusOrder);
+            orderDao.setOrder(order);
+        } catch (DaoException e) {
+            log.error("changeOrder id: {}, {}", id, e.toString());
+            throw e;
         }
-        order.setStatus(statusOrder);
-        orderDao.setOrder(order);
 
     }
 
@@ -126,12 +150,24 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteOrder(int id) {
-        orderDao.deleteOrder(orderDao.getOrder(id));
+        try {
+            log.info("Delete_Order_BY_Id: {}", id);
+            orderDao.deleteOrder(orderDao.getOrder(id));
+        } catch (DaoException e) {
+            log.error("deleteOrder id: {}, {}", id, e.toString());
+            throw e;
+        }
     }
 
     @Override
     public Order getOrder(int id) {
-        return orderDao.getOrder(id);
+        try {
+            log.info("Get_Order_BY_Id: {}", id);
+            return orderDao.getOrder(id);
+        } catch (DaoException e) {
+            log.error("getOrder id: {}, {}", id, e.toString());
+            throw e;
+        }
     }
 
     @Override

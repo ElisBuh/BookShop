@@ -21,13 +21,13 @@ public class MenuController {
     public void run() {
         builder.buildMenu();
         navigator.setCurrentMenu(builder.getRootMenu());
-        int point;
-        while (true) {
+        int point = -1;
+        while (point != 0) {
             navigator.printMenu();
             point = ConsoleHelper.readInt();
-            if (point == -1){
-                break;
-            }
+//            if (point == 0){
+//                break;
+//            }
             navigator.navigate(point);
 
         }

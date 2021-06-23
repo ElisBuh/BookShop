@@ -22,9 +22,14 @@ public class Navigator {
     }
 
     public void printMenu() {
+        try {
         ConsoleHelper.writeMessage(currentMenu.getName());
         IntStream.range(0, currentMenu.getMenuItem().length).mapToObj(i -> i + "-" + currentMenu.getMenuItem()[i]).forEach(System.out::println);
         ConsoleHelper.writeMessage("Сделайте выбор");
+        }catch (NullPointerException e){
+            currentMenu = Builder.getBuilderInstance().getRootMenu();
+            printMenu();
+        }
     }
 
     public void navigate(int point) {

@@ -5,7 +5,7 @@ import model.Request;
 
 import java.util.List;
 
-public interface IRequestDao {
+public interface IRequestDao extends AbstractDao {
 
     boolean add(Request request);
 

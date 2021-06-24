@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class Starter {
 
     public static void main(String[] args) {
-        addDataBook();
+//        addDataBook();
         MenuController.getMenuControllerInstance().run();
 
     }

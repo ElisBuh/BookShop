@@ -75,4 +75,13 @@ public class BookService implements IBookService {
         return new ArrayList<>(bookDao.getBooks());
     }
 
+    @Override
+    public <T> void set(List<T> list) {
+        if (list.size() > 0) {
+        log.info("Десериализация Book");
+            bookDao.set(list);
+            Book book = (Book) list.get(list.size() - 1);
+            id = book.getId();
+        }
+    }
 }

@@ -5,7 +5,6 @@ import api.service.IRequestService;
 import api.service.IStorageService;
 import dao.StorageDao;
 import exceptions.DaoException;
-import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
 import org.slf4j.Logger;
@@ -81,4 +80,9 @@ public class StorageService implements IStorageService {
         return new ArrayList<>(storageDao.getBooks());
     }
 
+    @Override
+    public <T> void set(List<T> list) {
+        log.info("Десериализация Storage");
+        storageDao.set(list);
+    }
 }

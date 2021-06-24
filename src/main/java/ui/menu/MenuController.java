@@ -1,10 +1,12 @@
 package ui.menu;
 
 import ui.actions.ConsoleHelper;
+import util.Deserialization;
 
 public class MenuController {
     private final Builder builder = Builder.getBuilderInstance();
     private final Navigator navigator = Navigator.getNavigatorInstance();
+    private final Deserialization deserialization = new Deserialization();
 
     private static volatile MenuController menuControllerInstance;
 
@@ -19,6 +21,7 @@ public class MenuController {
     }
 
     public void run() {
+        deserialization.deserialize();
         builder.buildMenu();
         navigator.setCurrentMenu(builder.getRootMenu());
         int point = -1;

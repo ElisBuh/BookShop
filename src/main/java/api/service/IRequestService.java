@@ -6,7 +6,7 @@ import service.TypeSortRequest;
 
 import java.util.List;
 
-public interface IRequestService {
+public interface IRequestService extends AbstractService {
 
     boolean addRequest(Book book);
 

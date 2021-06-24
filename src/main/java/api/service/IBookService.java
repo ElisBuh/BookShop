@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-public interface IBookService {
+public interface IBookService extends AbstractService {
 
     void addBook(String nameBook, String nameAuthor, int price, LocalDate date);
 

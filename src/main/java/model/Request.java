@@ -1,6 +1,10 @@
 package model;
 
-public class Request {
+import java.io.Serializable;
+
+public class Request implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Integer id;
     private Book book;
     private Integer countRequest;
@@ -26,6 +30,10 @@ public class Request {
 
     public void setCountRequest(Integer countRequest) {
         this.countRequest = countRequest;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     @Override

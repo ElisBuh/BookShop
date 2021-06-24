@@ -12,7 +12,7 @@ import java.util.List;
 public class OrderDao implements IOrderDao {
     private static final Logger log = LoggerFactory.getLogger(OrderDao.class);
 
-    private final List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
     private static volatile OrderDao orderDaoInstance;
 
     private OrderDao() {
@@ -56,5 +56,10 @@ public class OrderDao implements IOrderDao {
                 .filter(e -> e.getId() == order.getId())
                 .mapToInt(orders::indexOf)
                 .forEach(i -> orders.set(i, order));
+    }
+
+    @Override
+    public <T> void set(List<T> list) {
+        this.orders = (List<Order>) list;
     }
 }

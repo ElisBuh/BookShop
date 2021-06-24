@@ -9,6 +9,7 @@ import model.Book;
 import model.StatusBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Config;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,7 +45,9 @@ public class StorageService implements IStorageService {
             book.setDateReceipt(localDate);
             storageDao.addBook(book);
             if (requestService.isRequest(book)) {
+                if (Config.permissionChangeStatusRequest()){
                 requestService.deleteRequest(requestService.getRequest(book));
+                }
             }
             return true;
         } catch (DaoException e) {
@@ -69,9 +72,10 @@ public class StorageService implements IStorageService {
     }
 
     @Override
-    public List<Book> printBookNotSellMoreSixMonth() {
+    public List<Book> BookNotSellMoreNmonth() {
+        int month = Config.countMonth();
         return storageDao.getBooks().stream()
-                .filter(book -> LocalDate.now().minusMonths(6).isAfter(book.getDateReceipt()))
+                .filter(book -> LocalDate.now().minusMonths(month).isAfter(book.getDateReceipt()))
                 .collect(Collectors.toList());
     }
 

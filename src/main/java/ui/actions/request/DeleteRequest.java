@@ -13,7 +13,7 @@ public class DeleteRequest extends AbstractAction implements IAction {
     @Override
     public void execute() {
         try {
-            ConsoleHelper.writeMessage("Введите Id книги на которую хотите оставить запрос:");
+            ConsoleHelper.writeMessage("Введите Id книги с которой хотите снять запрос:");
             int id = ConsoleHelper.readInt();
             requestService.deleteRequest(requestService.getRequest(bookService.getBook(id)));
         } catch (DaoException e) {

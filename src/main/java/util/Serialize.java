@@ -26,7 +26,6 @@ public class Serialize {
     }
 
     public <T> T deserialize() {
-        log.info("Десериализация");
         try (final FileInputStream FileOutputStream = new FileInputStream(path);
              final ObjectInputStream ObjectInputStream = new ObjectInputStream(FileOutputStream)) {
             final Object Object = ObjectInputStream.readObject();
@@ -39,6 +38,6 @@ public class Serialize {
     }
 
     public boolean is() {
-        return null != this.file && this.file.exists();
+        return this.file.exists();
     }
 }

@@ -11,7 +11,7 @@ public interface IStorageService extends AbstractService {
 
     boolean deleteBook(Book book);
 
-    List<Book> printBookNotSellMoreSixMonth();
+    List<Book> BookNotSellMoreNmonth();
 
     List<Book> getStorageBooks();
 }

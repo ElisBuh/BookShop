@@ -13,7 +13,7 @@ import java.util.List;
 public class StorageDao implements IStorageDao {
     private static final Logger log = LoggerFactory.getLogger(StorageDao.class);
 
-    private List<Book> bookStorage = new ArrayList<>();
+    private final List<Book> bookStorage = new ArrayList<>();
     private static volatile StorageDao storageDaoInstance;
 
     private StorageDao() {
@@ -45,10 +45,5 @@ public class StorageDao implements IStorageDao {
             log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
             throw new DaoException(book.getNameBook() + "Not found");
         }
-    }
-
-    @Override
-    public <T> void set(List<T> list) {
-        this.bookStorage = (List<Book>) list;
     }
 }

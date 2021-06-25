@@ -4,7 +4,7 @@ import model.Book;
 
 import java.util.List;
 
-public interface IStorageDao extends AbstractDao {
+public interface IStorageDao{
 
     void addBook(Book book);
     boolean delete(Book book);

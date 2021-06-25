@@ -4,7 +4,7 @@ import model.Order;
 
 import java.util.List;
 
-public interface IOrderDao extends AbstractDao {
+public interface IOrderDao{
 
     void addOrder(Order order);
     void deleteOrder(Order order);

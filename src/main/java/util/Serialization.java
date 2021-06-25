@@ -12,10 +12,10 @@ import java.util.List;
 public class Serialization extends AbstractAction {
 
     public void serialize(){
-        final Serialize serBook = new Serialize("src/main/resources/BookDate.obj"),
-                serOrder = new Serialize("src/main/resources/OrderDate.obj"),
-                serRequest = new Serialize("src/main/resources/RequestDate.obj"),
-                serStorage = new Serialize("src/main/resources/StorageDate.obj");
+        final Serialize serBook = new Serialize(Config.configProperties("serBook")),
+                serOrder = new Serialize(Config.configProperties("serOrder")),
+                serRequest = new Serialize(Config.configProperties("serRequest")),
+                serStorage = new Serialize(Config.configProperties("serStorage"));
 
         List<Book> books = bookService.getListBooks();
         List<Order> orders = orderService.ListOrders();

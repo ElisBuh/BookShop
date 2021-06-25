@@ -6,6 +6,7 @@ import api.service.IStorageService;
 import dao.StorageDao;
 import exceptions.DaoException;
 import model.Book;
+import model.Order;
 import model.StatusBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class StorageService implements IStorageService {
             book.setDateReceipt(localDate);
             storageDao.addBook(book);
             if (requestService.isRequest(book)) {
-                if (Config.permissionChangeStatusRequest()){
+                if (Boolean.parseBoolean(Config.configProperties("storageService.permissionChangeStatusRequest"))){
                 requestService.deleteRequest(requestService.getRequest(book));
                 }
             }
@@ -73,7 +74,7 @@ public class StorageService implements IStorageService {
 
     @Override
     public List<Book> BookNotSellMoreNmonth() {
-        int month = Config.countMonth();
+        int month = Integer.parseInt(Config.configProperties("storageService.month"));
         return storageDao.getBooks().stream()
                 .filter(book -> LocalDate.now().minusMonths(month).isAfter(book.getDateReceipt()))
                 .collect(Collectors.toList());
@@ -87,6 +88,6 @@ public class StorageService implements IStorageService {
     @Override
     public <T> void set(List<T> list) {
         log.info("Десериализация Storage");
-        storageDao.set(list);
+        list.stream().map(e -> (Book) e).forEach(storageDao::addBook);
     }
 }

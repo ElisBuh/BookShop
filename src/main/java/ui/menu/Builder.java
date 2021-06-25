@@ -85,7 +85,7 @@ public class Builder {
     }
 
     private Menu storageMenu() {
-        int month = Config.countMonth();
+        int month = Integer.parseInt(Config.configProperties("storageService.month"));
         MenuItem[] storageMenuItems = new MenuItem[6];
         storageMenuItems[0] = new MenuItem("Выход",new Exit(),rootMenu);
         storageMenuItems[1] = new MenuItem("Добавить книгу на склад.", new AddBookToStorage(), rootMenu);

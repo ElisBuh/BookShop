@@ -12,7 +12,7 @@ import java.util.List;
 public class BookDao implements IBookDao {
     private static final Logger log = LoggerFactory.getLogger(BookDao.class);
 
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
     private static volatile BookDao bookDaoInstance;
 
     private BookDao() {
@@ -46,8 +46,4 @@ public class BookDao implements IBookDao {
         return new ArrayList<>(books);
     }
 
-    @Override
-    public <T> void set(List<T> list) {
-        this.books = (List<Book>) list;
-    }
 }

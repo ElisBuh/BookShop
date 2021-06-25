@@ -13,7 +13,7 @@ import java.util.List;
 public class RequestDao implements IRequestDao {
     private static final Logger log = LoggerFactory.getLogger(RequestDao.class);
 
-    private List<Request> requests = new ArrayList<>();
+    private final List<Request> requests = new ArrayList<>();
     private static volatile RequestDao requestDaoInstance;
 
     private RequestDao() {
@@ -71,10 +71,5 @@ public class RequestDao implements IRequestDao {
         return requests.stream().filter(request -> isBook(book))
                 .findFirst()
                 .orElseThrow(() -> new DaoException("Book:" + book + "-not found"));
-    }
-
-    @Override
-    public <T> void set(List<T> list) {
-        this.requests = (List<Request>) list;
     }
 }

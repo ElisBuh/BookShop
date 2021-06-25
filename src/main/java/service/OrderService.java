@@ -179,9 +179,9 @@ public class OrderService implements IOrderService {
     public <T> void set(List<T> list) {
         if (list.size() > 0) {
             log.info("Десериализация Order");
-            orderDao.set(list);
             Order order = (Order) list.get(list.size() - 1);
             idOrder = order.getId();
+            list.stream().map(e -> (Order) e).forEach(orderDao::addOrder);
         }
     }
 }

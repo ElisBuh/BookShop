@@ -4,7 +4,7 @@ import model.Book;
 
 import java.util.List;
 
-public interface IBookDao extends AbstractDao {
+public interface IBookDao {
 
     void addBook(Book book);
     Book getBook(int id);

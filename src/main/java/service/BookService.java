@@ -78,10 +78,10 @@ public class BookService implements IBookService {
     @Override
     public <T> void set(List<T> list) {
         if (list.size() > 0) {
-        log.info("Десериализация Book");
-            bookDao.set(list);
+            log.info("Десериализация Book");
             Book book = (Book) list.get(list.size() - 1);
             id = book.getId();
+            list.stream().map(e -> (Book) e).forEach(bookDao::addBook);
         }
     }
 }

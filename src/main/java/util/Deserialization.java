@@ -9,10 +9,10 @@ import java.util.List;
 public class Deserialization extends AbstractAction {
 
     public void deserialize(){
-        final Serialize serBook = new Serialize("src/main/resources/BookDate.obj"),
-                serOrder = new Serialize("src/main/resources/OrderDate.obj"),
-                serRequest = new Serialize("src/main/resources/RequestDate.obj"),
-                serStorage = new Serialize("src/main/resources/StorageDate.obj");
+        final Serialize serBook = new Serialize(Config.configProperties("serBook")),
+                serOrder = new Serialize(Config.configProperties("serOrder")),
+                serRequest = new Serialize(Config.configProperties("serRequest")),
+                serStorage = new Serialize(Config.configProperties("serStorage"));
 
         serOrder.is();
         bookService.set(serBook.deserialize());
@@ -20,4 +20,5 @@ public class Deserialization extends AbstractAction {
         requestService.set(serRequest.deserialize());
         storageService.set(serStorage.deserialize());
     }
+
 }

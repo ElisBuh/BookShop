@@ -46,5 +46,4 @@ public class BookDao implements IBookDao {
         return new ArrayList<>(books);
     }
 
-
 }

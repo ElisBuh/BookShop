@@ -5,7 +5,6 @@ import api.service.IOrderService;
 import api.service.IRequestService;
 import dao.OrderDao;
 import exceptions.DaoException;
-import exceptions.ServiceException;
 import model.Book;
 import model.StatusBook;
 import model.Order;
@@ -176,4 +175,13 @@ public class OrderService implements IOrderService {
 
     }
 
+    @Override
+    public <T> void set(List<T> list) {
+        if (list.size() > 0) {
+            log.info("Десериализация Order");
+            Order order = (Order) list.get(list.size() - 1);
+            idOrder = order.getId();
+            list.stream().map(e -> (Order) e).forEach(orderDao::addOrder);
+        }
+    }
 }

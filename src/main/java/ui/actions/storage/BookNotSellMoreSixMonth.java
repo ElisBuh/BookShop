@@ -6,6 +6,6 @@ import ui.actions.IAction;
 public class BookNotSellMoreSixMonth extends AbstractAction implements IAction {
     @Override
     public void execute() {
-        storageService.printBookNotSellMoreSixMonth().forEach(System.out::println);
+        storageService.BookNotSellMoreNmonth().forEach(System.out::println);
     }
 }

@@ -8,7 +8,7 @@ import service.TypeSortOrder;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface IOrderService {
+public interface IOrderService extends AbstractService {
 
     void creatOrder(String nameClient, Book book);
     void cancelOrder(int id);

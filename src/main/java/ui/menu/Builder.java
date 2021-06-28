@@ -11,6 +11,7 @@ import ui.actions.storage.AddBookToStorage;
 import ui.actions.storage.BookNotSellMoreSixMonth;
 import ui.actions.storage.DeleteBookFromStorage;
 import ui.actions.storage.ListBooksInStorage;
+import util.Config;
 
 
 public class Builder {
@@ -84,12 +85,13 @@ public class Builder {
     }
 
     private Menu storageMenu() {
+        int month = Integer.parseInt(Config.configProperties("storageService.month"));
         MenuItem[] storageMenuItems = new MenuItem[6];
         storageMenuItems[0] = new MenuItem("Выход",new Exit(),rootMenu);
         storageMenuItems[1] = new MenuItem("Добавить книгу на склад.", new AddBookToStorage(), rootMenu);
         storageMenuItems[2] = new MenuItem("Удалить книгу со склада.", new DeleteBookFromStorage(), rootMenu);
         storageMenuItems[3] = new MenuItem("Список книг на складе.", new ListBooksInStorage(), rootMenu);
-        storageMenuItems[4] = new MenuItem("Книги на складе более 6 месяцев.", new BookNotSellMoreSixMonth(), rootMenu);
+        storageMenuItems[4] = new MenuItem("Книги на складе более "+ month +" месяцев.", new BookNotSellMoreSixMonth(), rootMenu);
         storageMenuItems[5] = new MenuItem("Главное меню.", () -> { }, rootMenu);
 
         return new Menu("Меню склада:", storageMenuItems);

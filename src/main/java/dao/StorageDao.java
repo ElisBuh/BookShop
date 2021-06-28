@@ -46,5 +46,4 @@ public class StorageDao implements IStorageDao {
             throw new DaoException(book.getNameBook() + "Not found");
         }
     }
-
 }

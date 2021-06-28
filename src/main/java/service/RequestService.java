@@ -4,8 +4,8 @@ import api.dao.IRequestDao;
 import api.service.IRequestService;
 import dao.RequestDao;
 import exceptions.DaoException;
-import exceptions.ServiceException;
 import model.Book;
+import model.Order;
 import model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,6 +105,16 @@ public class RequestService implements IRequestService {
             return Comparator.comparing(o -> o.getBook().getNameBook());
         } else {
             return Comparator.comparing(Request::getCountRequest);
+        }
+    }
+
+    @Override
+    public <T> void set(List<T> list) {
+        if (list.size() > 0) {
+            log.info("Десериализация Request");
+            Request request = (Request) list.get(list.size() - 1);
+            idRequest = request.getId();
+            list.stream().map(e -> (Request) e).forEach(requestDao::add);
         }
     }
 }

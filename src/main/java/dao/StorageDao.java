@@ -2,7 +2,6 @@ package dao;
 
 import api.dao.IStorageDao;
 import exceptions.DaoException;
-import exceptions.ServiceException;
 import model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

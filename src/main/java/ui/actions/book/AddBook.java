@@ -18,6 +18,6 @@ public class AddBook extends AbstractAction implements IAction {
         int price = ConsoleHelper.readInt();
         ConsoleHelper.writeMessage("Ведите Дату, пример: \"22.05.2021\":");
         LocalDate date = LocalDate.parse(ConsoleHelper.readString(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        bookService.addBook(nameBook, nameAuthor, price, date);
+        bookService.save(nameBook, nameAuthor, price, date);
     }
 }

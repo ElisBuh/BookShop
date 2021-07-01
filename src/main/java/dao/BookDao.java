@@ -27,12 +27,12 @@ public class BookDao implements IBookDao {
     }
 
     @Override
-    public void addBook(Book book) {
+    public void save(Book book) {
         books.add(book);
     }
 
     @Override
-    public Book getBook(int id) {
+    public Book get(int id) {
         log.info("Get_Book_By_ID: {}", id);
         return books.stream()
                 .filter(book -> book.getId() == id)
@@ -42,7 +42,12 @@ public class BookDao implements IBookDao {
     }
 
     @Override
-    public List<Book> getBooks() {
+    public boolean delete(Book book) {
+        return books.remove(book);
+    }
+
+    @Override
+    public List<Book> getAll() {
         return new ArrayList<>(books);
     }
 

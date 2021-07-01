@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface IBookDao {
 
-    void addBook(Book book);
-    Book getBook(int id);
-    List<Book> getBooks();
+    void save(Book book);
+    Book get(int id);
+    List<Book> getAll();
+    boolean delete(Book book);
+
 
 }

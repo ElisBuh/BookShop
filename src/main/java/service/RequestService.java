@@ -34,7 +34,7 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public boolean addRequest(Book book) {
+    public boolean save(Book book) {
         try {
             log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
             boolean isReq;
@@ -43,7 +43,7 @@ public class RequestService implements IRequestService {
                 isReq = true;
             } else {
                 idRequest++;
-                isReq = requestDao.add(new Request(idRequest, book));
+                isReq = requestDao.save(new Request(idRequest, book));
             }
             return isReq;
         } catch (DaoException e) {
@@ -64,7 +64,7 @@ public class RequestService implements IRequestService {
             Request request = requestDao.changeCountRequest(book);
             Integer index = requestDao.indexRequest(request);
             request.setCountRequest(request.getCountRequest() + 1);
-            requestDao.setRequest(index, request);
+            requestDao.set(index, request);
         } catch (DaoException e) {
             log.error("changeCountRequest book-id: {}, {}", book, book.getId());
             throw e;
@@ -73,10 +73,10 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public Request getRequest(Book book) {
+    public Request get(Book book) {
         try {
             log.info("Get_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
-            return requestDao.getRequest(book);
+            return requestDao.get(book);
         } catch (DaoException e) {
             log.error("getRequest book-id: {}, {}", book, book.getId());
             throw e;
@@ -84,18 +84,18 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public void deleteRequest(Request request) {
-        requestDao.deleteRequest(request);
+    public void delete(Request request) {
+        requestDao.delete(request);
     }
 
     @Override
-    public List<Request> listRequests() {
-        return new ArrayList<>(requestDao.getRequests());
+    public List<Request> getAll() {
+        return new ArrayList<>(requestDao.getAll());
     }
 
     @Override
     public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
-        return requestDao.getRequests().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
+        return requestDao.getAll().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
 
     }
 
@@ -113,7 +113,7 @@ public class RequestService implements IRequestService {
             log.info("Десериализация Request");
             Request request = (Request) list.get(list.size() - 1);
             idRequest = request.getId();
-            list.stream().map(e -> (Request) e).forEach(requestDao::add);
+            list.stream().map(e -> (Request) e).forEach(requestDao::save);
         }
     }
 }

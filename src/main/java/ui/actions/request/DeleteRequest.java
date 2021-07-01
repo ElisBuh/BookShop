@@ -15,7 +15,7 @@ public class DeleteRequest extends AbstractAction implements IAction {
         try {
             ConsoleHelper.writeMessage("Введите Id книги с которой хотите снять запрос:");
             int id = ConsoleHelper.readInt();
-            requestService.deleteRequest(requestService.getRequest(bookService.getBook(id)));
+            requestService.delete(requestService.get(bookService.get(id)));
         } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");

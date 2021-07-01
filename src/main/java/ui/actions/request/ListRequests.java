@@ -6,6 +6,6 @@ import ui.actions.IAction;
 public class ListRequests extends AbstractAction implements IAction {
     @Override
     public void execute() {
-        requestService.listRequests().forEach(System.out::println);
+        requestService.getAll().forEach(System.out::println);
     }
 }

@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface IOrderService extends AbstractService {
 
-    void creatOrder(String nameClient, Book book);
-    void cancelOrder(int id);
+    void creat(String nameClient, Book book);
+    void cancel(int id);
     void changeStatusOrder(int id, StatusOrder statusOrder);
-    List<Order> ListOrders();
-    void deleteOrder(int id);
+    List<Order> getAll();
+    void delete(int id);
     Order getOrder(int id);
     List<Order> listSortOrder(TypeSortOrder typeSortOrder);
     List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);

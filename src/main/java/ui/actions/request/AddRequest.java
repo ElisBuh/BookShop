@@ -15,7 +15,7 @@ public class AddRequest extends AbstractAction implements IAction {
         try {
             ConsoleHelper.writeMessage("Введите Id книги на которую хотите оставить запрос:");
             int id = ConsoleHelper.readInt();
-            boolean isRequest = requestService.addRequest(bookService.getBook(id));
+            boolean isRequest = requestService.save(bookService.get(id));
             if (isRequest) {
                 ConsoleHelper.writeMessage("Запрос добавлен.");
             } else ConsoleHelper.writeMessage("Книга есть на складе.");

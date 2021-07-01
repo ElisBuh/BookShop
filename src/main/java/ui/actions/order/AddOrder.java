@@ -17,7 +17,7 @@ public class AddOrder extends AbstractAction implements IAction {
             String name = ConsoleHelper.readString();
             ConsoleHelper.writeMessage("Введите id книги");
             int id = ConsoleHelper.readInt();
-            orderService.creatOrder(name, bookService.getBook(id));
+            orderService.creat(name, bookService.get(id));
             ConsoleHelper.writeMessage("Заказ добавлен");
         } catch (DaoException e) {
             log.error(e.toString());

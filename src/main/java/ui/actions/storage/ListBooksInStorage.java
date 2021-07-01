@@ -6,6 +6,6 @@ import ui.actions.IAction;
 public class ListBooksInStorage extends AbstractAction implements IAction {
     @Override
     public void execute() {
-        storageService.getStorageBooks().forEach(System.out::println);
+        storageService.getAll().forEach(System.out::println);
     }
 }

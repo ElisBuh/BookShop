@@ -8,17 +8,17 @@ import java.util.List;
 
 public interface IRequestService extends AbstractService {
 
-    boolean addRequest(Book book);
+    boolean save(Book book);
 
     Boolean isRequest(Book book);
 
     void changeCountRequest(Book book);
 
-    void deleteRequest(Request request);
+    void delete(Request request);
 
-    Request getRequest(Book book);
+    Request get(Book book);
 
     List<Request> sortRequest(TypeSortRequest typeSortRequest);
 
-    List<Request> listRequests();
+    List<Request> getAll();
 }

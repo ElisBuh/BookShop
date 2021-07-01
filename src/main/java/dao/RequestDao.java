@@ -27,7 +27,7 @@ public class RequestDao implements IRequestDao {
     }
 
     @Override
-    public boolean add(Request request) {
+    public boolean save(Request request) {
         return requests.add(request);
     }
 
@@ -47,7 +47,7 @@ public class RequestDao implements IRequestDao {
     }
 
     @Override
-    public List<Request> getRequests() {
+    public List<Request> getAll() {
         return new ArrayList<>(requests);
     }
 
@@ -57,17 +57,17 @@ public class RequestDao implements IRequestDao {
     }
 
     @Override
-    public void setRequest(Integer index, Request request) {
+    public void set(Integer index, Request request) {
         requests.set(index, request);
     }
 
     @Override
-    public void deleteRequest(Request request) {
+    public void delete(Request request) {
         requests.remove(request);
     }
 
     @Override
-    public Request getRequest(Book book) {
+    public Request get(Book book) {
         return requests.stream().filter(request -> isBook(book))
                 .findFirst()
                 .orElseThrow(() -> new DaoException("Book:" + book + "-not found"));

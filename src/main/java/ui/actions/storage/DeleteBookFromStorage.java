@@ -15,7 +15,7 @@ public class DeleteBookFromStorage extends AbstractAction implements IAction {
         try {
             ConsoleHelper.writeMessage("Введите Id книги которые хотите удалить со склад:");
             int id = ConsoleHelper.readInt();
-            boolean isMessage = storageService.deleteBook(bookService.getBook(id));
+            boolean isMessage = storageService.delete(bookService.get(id));
             if (isMessage) {
                 ConsoleHelper.writeMessage("Книга удалена со склада.");
             }

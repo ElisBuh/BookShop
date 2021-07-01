@@ -1,6 +1,7 @@
-package util;
+package util.serialization;
 
 import ui.actions.AbstractAction;
+import util.Config;
 
 
 public class Deserialization extends AbstractAction {

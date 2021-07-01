@@ -1,9 +1,10 @@
-package util;
+package util.serialization;
 
 import model.Book;
 import model.Order;
 import model.Request;
 import ui.actions.AbstractAction;
+import util.Config;
 
 import java.util.List;
 

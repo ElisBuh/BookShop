@@ -1,6 +1,6 @@
 package ui.actions;
 
-import util.Serialization;
+import util.serialization.Serialization;
 
 public class Exit extends AbstractAction implements IAction{
     @Override

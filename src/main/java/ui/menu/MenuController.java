@@ -1,7 +1,7 @@
 package ui.menu;
 
 import ui.actions.ConsoleHelper;
-import util.Deserialization;
+import util.serialization.Deserialization;
 
 public class MenuController {
     private final Builder builder = Builder.getBuilderInstance();

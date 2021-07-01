@@ -14,7 +14,7 @@ public class CancelOrder extends AbstractAction implements IAction {
     public void execute() {
         try {
             ConsoleHelper.writeMessage("Введите id заказа для отмены");
-            orderService.cancelOrder(ConsoleHelper.readInt());
+            orderService.cancel(ConsoleHelper.readInt());
         } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");

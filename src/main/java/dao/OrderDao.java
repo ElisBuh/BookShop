@@ -26,23 +26,23 @@ public class OrderDao implements IOrderDao {
     }
 
     @Override
-    public void addOrder(Order order) {
+    public void save(Order order) {
         orders.add(order);
     }
 
     @Override
-    public void deleteOrder(Order order) {
+    public void delete(Order order) {
         orders.remove(order);
 
     }
 
     @Override
-    public List<Order> orders() {
+    public List<Order> gelAll() {
         return new ArrayList<>(orders);
     }
 
     @Override
-    public Order getOrder(int id) {
+    public Order get(int id) {
         log.info("Get_Order_By_ID: {}", id);
         return orders.stream()
                 .filter(order -> order.getId() == id)
@@ -51,7 +51,7 @@ public class OrderDao implements IOrderDao {
     }
 
     @Override
-    public void setOrder(Order order) {
+    public void set(Order order) {
         orders.stream()
                 .filter(e -> e.getId() == order.getId())
                 .mapToInt(orders::indexOf)

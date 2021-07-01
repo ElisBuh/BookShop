@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IOrderDao {
 
-    void addOrder(Order order);
-    void deleteOrder(Order order);
-    List<Order> orders();
-    Order getOrder(int id);
-    void setOrder(Order order);
+    void save(Order order);
+    void delete(Order order);
+    List<Order> gelAll();
+    Order get(int id);
+    void set(Order order);
 
 
 }

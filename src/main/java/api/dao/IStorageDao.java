@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface IStorageDao {
 
-    void addBook(Book book);
+    void add(Book book);
     boolean delete(Book book);
-    List<Book> getBooks();
+    List<Book> getAll();
 
 }

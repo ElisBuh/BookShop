@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IStorageService extends AbstractService {
 
-    boolean addBook(Book book, LocalDate localDate);
+    boolean add(Book book, LocalDate localDate);
 
-    boolean deleteBook(Book book);
+    boolean delete(Book book);
 
     List<Book> BookNotSellMoreNmonth();
 
-    List<Book> getStorageBooks();
+    List<Book> getAll();
 }

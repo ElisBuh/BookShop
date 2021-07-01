@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface IBookService extends AbstractService {
 
-    void addBook(String nameBook, String nameAuthor, int price, LocalDate date);
+    void save(String nameBook, String nameAuthor, int price, LocalDate date);
 
-    Book getBook(int id);
+    Book get(int id);
 
     List<Book> listSortBooks(TypeSortBook typeSortBook);
 
-    List<Book> getListBooks();
+    List<Book> getAll();
 }

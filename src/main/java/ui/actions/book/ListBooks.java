@@ -8,6 +8,6 @@ public class ListBooks extends AbstractAction implements IAction {
     @Override
     public void execute() {
         ConsoleHelper.writeMessage("Список книг:");
-        bookService.getListBooks().forEach(System.out::println);
+        bookService.getAll().forEach(System.out::println);
     }
 }

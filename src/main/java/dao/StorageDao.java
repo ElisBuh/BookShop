@@ -26,12 +26,12 @@ public class StorageDao implements IStorageDao {
     }
 
     @Override
-    public List<Book> getBooks() {
+    public List<Book> getAll() {
         return new ArrayList<>(bookStorage);
     }
 
     @Override
-    public void addBook(Book book) {
+    public void add(Book book) {
         bookStorage.add(book);
     }
 

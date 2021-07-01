@@ -20,7 +20,7 @@ public class AddBookToStorage extends AbstractAction implements IAction {
             int id = ConsoleHelper.readInt();
             ConsoleHelper.writeMessage("Ведите Дату добавления книги, пример: \"22.05.2021\":");
             LocalDate date = LocalDate.parse(ConsoleHelper.readString(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            boolean isMessage = storageService.addBook(bookService.getBook(id), date);
+            boolean isMessage = storageService.add(bookService.get(id), date);
 
             if (isMessage) {
                 ConsoleHelper.writeMessage("Книга добавлена на склад.");

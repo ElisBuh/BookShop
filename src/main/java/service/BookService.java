@@ -37,14 +37,14 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void addBook(String nameBook, String nameAuthor, int price, LocalDate date) {
+    public void save(String nameBook, String nameAuthor, int price, LocalDate date) {
         id++;
-        bookDao.addBook(new Book(id, nameBook, nameAuthor, date, price, StatusBook.ABSENT));
+        bookDao.save(new Book(id, nameBook, nameAuthor, date, price, StatusBook.ABSENT));
     }
 
     @Override
     public List<Book> listSortBooks(TypeSortBook typeSortBook) {
-        return bookDao.getBooks().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
+        return bookDao.getAll().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
     }
 
     private Comparator<Book> comparator(TypeSortBook typeSortBook) {
@@ -60,10 +60,10 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book getBook(int id) {
+    public Book get(int id) {
         try {
             log.info("Get_Book_BY_Id: {}", id);
-            return bookDao.getBook(id);
+            return bookDao.get(id);
         } catch (DaoException e) {
             log.error("getBook id: {}, {}", id, e.toString());
             throw e;
@@ -71,8 +71,8 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public List<Book> getListBooks() {
-        return new ArrayList<>(bookDao.getBooks());
+    public List<Book> getAll() {
+        return new ArrayList<>(bookDao.getAll());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BookService implements IBookService {
             log.info("Десериализация Book");
             Book book = (Book) list.get(list.size() - 1);
             id = book.getId();
-            list.stream().map(e -> (Book) e).forEach(bookDao::addBook);
+            list.stream().map(e -> (Book) e).forEach(bookDao::save);
         }
     }
 }

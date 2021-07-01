@@ -7,20 +7,20 @@ import java.util.List;
 
 public interface IRequestDao {
 
-    boolean add(Request request);
+    boolean save(Request request);
 
     Boolean isBook(Book book);
 
     Request changeCountRequest(Book book);
 
-    void setRequest(Integer index, Request request);
+    void set(Integer index, Request request);
 
     Integer indexRequest(Request request);
 
-    void deleteRequest(Request request);
+    void delete(Request request);
 
-    Request getRequest(Book book);
+    Request get(Book book);
 
-    List<Request> getRequests();
+    List<Request> getAll();
 
 }

@@ -35,18 +35,18 @@ public class StorageService implements IStorageService {
     }
 
     @Override
-    public boolean addBook(Book book, LocalDate localDate) {
+    public boolean add(Book book, LocalDate localDate) {
         log.info("Add_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
         try {
-            if (storageDao.getBooks().contains(book)) {
+            if (storageDao.getAll().contains(book)) {
                 return false;
             }
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
-            storageDao.addBook(book);
+            storageDao.add(book);
             if (requestService.isRequest(book)) {
                 if (Boolean.parseBoolean(Config.configProperties("storageService.permissionChangeStatusRequest"))){
-                requestService.deleteRequest(requestService.getRequest(book));
+                requestService.delete(requestService.get(book));
                 }
             }
             return true;
@@ -57,7 +57,7 @@ public class StorageService implements IStorageService {
     }
 
     @Override
-    public boolean deleteBook(Book book) {
+    public boolean delete(Book book) {
         try {
             log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
             book.setStatusBook(StatusBook.ABSENT);
@@ -74,19 +74,19 @@ public class StorageService implements IStorageService {
     @Override
     public List<Book> BookNotSellMoreNmonth() {
         int month = Integer.parseInt(Config.configProperties("storageService.month"));
-        return storageDao.getBooks().stream()
+        return storageDao.getAll().stream()
                 .filter(book -> LocalDate.now().minusMonths(month).isAfter(book.getDateReceipt()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Book> getStorageBooks() {
-        return new ArrayList<>(storageDao.getBooks());
+    public List<Book> getAll() {
+        return new ArrayList<>(storageDao.getAll());
     }
 
     @Override
     public <T> void set(List<T> list) {
         log.info("Десериализация Storage");
-        list.stream().map(e -> (Book) e).forEach(storageDao::addBook);
+        list.stream().map(e -> (Book) e).forEach(storageDao::add);
     }
 }

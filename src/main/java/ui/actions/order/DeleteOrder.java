@@ -15,7 +15,7 @@ public class DeleteOrder extends AbstractAction implements IAction {
         try {
             ConsoleHelper.writeMessage("Введите id заказа для удаления");
             int id = ConsoleHelper.readInt();
-            orderService.deleteOrder(id);
+            orderService.delete(id);
             ConsoleHelper.writeMessage("Заказ удален.");
         } catch (DaoException e) {
             log.error(e.toString());

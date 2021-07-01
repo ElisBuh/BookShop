@@ -40,19 +40,19 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void creatOrder(String nameClient, Book book) {
+    public void creat(String nameClient, Book book) {
         try {
             log.info("creat_Order_BY_Book: {}, id{}", book.getNameBook(), book.getId());
             if (book.getStatusBook().equals(StatusBook.INSTOCK)) {
                 idOrder++;
                 Order order = new Order(idOrder, nameClient, book, StatusOrder.NEW);
-                orderDao.addOrder(order);
+                orderDao.save(order);
             } else {
                 if (requestService.isRequest(book)) {
                     requestService.changeCountRequest(book);
                 } else {
 
-                    requestService.addRequest(book);
+                    requestService.save(book);
                 }
             }
         } catch (DaoException e) {
@@ -63,7 +63,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void cancelOrder(int id) {
+    public void cancel(int id) {
         try {
             log.info("Cancel_Order_BY_Id: {}", id);
             changeStatusOrder(id, StatusOrder.CANCEL);
@@ -78,7 +78,7 @@ public class OrderService implements IOrderService {
     public void changeStatusOrder(int id, StatusOrder statusOrder) {
         try {
             log.info("Change_Status_Order_BY_Id: {}", id);
-            Order order = orderDao.getOrder(id);
+            Order order = orderDao.get(id);
             if (statusOrder.equals(StatusOrder.COMPLETED)) {
                 Book book = order.getBook();
                 order.setDateComplete(LocalDate.now());
@@ -88,7 +88,7 @@ public class OrderService implements IOrderService {
                 }
             }
             order.setStatus(statusOrder);
-            orderDao.setOrder(order);
+            orderDao.set(order);
         } catch (DaoException e) {
             log.error("changeOrder id: {}, {}", id, e.toString());
             throw e;
@@ -98,7 +98,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
-        return orderDao.orders().stream()
+        return orderDao.gelAll().stream()
                 .filter(predicate(typeSortOrder))
                 .sorted(comparator(typeSortOrder))
                 .collect(Collectors.toList());
@@ -124,7 +124,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
-        return orderDao.orders().stream()
+        return orderDao.gelAll().stream()
                 .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
@@ -133,7 +133,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
-        return orderDao.orders().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+        return orderDao.gelAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .mapToInt(Order::getCost)
                 .sum();
@@ -141,17 +141,17 @@ public class OrderService implements IOrderService {
 
     @Override
     public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
-        return (int) orderDao.orders().stream()
+        return (int) orderDao.gelAll().stream()
                 .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .count();
     }
 
     @Override
-    public void deleteOrder(int id) {
+    public void delete(int id) {
         try {
             log.info("Delete_Order_BY_Id: {}", id);
-            orderDao.deleteOrder(orderDao.getOrder(id));
+            orderDao.delete(orderDao.get(id));
         } catch (DaoException e) {
             log.error("deleteOrder id: {}, {}", id, e.toString());
             throw e;
@@ -162,7 +162,7 @@ public class OrderService implements IOrderService {
     public Order getOrder(int id) {
         try {
             log.info("Get_Order_BY_Id: {}", id);
-            return orderDao.getOrder(id);
+            return orderDao.get(id);
         } catch (DaoException e) {
             log.error("getOrder id: {}, {}", id, e.toString());
             throw e;
@@ -170,8 +170,8 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> ListOrders() {
-        return new ArrayList<>(orderDao.orders());
+    public List<Order> getAll() {
+        return new ArrayList<>(orderDao.gelAll());
 
     }
 
@@ -181,7 +181,7 @@ public class OrderService implements IOrderService {
             log.info("Десериализация Order");
             Order order = (Order) list.get(list.size() - 1);
             idOrder = order.getId();
-            list.stream().map(e -> (Order) e).forEach(orderDao::addOrder);
+            list.stream().map(e -> (Order) e).forEach(orderDao::save);
         }
     }
 }

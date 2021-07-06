@@ -106,7 +106,7 @@ public class Builder {
         orderMenuItems[3] = new MenuItem("Изменить статус заказа.", changeOrderStatus, rootMenu);
         orderMenuItems[4] = new MenuItem("Сортированный список заказов.", listSortOrder, rootMenu);
         orderMenuItems[5] = new MenuItem("Данные за промежуток времени.", timeForPeriodForTime, rootMenu);
-        orderMenuItems[6] = new MenuItem("Удалить заказ.", new DeleteOrder(), rootMenu);
+        orderMenuItems[6] = new MenuItem("Удалить заказ.", deleteOrder, rootMenu);
         orderMenuItems[7] = new MenuItem("Главное меню.", () -> { }, rootMenu);
 
         return new Menu("Меню заказов:", orderMenuItems);

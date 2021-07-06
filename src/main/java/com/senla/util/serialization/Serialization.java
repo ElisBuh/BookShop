@@ -15,11 +15,6 @@ import java.util.List;
 
 @Singleton
 public class Serialization {
-    public Serialization() {
-        System.out.println("Serialization");
-    }
-
-
     @InjectByType
     protected IBookService bookService;
     @InjectByType

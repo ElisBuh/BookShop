@@ -45,7 +45,7 @@ public class ObjectFactory {
         configurators.forEach(objectConfigurator -> objectConfigurator.configure(t,context));
     }
 
-    private <T> T create(Class<T> implClass) throws InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException, NoSuchMethodException {
+    private <T> T create(Class<T> implClass) throws ReflectiveOperationException {
         T t = implClass.getDeclaredConstructor().newInstance();
         return t;
     }

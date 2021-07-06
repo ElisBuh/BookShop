@@ -21,6 +21,50 @@ public class Builder {
     @InjectProperty("storageService.month")
     private String month;
 
+    @InjectByType
+    private Exit exit;
+    @InjectByType
+    private AddBook addBook;
+    @InjectByType
+    private ListBooks listBooks;
+    @InjectByType
+    private ListSortNameBooks listSortNameBooks;
+    @InjectByType
+    private ListSortDateBooks listSortDateBooks;
+    @InjectByType
+    private ListSortPriceBooks listSortPriceBooks;
+    @InjectByType
+    private ListSortStatusBooks listSortStatusBooks;
+
+    @InjectByType
+    private AddOrder addOrder;
+    @InjectByType
+    private CancelOrder cancelOrder;
+    @InjectByType
+    private ChangeOrderStatus changeOrderStatus;
+    @InjectByType
+    private ListSortOrder listSortOrder;
+    @InjectByType
+    private TimeForPeriodForTime timeForPeriodForTime;
+    @InjectByType
+    private DeleteOrder deleteOrder;
+
+    @InjectByType
+    private AddRequest addRequest;
+    @InjectByType
+    private ListRequests listRequests;
+    @InjectByType
+    private ListSortRequests listSortRequests;
+    @InjectByType
+    private DeleteRequest deleteRequest;
+
+    @InjectByType
+    private AddBookToStorage addBookToStorage;
+    @InjectByType
+    private DeleteBookFromStorage deleteBookFromStorage;
+    @InjectByType
+    private ListBooksInStorage listBooksInStorage;
+
     private Menu rootMenu;
 
 
@@ -93,48 +137,6 @@ public class Builder {
         return new Menu("Меню склада:", storageMenuItems);
     }
 
-    @InjectByType
-    private Exit exit;
-    @InjectByType
-    private AddBook addBook;
-    @InjectByType
-    private ListBooks listBooks;
-    @InjectByType
-    private ListSortNameBooks listSortNameBooks;
-    @InjectByType
-    private ListSortDateBooks listSortDateBooks;
-    @InjectByType
-    private ListSortPriceBooks listSortPriceBooks;
-    @InjectByType
-    private ListSortStatusBooks listSortStatusBooks;
 
-    @InjectByType
-    private AddOrder addOrder;
-    @InjectByType
-    private CancelOrder cancelOrder;
-    @InjectByType
-    private ChangeOrderStatus changeOrderStatus;
-    @InjectByType
-    private ListSortOrder listSortOrder;
-    @InjectByType
-    private TimeForPeriodForTime timeForPeriodForTime;
-    @InjectByType
-    private DeleteOrder deleteOrder;
-
-    @InjectByType
-    private AddRequest addRequest;
-    @InjectByType
-    private ListRequests listRequests;
-    @InjectByType
-    private ListSortRequests listSortRequests;
-    @InjectByType
-    private DeleteRequest deleteRequest;
-
-    @InjectByType
-    private AddBookToStorage addBookToStorage;
-    @InjectByType
-    private DeleteBookFromStorage deleteBookFromStorage;
-    @InjectByType
-    private ListBooksInStorage listBooksInStorage;
 
 }

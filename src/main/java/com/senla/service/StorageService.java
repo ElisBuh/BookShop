@@ -43,10 +43,8 @@ public class StorageService implements IStorageService {
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
             storageDao.add(book);
-            if (requestService.isRequest(book)) {
-                if (Boolean.parseBoolean(changeStatusRequest)){
+            if (requestService.isRequest(book) && Boolean.parseBoolean(changeStatusRequest)) {
                 requestService.delete(requestService.get(book));
-                }
             }
             return true;
         } catch (DaoException e) {

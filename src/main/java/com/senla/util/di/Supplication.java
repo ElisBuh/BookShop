@@ -1,6 +1,6 @@
 package com.senla.util.di;
 
-public class Applicat {
+public class Supplication {
     public static ApplicationContext run(String packageToScan){
         JavaConfig config = new JavaConfig(packageToScan);
         ApplicationContext context = new ApplicationContext(config);

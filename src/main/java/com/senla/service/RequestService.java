@@ -2,10 +2,11 @@ package com.senla.service;
 
 import com.senla.api.dao.IRequestDao;
 import com.senla.api.service.IRequestService;
-import com.senla.dao.RequestDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.Request;
+import com.senla.util.annotation.InjectByType;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,24 +15,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
 public class RequestService implements IRequestService {
     private static final Logger log = LoggerFactory.getLogger(RequestService.class);
 
+    @InjectByType
+    private IRequestDao requestDao;
+
     private int idRequest;
-    private final IRequestDao requestDao;
-
-    private static volatile RequestService requestServiceInstance;
-
-    private RequestService() {
-        requestDao = RequestDao.getRequestDaoInstance();
-    }
-
-    public static RequestService getRequestServiceInstance() {
-        if (requestServiceInstance == null) {
-            requestServiceInstance = new RequestService();
-        }
-        return requestServiceInstance;
-    }
 
     @Override
     public boolean save(Book book) {

@@ -1,37 +1,52 @@
 package com.senla.util.di;
 
 
-import com.senla.api.dao.IBookDao;
-import com.senla.dao.BookDao;
-
+import lombok.SneakyThrows;
+import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ObjectFactory {
-    private static ObjectFactory ourInstance = new ObjectFactory();
-    private Config config;
-//    = new JavaConfig("api");
+    private List<ObjectConfigurator> configurators = new ArrayList<>();
+    private final ApplicationContext context;
 
-    private ObjectFactory() {
-        HashMap<Class,Class> map = new HashMap<>();
-        map.put(IBookDao.class, BookDao.class);
-        config = new JavaConfig("com/senla/dao");
-    }
-    public static ObjectFactory getInstance(){
-        return ourInstance;
+    @SneakyThrows
+    public ObjectFactory(ApplicationContext context) {
+        this.context = context;
+        for (Class<? extends ObjectConfigurator> aClass : context.getConfig().getScanner().getSubTypesOf(ObjectConfigurator.class)) {
+            configurators.add(aClass.getDeclaredConstructor().newInstance());
+        }
     }
 
-    public <T> T createObject(Class<T> type){
-        Class<? extends T> implClass = type;
-        if (type.isInterface()){
-            implClass = config.getImplClass(type);
-        }
-        try {
-            return implClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @SneakyThrows
+    public <T> T createObject(Class<T> implClass) {
+        T t = create(implClass);
 
+        configure(t);
+
+        invokeInit(implClass, t);
+
+
+        return t;
+    }
+
+    private <T> void invokeInit(Class<T> implClass, T t) throws IllegalAccessException, InvocationTargetException {
+        for (Method method : implClass.getMethods()) {
+            if (method.isAnnotationPresent(PostConstruct.class)){
+                method.invoke(t);
+            }
+        }
+    }
+
+    private <T> void configure(T t) {
+        configurators.forEach(objectConfigurator -> objectConfigurator.configure(t,context));
+    }
+
+    private <T> T create(Class<T> implClass) throws InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException, NoSuchMethodException {
+        T t = implClass.getDeclaredConstructor().newInstance();
+        return t;
     }
 }

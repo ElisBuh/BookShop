@@ -3,12 +3,13 @@ package com.senla.service;
 import com.senla.api.dao.IOrderDao;
 import com.senla.api.service.IOrderService;
 import com.senla.api.service.IRequestService;
-import com.senla.dao.OrderDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
 import com.senla.model.Order;
 import com.senla.model.StatusOrder;
+import com.senla.util.annotation.InjectByType;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,25 +20,17 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-
+@Singleton
 public class OrderService implements IOrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
+    @InjectByType
+    private IRequestService requestService;
+
+    @InjectByType
+    private IOrderDao orderDao;
+
     private int idOrder;
-    private final IRequestService requestService;
-    private final IOrderDao orderDao = OrderDao.getOrderDaoInstance();
-    private static volatile OrderService orderServiceInstance;
-
-    private OrderService() {
-        this.requestService = RequestService.getRequestServiceInstance();
-    }
-
-    public static OrderService getOrderServiceInstance() {
-        if (orderServiceInstance == null) {
-            orderServiceInstance = new OrderService();
-        }
-        return orderServiceInstance;
-    }
 
     @Override
     public void creat(String nameClient, Book book) {

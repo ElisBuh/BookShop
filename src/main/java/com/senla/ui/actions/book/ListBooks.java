@@ -1,10 +1,14 @@
 package com.senla.ui.actions.book;
 
-import com.senla.ui.actions.AbstractAction;
+import com.senla.service.BookService;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
+import com.senla.util.annotation.InjectByType;
 
-public class ListBooks extends AbstractAction implements IAction {
+public class ListBooks implements IAction {
+    @InjectByType
+    private BookService bookService;
+
     @Override
     public void execute() {
         ConsoleHelper.writeMessage("Список книг:");

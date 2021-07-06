@@ -1,12 +1,16 @@
 package com.senla.ui.actions.order;
 
+import com.senla.api.service.IOrderService;
 import com.senla.service.TypeSortOrder;
-import com.senla.ui.actions.AbstractAction;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
+import com.senla.util.annotation.InjectByType;
 
 
-public class ListSortOrder extends AbstractAction implements IAction {
+public class ListSortOrder implements IAction {
+    @InjectByType
+    private IOrderService orderService;
+
     @Override
     public void execute() {
         ConsoleHelper.writeMessage(

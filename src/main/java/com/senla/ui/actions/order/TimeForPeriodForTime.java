@@ -1,14 +1,17 @@
 package com.senla.ui.actions.order;
 
-import com.senla.ui.actions.AbstractAction;
+import com.senla.api.service.IOrderService;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
-import com.senla.ui.menu.MenuController;
+import com.senla.util.annotation.InjectByType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class TimeForPeriodForTime extends AbstractAction implements IAction {
+public class TimeForPeriodForTime implements IAction {
+    @InjectByType
+    private IOrderService orderService;
+
     @Override
     public void execute() {
         ConsoleHelper.writeMessage("Введите первую дату, пример: \"22.05.2021\":");
@@ -29,7 +32,7 @@ public class TimeForPeriodForTime extends AbstractAction implements IAction {
         } else if (point == 3) {
             ConsoleHelper.writeMessage(orderService.countCompleteOrders(dateStart, dateEnd) + "");
         } else {
-            MenuController.getMenuControllerInstance().run();
+
         }
     }
 }

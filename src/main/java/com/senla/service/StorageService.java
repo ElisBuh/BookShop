@@ -3,36 +3,35 @@ package com.senla.service;
 import com.senla.api.dao.IStorageDao;
 import com.senla.api.service.IRequestService;
 import com.senla.api.service.IStorageService;
-import com.senla.dao.StorageDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
+import com.senla.util.annotation.InjectByType;
+import com.senla.util.annotation.InjectProperty;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.senla.util.Config;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
 public class StorageService implements IStorageService {
     private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
-    private final IStorageDao storageDao = StorageDao.getStorageDaoInstance();
-    private final IRequestService requestService;
-    private static volatile StorageService storageServiceInstance;
+    @InjectProperty("storageService.month")
+    private String month;
+    @InjectProperty("storageService.permissionChangeStatusRequest")
+    private String changeStatusRequest;
 
-    private StorageService() {
-        this.requestService = RequestService.getRequestServiceInstance();
-    }
+    @InjectByType
+    private IStorageDao storageDao;
 
-    public static StorageService getStorageServiceInstance() {
-        if (storageServiceInstance == null) {
-            storageServiceInstance = new StorageService();
-        }
-        return storageServiceInstance;
-    }
+    @InjectByType
+    private IRequestService requestService;
+
 
     @Override
     public boolean add(Book book, LocalDate localDate) {
@@ -44,10 +43,8 @@ public class StorageService implements IStorageService {
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
             storageDao.add(book);
-            if (requestService.isRequest(book)) {
-                if (Boolean.parseBoolean(Config.configProperties("storageService.permissionChangeStatusRequest"))){
+            if (requestService.isRequest(book) && Boolean.parseBoolean(changeStatusRequest)) {
                 requestService.delete(requestService.get(book));
-                }
             }
             return true;
         } catch (DaoException e) {
@@ -73,9 +70,9 @@ public class StorageService implements IStorageService {
 
     @Override
     public List<Book> BookNotSellMoreNmonth() {
-        int month = Integer.parseInt(Config.configProperties("storageService.month"));
+//        int month = Integer.parseInt(Config.configProperties("storageService.month"));
         return storageDao.getAll().stream()
-                .filter(book -> LocalDate.now().minusMonths(month).isAfter(book.getDateReceipt()))
+                .filter(book -> LocalDate.now().minusMonths(Integer.parseInt(month)).isAfter(book.getDateReceipt()))
                 .collect(Collectors.toList());
     }
 

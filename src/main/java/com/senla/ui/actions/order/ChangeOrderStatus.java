@@ -1,16 +1,19 @@
 package com.senla.ui.actions.order;
 
+import com.senla.api.service.IOrderService;
 import com.senla.exceptions.DaoException;
-import com.senla.ui.actions.AbstractAction;
 import com.senla.model.StatusOrder;
+import com.senla.util.annotation.InjectByType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
-import com.senla.ui.menu.MenuController;
 
-public class ChangeOrderStatus extends AbstractAction implements IAction {
+public class ChangeOrderStatus implements IAction {
     private static final Logger log = LoggerFactory.getLogger(ChangeOrderStatus.class);
+    @InjectByType
+    private IOrderService orderService;
+
 
     @Override
     public void execute() {
@@ -34,7 +37,6 @@ public class ChangeOrderStatus extends AbstractAction implements IAction {
                 statusOrder = StatusOrder.CANCEL;
             } else {
                 ConsoleHelper.writeMessage("Не вверный ввод");
-                MenuController.getMenuControllerInstance().run();
             }
             orderService.changeStatusOrder(id, statusOrder);
         } catch (DaoException e) {

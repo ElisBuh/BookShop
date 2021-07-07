@@ -4,27 +4,18 @@ import com.senla.api.dao.IRequestDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.Request;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class RequestDao implements IRequestDao {
     private static final Logger log = LoggerFactory.getLogger(RequestDao.class);
 
     private final List<Request> requests = new ArrayList<>();
-    private static volatile RequestDao requestDaoInstance;
-
-    private RequestDao() {
-    }
-
-    public static RequestDao getRequestDaoInstance() {
-        if (requestDaoInstance == null) {
-            requestDaoInstance = new RequestDao();
-        }
-        return requestDaoInstance;
-    }
 
     @Override
     public boolean save(Request request) {

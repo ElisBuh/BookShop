@@ -1,17 +1,24 @@
 package com.senla.ui.actions.storage;
 
 import com.senla.exceptions.DaoException;
+import com.senla.service.BookService;
+import com.senla.service.StorageService;
+import com.senla.util.annotation.InjectByType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.senla.ui.actions.AbstractAction;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class AddBookToStorage extends AbstractAction implements IAction {
+public class AddBookToStorage implements IAction {
     private static final Logger log = LoggerFactory.getLogger(AddBookToStorage.class);
+
+    @InjectByType
+    private StorageService storageService;
+    @InjectByType
+    private BookService bookService;
 
     @Override
     public void execute() {

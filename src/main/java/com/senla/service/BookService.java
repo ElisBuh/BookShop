@@ -3,13 +3,13 @@ package com.senla.service;
 
 import com.senla.api.dao.IBookDao;
 import com.senla.api.service.IBookService;
-import com.senla.dao.BookDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
+import com.senla.util.annotation.InjectByType;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,24 +17,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Singleton
 public class BookService implements IBookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
 
     private int id;
-    private final IBookDao bookDao = BookDao.getBookDaoInstance();
-    private static volatile BookService bookServiceInstance;
 
-    private BookService() {
-    }
-
-
-    public static BookService getBookServiceInstance() {
-        if (bookServiceInstance == null) {
-            bookServiceInstance = new BookService();
-        }
-        return bookServiceInstance;
-    }
+    @InjectByType
+    private IBookDao bookDao;
 
     @Override
     public void save(String nameBook, String nameAuthor, int price, LocalDate date) {

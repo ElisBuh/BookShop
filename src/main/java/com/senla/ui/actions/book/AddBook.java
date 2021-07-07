@@ -1,13 +1,17 @@
 package com.senla.ui.actions.book;
 
-import com.senla.ui.actions.AbstractAction;
+import com.senla.service.BookService;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
+import com.senla.util.annotation.InjectByType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class AddBook extends AbstractAction implements IAction {
+public class AddBook implements IAction {
+    @InjectByType
+    private BookService bookService;
+
     @Override
     public void execute() {
         ConsoleHelper.writeMessage("Ведите Название книги:");

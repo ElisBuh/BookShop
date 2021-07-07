@@ -1,25 +1,21 @@
 package com.senla.ui.menu;
 
+import com.senla.util.annotation.InjectByType;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.senla.ui.actions.ConsoleHelper;
 
 import java.util.stream.IntStream;
 
+
+@Singleton
 public class Navigator {
     private static final Logger log = LoggerFactory.getLogger(Navigator.class);
     private Menu currentMenu;
-    private static volatile Navigator navigatorInstance;
 
-    private Navigator() {
-    }
-
-    public static Navigator getNavigatorInstance() {
-        if (navigatorInstance == null) {
-            navigatorInstance = new Navigator();
-        }
-        return navigatorInstance;
-    }
+    @InjectByType
+    private Builder builder;
 
     public void printMenu() {
         try {
@@ -27,7 +23,7 @@ public class Navigator {
         IntStream.range(0, currentMenu.getMenuItem().length).mapToObj(i -> i + "-" + currentMenu.getMenuItem()[i]).forEach(System.out::println);
         ConsoleHelper.writeMessage("Сделайте выбор");
         }catch (NullPointerException e){
-            currentMenu = Builder.getBuilderInstance().getRootMenu();
+            currentMenu = builder.getRootMenu();
             printMenu();
         }
     }

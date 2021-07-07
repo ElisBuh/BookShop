@@ -3,27 +3,18 @@ package com.senla.dao;
 import com.senla.api.dao.IStorageDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
+import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class StorageDao implements IStorageDao {
     private static final Logger log = LoggerFactory.getLogger(StorageDao.class);
 
     private final List<Book> bookStorage = new ArrayList<>();
-    private static volatile StorageDao storageDaoInstance;
-
-    private StorageDao() {
-    }
-
-    public static StorageDao getStorageDaoInstance() {
-        if (storageDaoInstance == null) {
-            storageDaoInstance = new StorageDao();
-        }
-        return storageDaoInstance;
-    }
 
     @Override
     public List<Book> getAll() {

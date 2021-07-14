@@ -2,7 +2,7 @@ package com.senla.task9.exe3;
 
 public class Producer implements Runnable
 {
-    Store store;
+    private Store store;
     Producer(Store store) {
         this.store=store;
     }

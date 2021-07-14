@@ -2,7 +2,7 @@ package com.senla.task9.exe3;
 
 public class Consumer implements Runnable
 {
-    Store store;
+    private Store store;
     Consumer(Store store) {
         this.store=store;
     }

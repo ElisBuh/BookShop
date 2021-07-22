@@ -16,6 +16,17 @@ public class Request implements Serializable {
         this.id = id;
     }
 
+    public Request(Integer id, Book book, Integer countRequest) {
+        this.id = id;
+        this.book = book;
+        this.countRequest = countRequest;
+    }
+
+    public Request(Book book) {
+        this.book = book;
+        this.countRequest = 1;
+    }
+
     public Book getBook() {
         return book;
     }

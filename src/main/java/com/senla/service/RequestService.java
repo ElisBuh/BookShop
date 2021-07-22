@@ -22,8 +22,6 @@ public class RequestService implements IRequestService {
     @InjectByType
     private IRequestDao requestDao;
 
-    private int idRequest;
-
     @Override
     public boolean save(Book book) {
         try {
@@ -33,8 +31,7 @@ public class RequestService implements IRequestService {
                 changeCountRequest(book);
                 isReq = true;
             } else {
-                idRequest++;
-                isReq = requestDao.save(new Request(idRequest, book));
+                isReq = requestDao.save(new Request(book));
             }
             return isReq;
         } catch (DaoException e) {
@@ -45,17 +42,22 @@ public class RequestService implements IRequestService {
 
     @Override
     public Boolean isRequest(Book book) {
+        log.info("isRequest book: {}", book.toString());
+        try {
         return requestDao.isBook(book);
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
     public void changeCountRequest(Book book) {
+        log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
         try {
-            log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
-            Request request = requestDao.changeCountRequest(book);
-            Integer index = requestDao.indexRequest(request);
+            Request request = requestDao.get(book);
             request.setCountRequest(request.getCountRequest() + 1);
-            requestDao.set(index, request);
+            requestDao.set(request);
         } catch (DaoException e) {
             log.error("changeCountRequest book-id: {}, {}", book, book.getId());
             throw e;
@@ -76,18 +78,35 @@ public class RequestService implements IRequestService {
 
     @Override
     public void delete(Request request) {
-        requestDao.delete(request);
+        try {
+            log.info("Delete_Request: {}", request.toString());
+            requestDao.delete(request);
+        } catch (DaoException e) {
+            log.error("deleteRequest: {}", request);
+            throw e;
+        }
     }
 
     @Override
     public List<Request> getAll() {
-        return new ArrayList<>(requestDao.getAll());
+        log.info("get_All_Request");
+        try {
+            return new ArrayList<>(requestDao.getAll());
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
     public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
+        log.info("SortRequest, {}", typeSortRequest);
+        try {
         return requestDao.getAll().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
-
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     private Comparator<Request> comparator(TypeSortRequest typeSortRequest) {
@@ -100,11 +119,11 @@ public class RequestService implements IRequestService {
 
     @Override
     public <T> void set(List<T> list) {
-        if (list.size() > 0) {
-            log.info("Десериализация Request");
-            Request request = (Request) list.get(list.size() - 1);
-            idRequest = request.getId();
-            list.stream().map(e -> (Request) e).forEach(requestDao::save);
-        }
+//        if (list.size() > 0) {
+//            log.info("Десериализация Request");
+//            Request request = (Request) list.get(list.size() - 1);
+//            idRequest = request.getId();
+//            list.stream().map(e -> (Request) e).forEach(requestDao::save);
+//        }
     }
 }

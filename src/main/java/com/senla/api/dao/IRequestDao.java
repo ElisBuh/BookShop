@@ -11,11 +11,7 @@ public interface IRequestDao {
 
     Boolean isBook(Book book);
 
-    Request changeCountRequest(Book book);
-
-    void set(Integer index, Request request);
-
-    Integer indexRequest(Request request);
+    void set(Request request);
 
     void delete(Request request);
 

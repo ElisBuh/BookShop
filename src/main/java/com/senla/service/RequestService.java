@@ -44,7 +44,7 @@ public class RequestService implements IRequestService {
     public Boolean isRequest(Book book) {
         log.info("isRequest book: {}", book.toString());
         try {
-        return requestDao.isBook(book);
+            return requestDao.isBook(book);
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
@@ -102,7 +102,7 @@ public class RequestService implements IRequestService {
     public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
         log.info("SortRequest, {}", typeSortRequest);
         try {
-        return requestDao.getAll().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
+            return requestDao.getAll().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;

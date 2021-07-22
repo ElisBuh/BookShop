@@ -3,6 +3,7 @@ package com.senla.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class Book implements Serializable {
@@ -68,6 +69,19 @@ public class Book implements Serializable {
 
     public int getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id && price == book.price && Objects.equals(nameBook, book.nameBook) && Objects.equals(nameAuthor, book.nameAuthor) && Objects.equals(date, book.date) && statusBook == book.statusBook && Objects.equals(dateReceipt, book.dateReceipt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameBook, nameAuthor, date, price, statusBook, dateReceipt);
     }
 
     @Override

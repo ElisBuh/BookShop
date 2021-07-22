@@ -24,6 +24,15 @@ public class BookDao implements IBookDao {
     private static final String GET_BOOK_QUERY = "SELECT * FROM books WHERE id=?";
     private static final String DELETE_BOOK_QUERY = "DELETE FROM books WHERE id=?";
     private static final String GET_ALL_BOOKS_QUERY = "SELECT * FROM books;";
+    private static final String SET_BOOK_QUERY = """
+                                                UPDATE books 
+                                                SET name_book = ?,
+                                                name_author = ?,
+                                                date = ?,
+                                                price = ?,
+                                                status_book = ?,
+                                                data_receipt = ?
+                                                WHERE id = ? """;
 
     @InjectByType
     private ConnectPostgreSQL connectPostgreSQL;
@@ -54,14 +63,35 @@ public class BookDao implements IBookDao {
     }
 
     @Override
+    public void set(Book book) {
+        log.info("Set Book: {} To BD", book.toString());
+        try (PreparedStatement statement = connection.prepareStatement(SET_BOOK_QUERY)) {
+            statement.setString(1, book.getNameBook());
+            statement.setString(2, book.getNameAuthor());
+            statement.setTimestamp(3, DataTimeUtil.localDataToTimestamp(book.getDate()));
+            statement.setInt(4, book.getPrice());
+            statement.setString(5, book.getStatusBook().name());
+            statement.setTimestamp(6,DataTimeUtil.localDataToTimestamp(book.getDateReceipt()));
+            statement.setInt(7,book.getId());
+            statement.execute();
+        } catch (NullPointerException e) {
+            log.error(e.toString());
+            throw new DaoException(e);
+        } catch (SQLException e) {
+            log.error("BookDao sql-exception {}", e.getMessage());
+            System.out.println("Ошибка в БД");
+        }
+    }
+
+    @Override
     public Book get(int id) {
         log.info("Get_Book_By_ID: {}", id);
         try (PreparedStatement statement = connection.prepareStatement(GET_BOOK_QUERY)) {
-            statement.setInt(1,id);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                    return getBook(resultSet);
+                return getBook(resultSet);
             }
         } catch (NullPointerException e) {
             log.error(e.toString());
@@ -73,7 +103,6 @@ public class BookDao implements IBookDao {
         return null;
 
     }
-
 
 
     @Override
@@ -97,7 +126,7 @@ public class BookDao implements IBookDao {
     public List<Book> getAll() {
         log.info("getAll-BookDao");
         List<Book> bookList = new ArrayList<>();
-        try(PreparedStatement statement = connection.prepareStatement(GET_ALL_BOOKS_QUERY)) {
+        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_BOOKS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 bookList.add(getBook(resultSet));

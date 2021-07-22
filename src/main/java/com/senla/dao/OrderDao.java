@@ -25,11 +25,11 @@ import java.util.List;
 public class OrderDao implements IOrderDao {
     private static final Logger log = LoggerFactory.getLogger(OrderDao.class);
 
-    private static String SAVE_ORDER_QUERY = "INSERT INTO orders(NAME_CLIENT, BOOK_ID, COST, STATUS_ORDER) VALUES(?,?,?,?)";
-    private static String DELETE_ORDER_QUERY = "DELETE FROM orders WHERE id=?";
-    private static String GET_ALL_ORDERS_QUERY = "SELECT * FROM orders,books WHERE books.id=orders.book_id";
-    private static String GET_ORDER_QUERY = "SELECT * FROM orders,books WHERE books.id=orders.book_id And orders.id=?";
-    private static String SET_ORDER_QUERY = "UPDATE orders SET status_order = ?, date_complete = ? WHERE id = ?";
+    private static final String SAVE_ORDER_QUERY = "INSERT INTO orders(NAME_CLIENT, BOOK_ID, COST, STATUS_ORDER) VALUES(?,?,?,?)";
+    private static final String DELETE_ORDER_QUERY = "DELETE FROM orders WHERE id=?";
+    private static final String GET_ALL_ORDERS_QUERY = "SELECT * FROM orders,books WHERE books.id=orders.book_id";
+    private static final String GET_ORDER_QUERY = "SELECT * FROM orders,books WHERE books.id=orders.book_id And orders.id=?";
+    private static final String SET_ORDER_QUERY = "UPDATE orders SET status_order = ?, date_complete = ? WHERE id = ?";
 
     @InjectByType
     private ConnectPostgreSQL connectPostgreSQL;

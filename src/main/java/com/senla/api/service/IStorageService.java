@@ -1,6 +1,7 @@
 package com.senla.api.service;
 
 import com.senla.model.Book;
+import com.senla.model.Storage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +12,7 @@ public interface IStorageService extends AbstractService {
 
     boolean delete(Book book);
 
-    List<Book> BookNotSellMoreNmonth();
+    List<Storage> BookNotSellMoreNmonth();
 
-    List<Book> getAll();
+    List<Storage> getAll();
 }

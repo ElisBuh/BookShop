@@ -11,6 +11,7 @@ public interface IBookDao {
     Book get(int id);
     List<Book> getAll() throws SQLException;
     boolean delete(Book book);
+    void set(Book book);
 
 
 }

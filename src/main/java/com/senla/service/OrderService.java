@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -94,11 +93,11 @@ public class OrderService implements IOrderService {
     public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
         log.info("ListSortOrder-OrderService");
         try {
-        return orderDao.gelAll().stream()
-                .filter(predicate(typeSortOrder))
-                .sorted(comparator(typeSortOrder))
-                .collect(Collectors.toList());
-        } catch (DaoException e){
+            return orderDao.gelAll().stream()
+                    .filter(predicate(typeSortOrder))
+                    .sorted(comparator(typeSortOrder))
+                    .collect(Collectors.toList());
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
@@ -126,12 +125,12 @@ public class OrderService implements IOrderService {
     public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-        return orderDao.gelAll().stream()
-                .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
-                .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
-                .collect(Collectors.toList());
-        } catch (DaoException e){
+            return orderDao.gelAll().stream()
+                    .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
+                    .collect(Collectors.toList());
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
@@ -141,11 +140,11 @@ public class OrderService implements IOrderService {
     public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-        return orderDao.gelAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
-                .mapToInt(Order::getCost)
-                .sum();
-        } catch (DaoException e){
+            return orderDao.gelAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .mapToInt(Order::getCost)
+                    .sum();
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
@@ -155,11 +154,11 @@ public class OrderService implements IOrderService {
     public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-        return (int) orderDao.gelAll().stream()
-                .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
-                .count();
-        } catch (DaoException e){
+            return (int) orderDao.gelAll().stream()
+                    .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .count();
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
@@ -191,8 +190,8 @@ public class OrderService implements IOrderService {
     public List<Order> getAll() {
         log.info("{}-OrderService", Method.class.getName());
         try {
-        return new ArrayList<>(orderDao.gelAll());
-        } catch (DaoException e){
+            return new ArrayList<>(orderDao.gelAll());
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }

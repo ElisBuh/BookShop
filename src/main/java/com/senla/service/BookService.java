@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,8 +22,6 @@ import java.util.stream.Collectors;
 public class BookService implements IBookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
 
-//    private int id;
-
     @InjectByType
     private IBookDao bookDao;
 
@@ -32,8 +29,8 @@ public class BookService implements IBookService {
     public void save(String nameBook, String nameAuthor, int price, LocalDate date) {
         log.info("save-BookService");
         try {
-        bookDao.save(new Book(nameBook, nameAuthor, date, price, StatusBook.ABSENT));
-        }catch (DaoException e){
+            bookDao.save(new Book(nameBook, nameAuthor, date, price, StatusBook.ABSENT));
+        } catch (DaoException e) {
             log.info(e.toString());
             throw e;
         }
@@ -47,7 +44,7 @@ public class BookService implements IBookService {
         } catch (SQLException e) {
             log.error("BookService sql-exception {}", e.getMessage());
             System.out.println("Ошибка в БД");
-        } catch (DaoException e){
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
@@ -85,11 +82,11 @@ public class BookService implements IBookService {
         } catch (SQLException e) {
             log.error("BookService sql-exception {}", e.getMessage());
             System.out.println("Ошибка в БД");
-        } catch (DaoException e){
+        } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
-    return null;
+        return null;
     }
 
     @Override

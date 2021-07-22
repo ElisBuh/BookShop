@@ -24,11 +24,11 @@ import java.util.List;
 public class RequestDao implements IRequestDao {
     private static final Logger log = LoggerFactory.getLogger(RequestDao.class);
 
-    private static String SAVE_REQUEST_QUERY = "INSERT INTO requests(book_id, count_request) VALUES(?,?)";
-    private static String GET_ALL_REQUESTS_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id";
-    private static String SET_REQUEST_QUERY = "UPDATE requests SET count_request = ? WHERE id = ?";
-    private static String DELETE_REQUEST_QUERY = "DELETE FROM requests WHERE id=?";
-    private static String GET_REQUEST_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id And requests.book_id=?";
+    private static final String SAVE_REQUEST_QUERY = "INSERT INTO requests(book_id, count_request) VALUES(?,?)";
+    private static final String GET_ALL_REQUESTS_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id";
+    private static final String SET_REQUEST_QUERY = "UPDATE requests SET count_request = ? WHERE id = ?";
+    private static final String DELETE_REQUEST_QUERY = "DELETE FROM requests WHERE id=?";
+    private static final String GET_REQUEST_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id And requests.book_id=?";
 
     @InjectByType
     private ConnectPostgreSQL connectPostgreSQL;

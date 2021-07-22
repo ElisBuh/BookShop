@@ -1,11 +1,13 @@
 package com.senla.service;
 
+import com.senla.api.dao.IBookDao;
 import com.senla.api.dao.IStorageDao;
 import com.senla.api.service.IRequestService;
 import com.senla.api.service.IStorageService;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
+import com.senla.model.Storage;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.InjectProperty;
 import com.senla.util.annotation.Singleton;
@@ -30,6 +32,9 @@ public class StorageService implements IStorageService {
     private IStorageDao storageDao;
 
     @InjectByType
+    private IBookDao bookDao;
+
+    @InjectByType
     private IRequestService requestService;
 
 
@@ -37,12 +42,10 @@ public class StorageService implements IStorageService {
     public boolean add(Book book, LocalDate localDate) {
         log.info("Add_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
         try {
-            if (storageDao.getAll().contains(book)) {
-                return false;
-            }
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
-            storageDao.add(book);
+            storageDao.add(new Storage(book));
+            bookDao.set(book);
             if (requestService.isRequest(book) && Boolean.parseBoolean(changeStatusRequest)) {
                 requestService.delete(requestService.get(book));
             }
@@ -62,28 +65,38 @@ public class StorageService implements IStorageService {
         } catch (DaoException e) {
             log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
             throw e;
-
         }
 
 
     }
 
     @Override
-    public List<Book> BookNotSellMoreNmonth() {
-//        int month = Integer.parseInt(Config.configProperties("storageService.month"));
-        return storageDao.getAll().stream()
-                .filter(book -> LocalDate.now().minusMonths(Integer.parseInt(month)).isAfter(book.getDateReceipt()))
-                .collect(Collectors.toList());
+    public List<Storage> BookNotSellMoreNmonth() {
+        log.info("Not sell list");
+        try {
+            return storageDao.getAll().stream()
+                    .filter(storage -> LocalDate.now().minusMonths(Integer.parseInt(month)).isAfter(storage.getBook().getDateReceipt()))
+                    .collect(Collectors.toList());
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
-    public List<Book> getAll() {
-        return new ArrayList<>(storageDao.getAll());
+    public List<Storage> getAll() {
+        log.info("get_All_Storage");
+        try {
+            return new ArrayList<>(storageDao.getAll());
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
     public <T> void set(List<T> list) {
-        log.info("Десериализация Storage");
-        list.stream().map(e -> (Book) e).forEach(storageDao::add);
+//        log.info("Десериализация Storage");
+//        list.stream().map(e -> (Book) e).forEach(storageDao::add);
     }
 }

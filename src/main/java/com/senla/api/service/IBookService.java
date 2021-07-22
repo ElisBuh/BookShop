@@ -15,7 +15,7 @@ public interface IBookService extends AbstractService {
 
     Book get(int id);
 
-    List<Book> listSortBooks(TypeSortBook typeSortBook) throws SQLException;
+    List<Book> listSortBooks(TypeSortBook typeSortBook);
 
     List<Book> getAll() throws SQLException;
 }

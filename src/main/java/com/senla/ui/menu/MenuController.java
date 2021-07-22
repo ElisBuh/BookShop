@@ -16,7 +16,7 @@ public class MenuController {
 
 
     public void run() {
-        deserialization.deserialize();
+//        deserialization.deserialize();
         builder.buildMenu();
         navigator.setCurrentMenu(builder.getRootMenu());
         int point = -1;

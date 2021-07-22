@@ -10,6 +10,8 @@ import com.senla.model.Request;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.InjectProperty;
 import com.senla.util.annotation.Singleton;
+
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -40,7 +42,12 @@ public class Serialization {
                 serRequest = new Serialize(pathRequest),
                 serStorage = new Serialize(pathStorage);
 
-        List<Book> books = bookService.getAll();
+        List<Book> books = null;
+        try {
+            books = bookService.getAll();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         List<Order> orders = orderService.getAll();
         List<Request> request = requestService.getAll();
         List<Book> storage = storageService.getAll();

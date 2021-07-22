@@ -26,6 +26,14 @@ public class Book implements Serializable {
         this.price = price;
     }
 
+    public Book(String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook) {
+        this.nameBook = nameBook;
+        this.nameAuthor = nameAuthor;
+        this.date = date;
+        this.price = price;
+        this.statusBook = statusBook;
+    }
+
     public String getNameBook() {
         return nameBook;
     }
@@ -64,6 +72,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
+        if (id != 0){
         return "Книга: " +
                 "id=" + id +
                 ", Название книги: '" + nameBook + '\'' +
@@ -71,5 +80,13 @@ public class Book implements Serializable {
                 ", Дата издания: " + date +
                 ", Стоимость: " + price +
                 ", Статус книги: " + statusBook + ".";
+    }else {
+            return "Книга: " +
+                    "Название книги: '" + nameBook + '\'' +
+                    ", Имя Автора: '" + nameAuthor + '\'' +
+                    ", Дата издания: " + date +
+                    ", Стоимость: " + price +
+                    ", Статус книги: " + statusBook + ".";
+        }
     }
 }

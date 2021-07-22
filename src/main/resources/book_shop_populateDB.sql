@@ -23,14 +23,17 @@ INSERT INTO storage (book_id)
 VALUES (100002),
        (100007),
        (100005);
+
 UPDATE books
 SET status_book  = 'INSTOCK',
     data_receipt = '2020-10-24'
 WHERE id = 100002;
+
 UPDATE books
 SET status_book  = 'INSTOCK',
     data_receipt = '2020-05-15'
 WHERE id = 100007;
+
 UPDATE books
 SET status_book  = 'INSTOCK',
     data_receipt = '2020-4-19'
@@ -50,6 +53,7 @@ UPDATE orders
 SET status_order  = 'COMPLETED',
     date_complete = '2021-01-24'
 WHERE book_id = 100002;
+
 UPDATE orders
 SET status_order = 'CANCEL'
 WHERE book_id = 100005;

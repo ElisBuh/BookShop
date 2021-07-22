@@ -13,6 +13,8 @@ import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,8 +39,7 @@ public class OrderService implements IOrderService {
         try {
             log.info("creat_Order_BY_Book: {}, id{}", book.getNameBook(), book.getId());
             if (book.getStatusBook().equals(StatusBook.INSTOCK)) {
-                idOrder++;
-                Order order = new Order(idOrder, nameClient, book, StatusOrder.NEW);
+                Order order = new Order(nameClient, book, StatusOrder.NEW);
                 orderDao.save(order);
             } else {
                 if (requestService.isRequest(book)) {
@@ -91,10 +92,16 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
+        log.info("ListSortOrder-OrderService");
+        try {
         return orderDao.gelAll().stream()
                 .filter(predicate(typeSortOrder))
                 .sorted(comparator(typeSortOrder))
                 .collect(Collectors.toList());
+        } catch (DaoException e){
+            log.error(e.toString());
+            throw e;
+        }
 
     }
 
@@ -117,27 +124,45 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+        log.info("{}-OrderService", Method.class.getName());
+        try {
         return orderDao.gelAll().stream()
                 .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
                 .collect(Collectors.toList());
+        } catch (DaoException e){
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
     public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+        log.info("{}-OrderService", Method.class.getName());
+        try {
         return orderDao.gelAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .mapToInt(Order::getCost)
                 .sum();
+        } catch (DaoException e){
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
     public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
+        log.info("{}-OrderService", Method.class.getName());
+        try {
         return (int) orderDao.gelAll().stream()
                 .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                 .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                 .count();
+        } catch (DaoException e){
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
@@ -164,17 +189,23 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> getAll() {
+        log.info("{}-OrderService", Method.class.getName());
+        try {
         return new ArrayList<>(orderDao.gelAll());
+        } catch (DaoException e){
+            log.error(e.toString());
+            throw e;
+        }
 
     }
 
     @Override
     public <T> void set(List<T> list) {
-        if (list.size() > 0) {
-            log.info("Десериализация Order");
-            Order order = (Order) list.get(list.size() - 1);
-            idOrder = order.getId();
-            list.stream().map(e -> (Order) e).forEach(orderDao::save);
-        }
+//        if (list.size() > 0) {
+//            log.info("Десериализация Order");
+//            Order order = (Order) list.get(list.size() - 1);
+//            idOrder = order.getId();
+//            list.stream().map(e -> (Order) e).forEach(orderDao::save);
+//        }
     }
 }

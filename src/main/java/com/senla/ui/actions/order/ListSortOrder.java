@@ -1,6 +1,7 @@
 package com.senla.ui.actions.order;
 
 import com.senla.api.service.IOrderService;
+import com.senla.exceptions.DaoException;
 import com.senla.service.TypeSortOrder;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
@@ -31,6 +32,10 @@ public class ListSortOrder implements IAction {
             ConsoleHelper.writeMessage("Не вверный ввод");
 
         }
+        try {
         orderService.listSortOrder(typeSortOrder).forEach(System.out::println);
+        } catch (DaoException e){
+            System.out.println("Критическая ошибка в БД, Обратитеть в тех поддержку. Ошибка: " + e.getMessage());
+        }
     }
 }

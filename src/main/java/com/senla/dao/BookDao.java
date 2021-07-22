@@ -61,9 +61,7 @@ public class BookDao implements IBookDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                if (resultSet.getInt("id") == id) {
                     return getBook(resultSet);
-                }
             }
         } catch (NullPointerException e) {
             log.error(e.toString());
@@ -99,8 +97,7 @@ public class BookDao implements IBookDao {
     public List<Book> getAll() {
         log.info("getAll-BookDao");
         List<Book> bookList = new ArrayList<>();
-        try {
-            PreparedStatement statement = connection.prepareStatement(GET_ALL_BOOKS_QUERY);
+        try(PreparedStatement statement = connection.prepareStatement(GET_ALL_BOOKS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 bookList.add(getBook(resultSet));

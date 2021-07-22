@@ -15,10 +15,10 @@ public class ListBooks implements IAction {
     @Override
     public void execute() {
         try {
-        ConsoleHelper.writeMessage("Список книг:");
-        bookService.getAll().forEach(System.out::println);
+            ConsoleHelper.writeMessage("Список книг:");
+            bookService.getAll().forEach(System.out::println);
 
-        }catch (DaoException | NullPointerException e){
+        } catch (DaoException e) {
             System.out.println("Критическая ошибка в БД, Обратитеть в тех поддержку. Ошибка: " + e.getMessage());
         }
     }

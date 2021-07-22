@@ -11,7 +11,6 @@ import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -41,14 +40,10 @@ public class BookService implements IBookService {
         log.info("SortsBooks on {}", typeSortBook.name());
         try {
             return bookDao.getAll().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
-        } catch (SQLException e) {
-            log.error("BookService sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
-        return null;
     }
 
     private Comparator<Book> comparator(TypeSortBook typeSortBook) {
@@ -79,14 +74,10 @@ public class BookService implements IBookService {
         log.info("getAll-BookService");
         try {
             return new ArrayList<>(bookDao.getAll());
-        } catch (SQLException e) {
-            log.error("BookService sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
         }
-        return null;
     }
 
     @Override

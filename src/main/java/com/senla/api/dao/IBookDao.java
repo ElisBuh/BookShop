@@ -9,7 +9,7 @@ public interface IBookDao {
 
     void save(Book book);
     Book get(int id);
-    List<Book> getAll() throws SQLException;
+    List<Book> getAll();
     boolean delete(Book book);
     void set(Book book);
 

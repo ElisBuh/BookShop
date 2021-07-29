@@ -3,7 +3,6 @@ package com.senla.dao;
 import com.senla.api.dao.IBookDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
-import com.senla.model.StatusBook;
 import com.senla.model.dto.BookDTO;
 import com.senla.util.DataTimeUtil;
 import com.senla.util.annotation.InjectByType;
@@ -16,7 +15,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

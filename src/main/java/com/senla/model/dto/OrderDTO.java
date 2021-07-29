@@ -4,7 +4,6 @@ import com.senla.model.Book;
 import com.senla.model.Order;
 import com.senla.model.StatusOrder;
 import com.senla.util.DataTimeUtil;
-import com.senla.util.annotation.InjectByType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

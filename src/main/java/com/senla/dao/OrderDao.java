@@ -2,10 +2,7 @@ package com.senla.dao;
 
 import com.senla.api.dao.IOrderDao;
 import com.senla.exceptions.DaoException;
-import com.senla.model.Book;
 import com.senla.model.Order;
-import com.senla.model.StatusBook;
-import com.senla.model.StatusOrder;
 import com.senla.model.dto.BookDTO;
 import com.senla.model.dto.OrderDTO;
 import com.senla.util.DataTimeUtil;
@@ -19,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

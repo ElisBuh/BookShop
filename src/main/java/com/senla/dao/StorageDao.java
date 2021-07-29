@@ -5,6 +5,7 @@ import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
 import com.senla.model.Storage;
+import com.senla.model.dto.BookDTO;
 import com.senla.util.DataTimeUtil;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
@@ -32,6 +33,8 @@ public class StorageDao implements IStorageDao {
     @InjectByType
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
+    @InjectByType
+    private BookDTO bookDTO;
 
     @PostConstruct
     public void connection() {
@@ -46,16 +49,13 @@ public class StorageDao implements IStorageDao {
             PreparedStatement statement = connection.prepareStatement(GET_ALL_STORAGE_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                storageList.add(new Storage(resultSet.getLong("id"), getBook(resultSet)));
+                storageList.add(new Storage(resultSet.getLong("id"), bookDTO.getBook(resultSet)));
             }
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
+            return storageList;
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return storageList;
     }
 
     @Override
@@ -64,12 +64,9 @@ public class StorageDao implements IStorageDao {
         try (PreparedStatement statement = connection.prepareStatement(ADD_BOOK_TO_STORAGE_QUERY)) {
             statement.setInt(1, storage.getBook().getId());
             statement.execute();
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
     }
 
@@ -80,23 +77,9 @@ public class StorageDao implements IStorageDao {
             statement.setInt(1, book.getId());
             statement.execute();
             return true;
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return false;
-    }
-
-    private Book getBook(ResultSet resultSet) throws SQLException {
-        int idBook = resultSet.getInt("book_id");
-        String nameBook = resultSet.getString("name_book");
-        String nameAuthor = resultSet.getString("name_author");
-        LocalDate date = DataTimeUtil.timestampToLocalDate(resultSet.getTimestamp("date"));
-        int price = resultSet.getInt("price");
-        StatusBook statusBook = StatusBook.valueOf(resultSet.getString("status_book"));
-        return new Book(idBook, nameBook, nameAuthor, date, price, statusBook);
     }
 }

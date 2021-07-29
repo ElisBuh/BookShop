@@ -6,6 +6,7 @@ import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,21 +22,24 @@ public class ConnectPostgreSQL {
     private String USER;
     @InjectProperty("pass")
     private String PASS;
+    @InjectProperty("db_driver")
+    private String dbDriver;
 
     private Connection connection;
 
     public Connection conPostqres() {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(dbDriver);
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
             log.info("Connection to BD: {}", connection.getClientInfo());
             return connection;
         } catch (SQLException | ClassNotFoundException e) {
             log.error("Connection Failed: {}", e.getMessage());
+            throw new DaoException(e);
         }
-        return null;
     }
-    public void connectionClose(){
+
+    public void connectionClose() {
         try {
             connection.close();
             log.info("Bd session close.");

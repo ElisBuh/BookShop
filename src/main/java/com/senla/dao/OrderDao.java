@@ -6,6 +6,8 @@ import com.senla.model.Book;
 import com.senla.model.Order;
 import com.senla.model.StatusBook;
 import com.senla.model.StatusOrder;
+import com.senla.model.dto.BookDTO;
+import com.senla.model.dto.OrderDTO;
 import com.senla.util.DataTimeUtil;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
@@ -34,6 +36,10 @@ public class OrderDao implements IOrderDao {
     @InjectByType
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
+    @InjectByType
+    private BookDTO bookDTO;
+    @InjectByType
+    private OrderDTO orderDTO;
 
     @PostConstruct
     public void connection() {
@@ -49,12 +55,9 @@ public class OrderDao implements IOrderDao {
             statement.setInt(3, order.getCost());
             statement.setString(4, order.getStatusOrder().name());
             statement.execute();
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
     }
 
@@ -64,12 +67,9 @@ public class OrderDao implements IOrderDao {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_ORDER_QUERY)) {
             statement.setInt(1, order.getId());
             statement.execute();
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
     }
 
@@ -81,16 +81,13 @@ public class OrderDao implements IOrderDao {
             PreparedStatement statement = connection.prepareStatement(GET_ALL_ORDERS_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                orderList.add(getOrder(resultSet));
+                orderList.add(orderDTO.getOrder(resultSet, bookDTO));
             }
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
+            return orderList;
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return orderList;
     }
 
     @Override
@@ -101,16 +98,13 @@ public class OrderDao implements IOrderDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return getOrder(resultSet);
+                return orderDTO.getOrder(resultSet, bookDTO);
             }
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
+            return null;
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return null;
     }
 
     @Override
@@ -125,34 +119,9 @@ public class OrderDao implements IOrderDao {
             }
             statement.setInt(3, order.getId());
             statement.execute();
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-    }
-
-    private Book getBook(ResultSet resultSet) throws SQLException {
-        int idBook = resultSet.getInt("book_id");
-        String nameBook = resultSet.getString("name_book");
-        String nameAuthor = resultSet.getString("name_author");
-        LocalDate date = DataTimeUtil.timestampToLocalDate(resultSet.getTimestamp("date"));
-        int price = resultSet.getInt("price");
-        StatusBook statusBook = StatusBook.valueOf(resultSet.getString("status_book"));
-        return new Book(idBook, nameBook, nameAuthor, date, price, statusBook);
-    }
-
-    private Order getOrder(ResultSet resultSet) throws SQLException {
-        int idOrder = resultSet.getInt("id");
-        String nameClient = resultSet.getString("name_client");
-        Book book = getBook(resultSet);
-        StatusOrder statusOrder = StatusOrder.valueOf(resultSet.getString("status_order"));
-        LocalDate date = null;
-        if (resultSet.getTimestamp("date_complete") != null) {
-            date = DataTimeUtil.timestampToLocalDate(resultSet.getTimestamp("date_complete"));
-        }
-        return new Order(idOrder, nameClient, book, date, statusOrder);
     }
 }

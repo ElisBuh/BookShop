@@ -43,12 +43,7 @@ public class Serialization {
                 serRequest = new Serialize(pathRequest),
                 serStorage = new Serialize(pathStorage);
 
-        List<Book> books = null;
-        try {
-            books = bookService.getAll();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        List<Book> books = bookService.getAll();
         List<Order> orders = orderService.getAll();
         List<Request> request = requestService.getAll();
         List<Storage> storage = storageService.getAll();

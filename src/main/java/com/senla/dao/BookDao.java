@@ -4,6 +4,7 @@ import com.senla.api.dao.IBookDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
+import com.senla.model.dto.BookDTO;
 import com.senla.util.DataTimeUtil;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
@@ -11,7 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +29,20 @@ public class BookDao implements IBookDao {
     private static final String DELETE_BOOK_QUERY = "DELETE FROM books WHERE id=?";
     private static final String GET_ALL_BOOKS_QUERY = "SELECT * FROM books;";
     private static final String SET_BOOK_QUERY = """
-                                                UPDATE books 
-                                                SET name_book = ?,
-                                                name_author = ?,
-                                                date = ?,
-                                                price = ?,
-                                                status_book = ?,
-                                                data_receipt = ?
-                                                WHERE id = ? """;
+            UPDATE books 
+            SET name_book = ?,
+            name_author = ?,
+            date = ?,
+            price = ?,
+            status_book = ?,
+            data_receipt = ?
+            WHERE id = ? """;
 
     @InjectByType
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
+    @InjectByType
+    private BookDTO bookDTO;
 
     @PostConstruct
     public void connection() {
@@ -53,12 +59,9 @@ public class BookDao implements IBookDao {
             statement.setInt(4, book.getPrice());
             statement.setString(5, book.getStatusBook().name());
             statement.execute();
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("BookDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
     }
 
@@ -71,15 +74,12 @@ public class BookDao implements IBookDao {
             statement.setTimestamp(3, DataTimeUtil.localDataToTimestamp(book.getDate()));
             statement.setInt(4, book.getPrice());
             statement.setString(5, book.getStatusBook().name());
-            statement.setTimestamp(6,DataTimeUtil.localDataToTimestamp(book.getDateReceipt()));
-            statement.setInt(7,book.getId());
+            statement.setTimestamp(6, DataTimeUtil.localDataToTimestamp(book.getDateReceipt()));
+            statement.setInt(7, book.getId());
             statement.execute();
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("BookDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
     }
 
@@ -91,17 +91,13 @@ public class BookDao implements IBookDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return getBook(resultSet);
+                return bookDTO.getBook(resultSet);
             }
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
+            return null;
         } catch (SQLException e) {
             log.error("BookDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return null;
-
     }
 
 
@@ -112,14 +108,10 @@ public class BookDao implements IBookDao {
             statement.setInt(1, book.getId());
             statement.execute();
             return true;
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
         } catch (SQLException e) {
             log.error("BookDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return false;
     }
 
     @Override
@@ -129,27 +121,12 @@ public class BookDao implements IBookDao {
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_BOOKS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                bookList.add(getBook(resultSet));
+                bookList.add(bookDTO.getBook(resultSet));
             }
-        } catch (NullPointerException e) {
-            log.error(e.toString());
-            throw new DaoException(e);
+            return bookList;
         } catch (SQLException e) {
             log.error("BookDao sql-exception {}", e.getMessage());
-            System.out.println("Ошибка в БД");
+            throw new DaoException(e);
         }
-        return bookList;
     }
-
-
-    private Book getBook(ResultSet resultSet) throws SQLException {
-        int idBook = resultSet.getInt("id");
-        String nameBook = resultSet.getString("name_book");
-        String nameAuthor = resultSet.getString("name_author");
-        LocalDate date = DataTimeUtil.timestampToLocalDate(resultSet.getTimestamp("date"));
-        int price = resultSet.getInt("price");
-        StatusBook statusBook = StatusBook.valueOf(resultSet.getString("status_book"));
-        return new Book(idBook, nameBook, nameAuthor, date, price, statusBook);
-    }
-
 }

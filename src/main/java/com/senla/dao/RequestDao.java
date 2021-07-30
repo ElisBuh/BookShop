@@ -4,7 +4,7 @@ import com.senla.api.dao.IRequestDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.Request;
-import com.senla.model.dto.BookDTO;
+import com.senla.model.mapper.BookMapper;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class RequestDao implements IRequestDao {
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
     @InjectByType
-    private BookDTO bookDTO;
+    private BookMapper bookMapper;
 
     @PostConstruct
     public void connection() {
@@ -72,7 +72,7 @@ public class RequestDao implements IRequestDao {
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_REQUESTS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                requestList.add(new Request(resultSet.getInt("id"), bookDTO.getBook(resultSet), resultSet.getInt("count_request")));
+                requestList.add(new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request")));
             }
             return requestList;
         } catch (SQLException e) {
@@ -114,7 +114,7 @@ public class RequestDao implements IRequestDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return new Request(resultSet.getInt("id"), bookDTO.getBook(resultSet), resultSet.getInt("count_request"));
+                return new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request"));
             }
             return null;
         } catch (SQLException e) {

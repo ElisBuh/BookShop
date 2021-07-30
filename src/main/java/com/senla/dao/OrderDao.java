@@ -3,8 +3,8 @@ package com.senla.dao;
 import com.senla.api.dao.IOrderDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Order;
-import com.senla.model.dto.BookDTO;
-import com.senla.model.dto.OrderDTO;
+import com.senla.model.mapper.BookMapper;
+import com.senla.model.mapper.OrderMapper;
 import com.senla.util.DataTimeUtil;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
@@ -33,9 +33,9 @@ public class OrderDao implements IOrderDao {
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
     @InjectByType
-    private BookDTO bookDTO;
+    private BookMapper bookMapper;
     @InjectByType
-    private OrderDTO orderDTO;
+    private OrderMapper orderMapper;
 
     @PostConstruct
     public void connection() {
@@ -77,7 +77,7 @@ public class OrderDao implements IOrderDao {
             PreparedStatement statement = connection.prepareStatement(GET_ALL_ORDERS_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                orderList.add(orderDTO.getOrder(resultSet, bookDTO));
+                orderList.add(orderMapper.getOrder(resultSet, bookMapper));
             }
             return orderList;
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class OrderDao implements IOrderDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return orderDTO.getOrder(resultSet, bookDTO);
+                return orderMapper.getOrder(resultSet, bookMapper);
             }
             return null;
         } catch (SQLException e) {

@@ -1,4 +1,4 @@
-package com.senla.model.dto;
+package com.senla.model.mapper;
 
 import com.senla.model.Book;
 import com.senla.model.Order;
@@ -9,12 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class OrderDTO {
+public class OrderMapper {
 
-    public Order getOrder(ResultSet resultSet, BookDTO bookDTO) throws SQLException {
+    public Order getOrder(ResultSet resultSet, BookMapper bookMapper) throws SQLException {
         int idOrder = resultSet.getInt("id");
         String nameClient = resultSet.getString("name_client");
-        Book book = bookDTO.getBook(resultSet);
+        Book book = bookMapper.getBook(resultSet);
         StatusOrder statusOrder = StatusOrder.valueOf(resultSet.getString("status_order"));
         LocalDate date = null;
         if (resultSet.getTimestamp("date_complete") != null) {

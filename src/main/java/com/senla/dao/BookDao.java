@@ -3,7 +3,7 @@ package com.senla.dao;
 import com.senla.api.dao.IBookDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
-import com.senla.model.dto.BookDTO;
+import com.senla.model.mapper.BookMapper;
 import com.senla.util.DataTimeUtil;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
@@ -40,7 +40,7 @@ public class BookDao implements IBookDao {
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
     @InjectByType
-    private BookDTO bookDTO;
+    private BookMapper bookMapper;
 
     @PostConstruct
     public void connection() {
@@ -89,7 +89,7 @@ public class BookDao implements IBookDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return bookDTO.getBook(resultSet);
+                return bookMapper.getBook(resultSet);
             }
             return null;
         } catch (SQLException e) {
@@ -119,7 +119,7 @@ public class BookDao implements IBookDao {
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_BOOKS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                bookList.add(bookDTO.getBook(resultSet));
+                bookList.add(bookMapper.getBook(resultSet));
             }
             return bookList;
         } catch (SQLException e) {

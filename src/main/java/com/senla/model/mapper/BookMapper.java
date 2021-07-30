@@ -1,4 +1,4 @@
-package com.senla.model.dto;
+package com.senla.model.mapper;
 
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class BookDTO {
+public class BookMapper {
 
     public Book getBook(ResultSet resultSet) throws SQLException {
         int idBook = resultSet.getInt("id");

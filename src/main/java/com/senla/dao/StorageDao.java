@@ -4,7 +4,7 @@ import com.senla.api.dao.IStorageDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.Storage;
-import com.senla.model.dto.BookDTO;
+import com.senla.model.mapper.BookMapper;
 import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class StorageDao implements IStorageDao {
     private ConnectPostgreSQL connectPostgreSQL;
     private Connection connection;
     @InjectByType
-    private BookDTO bookDTO;
+    private BookMapper bookMapper;
 
     @PostConstruct
     public void connection() {
@@ -46,7 +46,7 @@ public class StorageDao implements IStorageDao {
             PreparedStatement statement = connection.prepareStatement(GET_ALL_STORAGE_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                storageList.add(new Storage(resultSet.getLong("id"), bookDTO.getBook(resultSet)));
+                storageList.add(new Storage(resultSet.getLong("id"), bookMapper.getBook(resultSet)));
             }
             return storageList;
         } catch (SQLException e) {

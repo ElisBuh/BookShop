@@ -20,7 +20,22 @@ public class Order implements Serializable {
         this.statusOrder = statusOrder;
         this.id = id;
         this.cost = book.getPrice();
+    }
 
+    public Order(int id, String nameClient, Book book, LocalDate dateComplete, StatusOrder statusOrder) {
+        this.id = id;
+        this.nameClient = nameClient;
+        this.book = book;
+        this.cost = book.getPrice();
+        this.dateComplete = dateComplete;
+        this.statusOrder = statusOrder;
+    }
+
+    public Order(String nameClient, Book book, StatusOrder statusOrder) {
+        this.nameClient = nameClient;
+        this.book = book;
+        this.cost = book.getPrice();
+        this.statusOrder = statusOrder;
     }
 
     public int getId() {
@@ -51,6 +66,9 @@ public class Order implements Serializable {
         this.dateComplete = dateComplete;
     }
 
+    public String getNameClient() {
+        return nameClient;
+    }
 
     @Override
     public String toString() {

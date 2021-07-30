@@ -4,10 +4,17 @@ import com.senla.api.dao.IRequestDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.Request;
+import com.senla.model.mapper.BookMapper;
+import com.senla.util.annotation.InjectByType;
 import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,52 +22,104 @@ import java.util.List;
 public class RequestDao implements IRequestDao {
     private static final Logger log = LoggerFactory.getLogger(RequestDao.class);
 
-    private final List<Request> requests = new ArrayList<>();
+    private static final String SAVE_REQUEST_QUERY = "INSERT INTO requests(book_id, count_request) VALUES(?,?)";
+    private static final String GET_ALL_REQUESTS_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id";
+    private static final String SET_REQUEST_QUERY = "UPDATE requests SET count_request = ? WHERE id = ?";
+    private static final String DELETE_REQUEST_QUERY = "DELETE FROM requests WHERE id=?";
+    private static final String GET_REQUEST_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id And requests.book_id=?";
+
+    @InjectByType
+    private ConnectPostgreSQL connectPostgreSQL;
+    private Connection connection;
+    @InjectByType
+    private BookMapper bookMapper;
+
+    @PostConstruct
+    public void connection() {
+        this.connection = connectPostgreSQL.conPostqres();
+    }
 
     @Override
     public boolean save(Request request) {
-        return requests.add(request);
+        log.info("Save Request: {} To BD", request.toString());
+        try (PreparedStatement statement = connection.prepareStatement(SAVE_REQUEST_QUERY)) {
+            statement.setInt(1, request.getBook().getId());
+            statement.setInt(2, request.getCountRequest());
+            statement.execute();
+            return true;
+        } catch (SQLException e) {
+            log.error("RequestDao sql-exception {}", e.getMessage());
+            throw new DaoException(e);
+        }
     }
 
     @Override
     public Boolean isBook(Book book) {
-        return requests.stream()
-                .anyMatch(request -> request.getBook().equals(book));
-    }
-
-    @Override
-    public Request changeCountRequest(Book book) {
-        log.info("Change_count_By_Book: {}, id:{}", book.getNameBook(), book.getId());
-        return requests.stream().filter(request -> request.getBook()
-                .equals(book))
-                .findFirst()
-                .orElseThrow(() -> new DaoException("Book:" + book.getNameBook() + "-not found"));
+        log.info("isBook-RequestDao");
+        try {
+            return getAll().stream()
+                    .anyMatch(request -> request.getBook().getId() == book.getId());
+        } catch (DaoException e) {
+            log.error("isBook-id: {}, {}", book, book.getId());
+            throw new DaoException(e);
+        }
     }
 
     @Override
     public List<Request> getAll() {
-        return new ArrayList<>(requests);
+        log.info("getAll-RequestDao");
+        List<Request> requestList = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_REQUESTS_QUERY)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                requestList.add(new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request")));
+            }
+            return requestList;
+        } catch (SQLException e) {
+            log.error("RequestDao sql-exception {}", e.getMessage());
+            throw new DaoException(e);
+        }
     }
 
     @Override
-    public Integer indexRequest(Request request) {
-        return requests.indexOf(request);
-    }
-
-    @Override
-    public void set(Integer index, Request request) {
-        requests.set(index, request);
+    public void set(Request request) {
+        log.info("Set_Request: {}", request.toString());
+        try (PreparedStatement statement = connection.prepareStatement(SET_REQUEST_QUERY)) {
+            statement.setInt(1, request.getCountRequest());
+            statement.setInt(2, request.getId());
+            statement.execute();
+        } catch (SQLException e) {
+            log.error("RequestDao sql-exception {}", e.getMessage());
+            throw new DaoException(e);
+        }
     }
 
     @Override
     public void delete(Request request) {
-        requests.remove(request);
+        log.info("Delete request: {}", request.toString());
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_REQUEST_QUERY)) {
+            statement.setInt(1, request.getId());
+            statement.execute();
+        } catch (SQLException e) {
+            log.error("RequestDao sql-exception {}", e.getMessage());
+            throw new DaoException(e);
+        }
     }
 
     @Override
     public Request get(Book book) {
-        return requests.stream().filter(request -> isBook(book))
-                .findFirst()
-                .orElseThrow(() -> new DaoException("Book:" + book + "-not found"));
+        log.info("Get_Request, {}", book.toString());
+        try (PreparedStatement statement = connection.prepareStatement(GET_REQUEST_QUERY)) {
+            statement.setInt(1, book.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                return new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request"));
+            }
+            return null;
+        } catch (SQLException e) {
+            log.error("RequestDao sql-exception {}", e.getMessage());
+            throw new DaoException(e);
+        }
     }
 }

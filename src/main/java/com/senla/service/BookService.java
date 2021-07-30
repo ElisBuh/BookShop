@@ -21,20 +21,29 @@ import java.util.stream.Collectors;
 public class BookService implements IBookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
 
-    private int id;
-
     @InjectByType
     private IBookDao bookDao;
 
     @Override
     public void save(String nameBook, String nameAuthor, int price, LocalDate date) {
-        id++;
-        bookDao.save(new Book(id, nameBook, nameAuthor, date, price, StatusBook.ABSENT));
+        log.info("save-BookService");
+        try {
+            bookDao.save(new Book(nameBook, nameAuthor, date, price, StatusBook.ABSENT));
+        } catch (DaoException e) {
+            log.info(e.toString());
+            throw e;
+        }
     }
 
     @Override
     public List<Book> listSortBooks(TypeSortBook typeSortBook) {
-        return bookDao.getAll().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
+        log.info("SortsBooks on {}", typeSortBook.name());
+        try {
+            return bookDao.getAll().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     private Comparator<Book> comparator(TypeSortBook typeSortBook) {
@@ -62,7 +71,13 @@ public class BookService implements IBookService {
 
     @Override
     public List<Book> getAll() {
-        return new ArrayList<>(bookDao.getAll());
+        log.info("getAll-BookService");
+        try {
+            return new ArrayList<>(bookDao.getAll());
+        } catch (DaoException e) {
+            log.error(e.toString());
+            throw e;
+        }
     }
 
     @Override
@@ -70,7 +85,7 @@ public class BookService implements IBookService {
         if (list.size() > 0) {
             log.info("Десериализация Book");
             Book book = (Book) list.get(list.size() - 1);
-            id = book.getId();
+//            id = book.getId();
             list.stream().map(e -> (Book) e).forEach(bookDao::save);
         }
     }

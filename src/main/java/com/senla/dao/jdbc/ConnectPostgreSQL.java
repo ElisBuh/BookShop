@@ -1,4 +1,4 @@
-package com.senla.dao;
+package com.senla.dao.jdbc;
 
 import com.senla.exceptions.DaoException;
 import com.senla.util.annotation.InjectProperty;

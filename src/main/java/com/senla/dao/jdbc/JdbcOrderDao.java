@@ -1,4 +1,4 @@
-package com.senla.dao;
+package com.senla.dao.jdbc;
 
 import com.senla.api.dao.IOrderDao;
 import com.senla.exceptions.DaoException;
@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class OrderDao implements IOrderDao {
-    private static final Logger log = LoggerFactory.getLogger(OrderDao.class);
+public class JdbcOrderDao {
+    private static final Logger log = LoggerFactory.getLogger(JdbcOrderDao.class);
 
     private static final String SAVE_ORDER_QUERY = "INSERT INTO orders(NAME_CLIENT, BOOK_ID, COST, STATUS_ORDER) VALUES(?,?,?,?)";
     private static final String DELETE_ORDER_QUERY = "DELETE FROM orders WHERE id=?";
@@ -42,12 +42,12 @@ public class OrderDao implements IOrderDao {
         this.connection = connectPostgreSQL.conPostqres();
     }
 
-    @Override
+//    @Override
     public void save(Order order) {
         log.info("Save Order: {} To BD", order.toString());
         try (PreparedStatement statement = connection.prepareStatement(SAVE_ORDER_QUERY)) {
             statement.setString(1, order.getNameClient());
-            statement.setInt(2, order.getBook().getId());
+            statement.setLong(2, order.getBook().getId());
             statement.setInt(3, order.getCost());
             statement.setString(4, order.getStatusOrder().name());
             statement.execute();
@@ -57,11 +57,11 @@ public class OrderDao implements IOrderDao {
         }
     }
 
-    @Override
+//    @Override
     public void delete(Order order) {
         log.info("Delete order: {}", order.toString());
         try (PreparedStatement statement = connection.prepareStatement(DELETE_ORDER_QUERY)) {
-            statement.setInt(1, order.getId());
+            statement.setLong(1, order.getId());
             statement.execute();
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
@@ -69,7 +69,7 @@ public class OrderDao implements IOrderDao {
         }
     }
 
-    @Override
+//    @Override
     public List<Order> gelAll() {
         log.info("getAll-OrderDao");
         List<Order> orderList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class OrderDao implements IOrderDao {
         }
     }
 
-    @Override
+//    @Override
     public Order get(int id) {
         log.info("Get_Order_By_ID: {}", id);
         try (PreparedStatement statement = connection.prepareStatement(GET_ORDER_QUERY)) {
@@ -103,7 +103,7 @@ public class OrderDao implements IOrderDao {
         }
     }
 
-    @Override
+//    @Override
     public void set(Order order) {
         log.info("Set_Order_By_ID: {}", order.toString());
         try (PreparedStatement statement = connection.prepareStatement(SET_ORDER_QUERY)) {
@@ -113,7 +113,7 @@ public class OrderDao implements IOrderDao {
             } else {
                 statement.setTimestamp(2, null);
             }
-            statement.setInt(3, order.getId());
+            statement.setLong(3, order.getId());
             statement.execute();
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());

@@ -1,9 +1,19 @@
 package com.senla.model;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "storage")
 public class Storage {
+    @Id
     private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
     private Book book;
+
+    public Storage() {
+    }
 
     public Storage(Long id, Book book) {
         this.id = id;

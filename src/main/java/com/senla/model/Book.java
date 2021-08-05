@@ -1,24 +1,52 @@
 package com.senla.model;
 
 
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
 
+@Entity
+@Table(name = "books")
 public class Book implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    @Id
+    @Column(name = "id")
+    @SequenceGenerator(name = "book_id", sequenceName = "book_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id")
+    private Integer id;
+
+    @Column(name = "name_book")
+    @NotBlank
     private String nameBook;
+
+    @Column(name = "name_author")
+    @NotBlank
     private String nameAuthor;
+
+    @Column(name = "date")
+    @NotBlank
     private LocalDate date;
+
+    @Column(name = "price")
+    @NotBlank
     private int price;
+
+    @Column(name = "status_book")
+    @Enumerated(EnumType.STRING)
     private StatusBook statusBook;
+
+    @Column(name = "data_receipt")
     private LocalDate dateReceipt;
 
+    public Book() {
+    }
 
-    public Book(int id, String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook) {
+    public Book(Integer id, String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook) {
         this.nameBook = nameBook;
         this.nameAuthor = nameAuthor;
         this.id = id;
@@ -55,7 +83,7 @@ public class Book implements Serializable {
         this.dateReceipt = dateReceipt;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -86,17 +114,17 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        if (id != 0){
-        return "Книга: " +
-                "id=" + id +
-                ", Название книги: '" + nameBook + '\'' +
-                ", Имя Автора: '" + nameAuthor + '\'' +
-                ", Дата издания: " + date +
-                ", Стоимость: " + price +
-                ", Статус книги: " + statusBook + ".";
-    }else {
+        if ((id == null)){
             return "Книга: " +
                     "Название книги: '" + nameBook + '\'' +
+                    ", Имя Автора: '" + nameAuthor + '\'' +
+                    ", Дата издания: " + date +
+                    ", Стоимость: " + price +
+                    ", Статус книги: " + statusBook + ".";
+    }else {
+            return "Книга: " +
+                    "id=" + id +
+                    ", Название книги: '" + nameBook + '\'' +
                     ", Имя Автора: '" + nameAuthor + '\'' +
                     ", Дата издания: " + date +
                     ", Стоимость: " + price +

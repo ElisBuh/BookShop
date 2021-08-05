@@ -1,4 +1,4 @@
-package com.senla.dao;
+package com.senla.dao.jdbc;
 
 import com.senla.api.dao.IStorageDao;
 import com.senla.exceptions.DaoException;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class StorageDao implements IStorageDao {
-    private static final Logger log = LoggerFactory.getLogger(StorageDao.class);
+public class JdbcStorageDao implements IStorageDao {
+    private static final Logger log = LoggerFactory.getLogger(JdbcStorageDao.class);
 
     private static final String GET_ALL_STORAGE_QUERY = "SELECT * FROM storage,books WHERE books.id=storage.book_id";
     private static final String ADD_BOOK_TO_STORAGE_QUERY = "INSERT INTO storage(book_id) VALUES(?)";
@@ -59,7 +59,7 @@ public class StorageDao implements IStorageDao {
     public void add(Storage storage) {
         log.info("Save Storage: {} To BD", storage.toString());
         try (PreparedStatement statement = connection.prepareStatement(ADD_BOOK_TO_STORAGE_QUERY)) {
-            statement.setInt(1, storage.getBook().getId());
+            statement.setLong(1, storage.getBook().getId());
             statement.execute();
         } catch (SQLException e) {
             log.error("OrderDao sql-exception {}", e.getMessage());
@@ -71,7 +71,7 @@ public class StorageDao implements IStorageDao {
     public boolean delete(Book book) {
         log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
         try (PreparedStatement statement = connection.prepareStatement(DELETE_BOOK_TO_STORAGE_QUERY)) {
-            statement.setInt(1, book.getId());
+            statement.setLong(1, book.getId());
             statement.execute();
             return true;
         } catch (SQLException e) {

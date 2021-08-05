@@ -1,4 +1,4 @@
-package com.senla.dao;
+package com.senla.dao.jdbc;
 
 import com.senla.api.dao.IRequestDao;
 import com.senla.exceptions.DaoException;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class RequestDao implements IRequestDao {
-    private static final Logger log = LoggerFactory.getLogger(RequestDao.class);
+public class JdbcRequestDao implements IRequestDao {
+    private static final Logger log = LoggerFactory.getLogger(JdbcRequestDao.class);
 
     private static final String SAVE_REQUEST_QUERY = "INSERT INTO requests(book_id, count_request) VALUES(?,?)";
     private static final String GET_ALL_REQUESTS_QUERY = "SELECT * FROM requests,books WHERE books.id=requests.book_id";
@@ -43,7 +43,7 @@ public class RequestDao implements IRequestDao {
     public boolean save(Request request) {
         log.info("Save Request: {} To BD", request.toString());
         try (PreparedStatement statement = connection.prepareStatement(SAVE_REQUEST_QUERY)) {
-            statement.setInt(1, request.getBook().getId());
+            statement.setLong(1, request.getBook().getId());
             statement.setInt(2, request.getCountRequest());
             statement.execute();
             return true;
@@ -72,7 +72,7 @@ public class RequestDao implements IRequestDao {
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_REQUESTS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                requestList.add(new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request")));
+                requestList.add(new Request(resultSet.getLong("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request")));
             }
             return requestList;
         } catch (SQLException e) {
@@ -86,7 +86,7 @@ public class RequestDao implements IRequestDao {
         log.info("Set_Request: {}", request.toString());
         try (PreparedStatement statement = connection.prepareStatement(SET_REQUEST_QUERY)) {
             statement.setInt(1, request.getCountRequest());
-            statement.setInt(2, request.getId());
+            statement.setLong(2, request.getId());
             statement.execute();
         } catch (SQLException e) {
             log.error("RequestDao sql-exception {}", e.getMessage());
@@ -98,7 +98,7 @@ public class RequestDao implements IRequestDao {
     public void delete(Request request) {
         log.info("Delete request: {}", request.toString());
         try (PreparedStatement statement = connection.prepareStatement(DELETE_REQUEST_QUERY)) {
-            statement.setInt(1, request.getId());
+            statement.setLong(1, request.getId());
             statement.execute();
         } catch (SQLException e) {
             log.error("RequestDao sql-exception {}", e.getMessage());
@@ -110,11 +110,11 @@ public class RequestDao implements IRequestDao {
     public Request get(Book book) {
         log.info("Get_Request, {}", book.toString());
         try (PreparedStatement statement = connection.prepareStatement(GET_REQUEST_QUERY)) {
-            statement.setInt(1, book.getId());
+            statement.setLong(1, book.getId());
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request"));
+                return new Request(resultSet.getLong("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request"));
             }
             return null;
         } catch (SQLException e) {

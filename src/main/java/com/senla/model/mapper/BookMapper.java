@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class BookMapper {
 
     public Book getBook(ResultSet resultSet) throws SQLException {
-        int idBook = resultSet.getInt("id");
+        Integer idBook = resultSet.getInt("id");
         String nameBook = resultSet.getString("name_book");
         String nameAuthor = resultSet.getString("name_author");
         LocalDate date = DataTimeUtil.timestampToLocalDate(resultSet.getTimestamp("date"));

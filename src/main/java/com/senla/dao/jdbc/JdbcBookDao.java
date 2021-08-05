@@ -1,6 +1,5 @@
-package com.senla.dao;
+package com.senla.dao.jdbc;
 
-import com.senla.api.dao.IBookDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.mapper.BookMapper;
@@ -19,13 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class BookDao implements IBookDao {
-    private static final Logger log = LoggerFactory.getLogger(BookDao.class);
+public class JdbcBookDao {
+    private static final Logger log = LoggerFactory.getLogger(JdbcBookDao.class);
 
     private static final String SAVE_BOOK_QUERY = "INSERT INTO books(name_book, name_author, date, price, status_book) VALUES(?,?,?,?,?)";
     private static final String GET_BOOK_QUERY = "SELECT * FROM books WHERE id=?";
     private static final String DELETE_BOOK_QUERY = "DELETE FROM books WHERE id=?";
-    private static final String GET_ALL_BOOKS_QUERY = "SELECT * FROM books;";
+    private static final String GET_ALL_BOOKS_QUERY = "SELECT * FROM books";
     private static final String SET_BOOK_QUERY = """
             UPDATE books 
             SET name_book = ?,
@@ -47,7 +46,7 @@ public class BookDao implements IBookDao {
         this.connection = connectPostgreSQL.conPostqres();
     }
 
-    @Override
+//    @Override
     public void save(Book book) {
         log.info("Save Book: {} To BD", book.toString());
         try (PreparedStatement statement = connection.prepareStatement(SAVE_BOOK_QUERY)) {
@@ -63,7 +62,7 @@ public class BookDao implements IBookDao {
         }
     }
 
-    @Override
+//    @Override
     public void set(Book book) {
         log.info("Set Book: {} To BD", book.toString());
         try (PreparedStatement statement = connection.prepareStatement(SET_BOOK_QUERY)) {
@@ -73,7 +72,7 @@ public class BookDao implements IBookDao {
             statement.setInt(4, book.getPrice());
             statement.setString(5, book.getStatusBook().name());
             statement.setTimestamp(6, DataTimeUtil.localDataToTimestamp(book.getDateReceipt()));
-            statement.setInt(7, book.getId());
+            statement.setLong(7, book.getId());
             statement.execute();
         } catch (SQLException e) {
             log.error("BookDao sql-exception {}", e.getMessage());
@@ -81,7 +80,7 @@ public class BookDao implements IBookDao {
         }
     }
 
-    @Override
+//    @Override
     public Book get(int id) {
         log.info("Get_Book_By_ID: {}", id);
         try (PreparedStatement statement = connection.prepareStatement(GET_BOOK_QUERY)) {
@@ -99,11 +98,11 @@ public class BookDao implements IBookDao {
     }
 
 
-    @Override
+//    @Override
     public boolean delete(Book book) {
         log.info("Delete book: {}", book.toString());
         try (PreparedStatement statement = connection.prepareStatement(DELETE_BOOK_QUERY)) {
-            statement.setInt(1, book.getId());
+            statement.setLong(1, book.getId());
             statement.execute();
             return true;
         } catch (SQLException e) {
@@ -112,7 +111,7 @@ public class BookDao implements IBookDao {
         }
     }
 
-    @Override
+//    @Override
     public List<Book> getAll() {
         log.info("getAll-BookDao");
         List<Book> bookList = new ArrayList<>();

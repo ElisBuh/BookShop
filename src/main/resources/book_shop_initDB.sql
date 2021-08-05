@@ -35,7 +35,7 @@ CREATE TABLE orders
     status_order  varchar(9) DEFAULT 'NEW',
     date_complete timestamp,
     PRIMARY KEY (id),
-    FOREIGN KEY (book_id) REFERENCES books (id),
+    FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE ,
     CHECK ( status_order IN ('NEW', 'COMPLETED', 'CANCEL'))
 );
 
@@ -45,7 +45,7 @@ CREATE TABLE requests
     book_id integer NOT NULL ,
     count_request integer NOT NULL ,
     PRIMARY KEY (id),
-    FOREIGN KEY (book_id) REFERENCES books(id)
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 CREATE TABLE storage
@@ -53,5 +53,5 @@ CREATE TABLE storage
     id integer DEFAULT nextval('storage_id'),
     book_id integer NOT NULL ,
     PRIMARY KEY (id),
-    FOREIGN KEY (book_id) REFERENCES books(id)
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );

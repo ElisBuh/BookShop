@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "orders")
-public class Order implements Serializable {
+public class Order extends AEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

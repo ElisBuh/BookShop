@@ -14,7 +14,7 @@ public class Exit implements IAction{
     public void execute() {
 //        Serialization serialization = new Serialization();
 //        serialization.serialize();
-        connectPostgreSQL.connectionClose();
+//        connectPostgreSQL.connectionClose();
         HibernateSessionFactory.shutdown();
         System.out.println("Good Buy");
     }

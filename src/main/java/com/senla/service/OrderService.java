@@ -81,7 +81,7 @@ public class OrderService implements IOrderService {
                 }
             }
             order.setStatus(statusOrder);
-            orderDao.set(order);
+            orderDao.update(order);
         } catch (DaoException e) {
             log.error("changeOrder id: {}, {}", id, e.toString());
             throw e;
@@ -93,7 +93,7 @@ public class OrderService implements IOrderService {
     public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
         log.info("ListSortOrder-OrderService");
         try {
-            return orderDao.gelAll().stream()
+            return orderDao.getAll().stream()
                     .filter(predicate(typeSortOrder))
                     .sorted(comparator(typeSortOrder))
                     .collect(Collectors.toList());
@@ -125,7 +125,7 @@ public class OrderService implements IOrderService {
     public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-            return orderDao.gelAll().stream()
+            return orderDao.getAll().stream()
                     .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                     .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
@@ -140,7 +140,7 @@ public class OrderService implements IOrderService {
     public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-            return orderDao.gelAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
+            return orderDao.getAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                     .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .mapToInt(Order::getCost)
                     .sum();
@@ -154,7 +154,7 @@ public class OrderService implements IOrderService {
     public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-            return (int) orderDao.gelAll().stream()
+            return (int) orderDao.getAll().stream()
                     .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
                     .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .count();
@@ -190,7 +190,7 @@ public class OrderService implements IOrderService {
     public List<Order> getAll() {
         log.info("{}-OrderService", Method.class.getName());
         try {
-            return new ArrayList<>(orderDao.gelAll());
+            return new ArrayList<>(orderDao.getAll());
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;

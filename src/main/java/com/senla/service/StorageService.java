@@ -47,7 +47,7 @@ public class StorageService implements IStorageService {
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
             storageDao.save(new Storage(book));
-            bookDao.set(book);
+            bookDao.update(book);
             if (requestService.isRequest(book) && Boolean.parseBoolean(changeStatusRequest)) {
                 requestService.delete(requestService.findRequest(book));
             }
@@ -64,7 +64,7 @@ public class StorageService implements IStorageService {
             log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
             book.setStatusBook(StatusBook.ABSENT);
             book.setDateReceipt(null);
-            bookDao.set(book);
+            bookDao.update(book);
             return storageDao.delete(findStorage(book));
         } catch (DaoException e) {
             log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());

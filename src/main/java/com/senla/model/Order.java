@@ -2,22 +2,26 @@ package com.senla.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
+    @SequenceGenerator(name = "order_id", sequenceName = "order_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id")
+    private Integer id;
 
     @Column(name = "name_client")
     @NotBlank
     private String nameClient;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
 
@@ -35,7 +39,7 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(Long id, String nameClient, Book book, StatusOrder statusOrder) {
+    public Order(Integer id, String nameClient, Book book, StatusOrder statusOrder) {
         this.nameClient = nameClient;
         this.book = book;
         this.statusOrder = statusOrder;
@@ -43,7 +47,7 @@ public class Order implements Serializable {
         this.cost = book.getPrice();
     }
 
-    public Order(Long id, String nameClient, Book book, LocalDate dateComplete, StatusOrder statusOrder) {
+    public Order(Integer id, String nameClient, Book book, LocalDate dateComplete, StatusOrder statusOrder) {
         this.id = id;
         this.nameClient = nameClient;
         this.book = book;
@@ -59,7 +63,7 @@ public class Order implements Serializable {
         this.statusOrder = statusOrder;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

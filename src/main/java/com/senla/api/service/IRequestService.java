@@ -16,9 +16,11 @@ public interface IRequestService extends AbstractService {
 
     void delete(Request request);
 
-    Request get(Book book);
+    Request get(Integer id);
 
     List<Request> sortRequest(TypeSortRequest typeSortRequest);
 
     List<Request> getAll();
+
+    Request findRequest(Book book);
 }

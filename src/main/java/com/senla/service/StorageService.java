@@ -5,7 +5,9 @@ import com.senla.api.dao.IStorageDao;
 import com.senla.api.service.IRequestService;
 import com.senla.api.service.IStorageService;
 import com.senla.exceptions.DaoException;
+import com.senla.exceptions.ServiceException;
 import com.senla.model.Book;
+import com.senla.model.Request;
 import com.senla.model.StatusBook;
 import com.senla.model.Storage;
 import com.senla.util.annotation.InjectByType;
@@ -44,10 +46,10 @@ public class StorageService implements IStorageService {
         try {
             book.setStatusBook(StatusBook.INSTOCK);
             book.setDateReceipt(localDate);
-            storageDao.add(new Storage(book));
+            storageDao.save(new Storage(book));
             bookDao.set(book);
             if (requestService.isRequest(book) && Boolean.parseBoolean(changeStatusRequest)) {
-                requestService.delete(requestService.get(book));
+                requestService.delete(requestService.findRequest(book));
             }
             return true;
         } catch (DaoException e) {
@@ -61,7 +63,9 @@ public class StorageService implements IStorageService {
         try {
             log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
             book.setStatusBook(StatusBook.ABSENT);
-            return storageDao.delete(book);
+            book.setDateReceipt(null);
+            bookDao.set(book);
+            return storageDao.delete(findStorage(book));
         } catch (DaoException e) {
             log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
             throw e;
@@ -92,6 +96,16 @@ public class StorageService implements IStorageService {
             log.error(e.toString());
             throw e;
         }
+    }
+
+    private Storage findStorage(Book book) {
+        List<Storage> storages = storageDao.getAll();
+        for (Storage storage : storages) {
+            if (storage.getBook().equals(book)) {
+                return storage;
+            }
+        }
+        throw new ServiceException("Not request");
     }
 
     @Override

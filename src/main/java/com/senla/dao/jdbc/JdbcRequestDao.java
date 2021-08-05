@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class JdbcRequestDao implements IRequestDao {
+public class JdbcRequestDao{
     private static final Logger log = LoggerFactory.getLogger(JdbcRequestDao.class);
 
     private static final String SAVE_REQUEST_QUERY = "INSERT INTO requests(book_id, count_request) VALUES(?,?)";
@@ -39,7 +39,7 @@ public class JdbcRequestDao implements IRequestDao {
         this.connection = connectPostgreSQL.conPostqres();
     }
 
-    @Override
+//    @Override
     public boolean save(Request request) {
         log.info("Save Request: {} To BD", request.toString());
         try (PreparedStatement statement = connection.prepareStatement(SAVE_REQUEST_QUERY)) {
@@ -53,7 +53,7 @@ public class JdbcRequestDao implements IRequestDao {
         }
     }
 
-    @Override
+//    @Override
     public Boolean isBook(Book book) {
         log.info("isBook-RequestDao");
         try {
@@ -65,14 +65,14 @@ public class JdbcRequestDao implements IRequestDao {
         }
     }
 
-    @Override
+//    @Override
     public List<Request> getAll() {
         log.info("getAll-RequestDao");
         List<Request> requestList = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_REQUESTS_QUERY)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                requestList.add(new Request(resultSet.getLong("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request")));
+                requestList.add(new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request")));
             }
             return requestList;
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class JdbcRequestDao implements IRequestDao {
         }
     }
 
-    @Override
+//    @Override
     public void set(Request request) {
         log.info("Set_Request: {}", request.toString());
         try (PreparedStatement statement = connection.prepareStatement(SET_REQUEST_QUERY)) {
@@ -94,7 +94,7 @@ public class JdbcRequestDao implements IRequestDao {
         }
     }
 
-    @Override
+//    @Override
     public void delete(Request request) {
         log.info("Delete request: {}", request.toString());
         try (PreparedStatement statement = connection.prepareStatement(DELETE_REQUEST_QUERY)) {
@@ -106,7 +106,7 @@ public class JdbcRequestDao implements IRequestDao {
         }
     }
 
-    @Override
+//    @Override
     public Request get(Book book) {
         log.info("Get_Request, {}", book.toString());
         try (PreparedStatement statement = connection.prepareStatement(GET_REQUEST_QUERY)) {
@@ -114,7 +114,7 @@ public class JdbcRequestDao implements IRequestDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                return new Request(resultSet.getLong("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request"));
+                return new Request(resultSet.getInt("id"), bookMapper.getBook(resultSet), resultSet.getInt("count_request"));
             }
             return null;
         } catch (SQLException e) {

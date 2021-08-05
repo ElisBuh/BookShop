@@ -4,6 +4,7 @@ package com.senla.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "books")
 public class Book implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -104,7 +106,7 @@ public class Book implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id && price == book.price && Objects.equals(nameBook, book.nameBook) && Objects.equals(nameAuthor, book.nameAuthor) && Objects.equals(date, book.date) && statusBook == book.statusBook && Objects.equals(dateReceipt, book.dateReceipt);
+        return price == book.price && Objects.equals(id, book.id) && Objects.equals(nameBook, book.nameBook) && Objects.equals(nameAuthor, book.nameAuthor) && Objects.equals(date, book.date) && statusBook == book.statusBook && Objects.equals(dateReceipt, book.dateReceipt);
     }
 
     @Override

@@ -5,10 +5,10 @@ import com.senla.model.Storage;
 
 import java.util.List;
 
-public interface IStorageDao {
+public interface IStorageDao extends GenericDao<Storage> {
 
-    void add(Storage storage);
-    boolean delete(Book book);
-    List<Storage> getAll();
+//    void add(Storage storage);
+//    boolean delete(Book book);
+//    List<Storage> getAll();
 
 }

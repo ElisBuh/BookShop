@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class JdbcStorageDao implements IStorageDao {
+public class JdbcStorageDao{
     private static final Logger log = LoggerFactory.getLogger(JdbcStorageDao.class);
 
     private static final String GET_ALL_STORAGE_QUERY = "SELECT * FROM storage,books WHERE books.id=storage.book_id";
@@ -38,7 +38,7 @@ public class JdbcStorageDao implements IStorageDao {
         this.connection = connectPostgreSQL.conPostqres();
     }
 
-    @Override
+//    @Override
     public List<Storage> getAll() {
         log.info("getAll-StorageDao");
         List<Storage> storageList = new ArrayList<>();
@@ -46,7 +46,7 @@ public class JdbcStorageDao implements IStorageDao {
             PreparedStatement statement = connection.prepareStatement(GET_ALL_STORAGE_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                storageList.add(new Storage(resultSet.getLong("id"), bookMapper.getBook(resultSet)));
+                storageList.add(new Storage(resultSet.getInt("id"), bookMapper.getBook(resultSet)));
             }
             return storageList;
         } catch (SQLException e) {
@@ -55,7 +55,7 @@ public class JdbcStorageDao implements IStorageDao {
         }
     }
 
-    @Override
+//    @Override
     public void add(Storage storage) {
         log.info("Save Storage: {} To BD", storage.toString());
         try (PreparedStatement statement = connection.prepareStatement(ADD_BOOK_TO_STORAGE_QUERY)) {
@@ -67,7 +67,7 @@ public class JdbcStorageDao implements IStorageDao {
         }
     }
 
-    @Override
+//    @Override
     public boolean delete(Book book) {
         log.info("Delete_Book: {}-{}", book.getNameBook(), book.getId());
         try (PreparedStatement statement = connection.prepareStatement(DELETE_BOOK_TO_STORAGE_QUERY)) {

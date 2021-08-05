@@ -1,17 +1,21 @@
 package com.senla.model;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "requests")
-public class Request implements Serializable {
+public class Request extends AEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
+    @SequenceGenerator(name = "request_id", sequenceName = "request_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "request_id")
+    private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
 
@@ -21,13 +25,13 @@ public class Request implements Serializable {
     public Request() {
     }
 
-    public Request(Long id, Book book) {
+    public Request(Integer id, Book book) {
         this.book = book;
         this.countRequest = 1;
         this.id = id;
     }
 
-    public Request(Long id, Book book, Integer countRequest) {
+    public Request(Integer id, Book book, Integer countRequest) {
         this.id = id;
         this.book = book;
         this.countRequest = countRequest;
@@ -54,7 +58,7 @@ public class Request implements Serializable {
         this.countRequest = countRequest;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

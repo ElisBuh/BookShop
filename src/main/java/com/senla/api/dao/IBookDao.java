@@ -4,7 +4,7 @@ import com.senla.model.Book;
 
 import java.util.List;
 
-public interface IBookDao {
+public interface IBookDao{
 
     void save(Book book);
     Book get(int id);

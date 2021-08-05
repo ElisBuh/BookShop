@@ -3,6 +3,7 @@ package com.senla.service;
 import com.senla.api.dao.IRequestDao;
 import com.senla.api.service.IRequestService;
 import com.senla.exceptions.DaoException;
+import com.senla.exceptions.ServiceException;
 import com.senla.model.Book;
 import com.senla.model.Request;
 import com.senla.util.annotation.InjectByType;
@@ -26,14 +27,12 @@ public class RequestService implements IRequestService {
     public boolean save(Book book) {
         try {
             log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
-            boolean isReq;
             if (isRequest(book)) {
                 changeCountRequest(book);
-                isReq = true;
             } else {
-                isReq = requestDao.save(new Request(book));
+                requestDao.save(new Request(book));
             }
-            return isReq;
+            return true;
         } catch (DaoException e) {
             log.error("addRequest book-id: {}, {}", book, book.getId());
             throw e;
@@ -44,7 +43,7 @@ public class RequestService implements IRequestService {
     public Boolean isRequest(Book book) {
         log.info("isRequest book: {}", book.toString());
         try {
-            return requestDao.isBook(book);
+            return requestDao.getAll().stream().anyMatch(request -> request.getBook().equals(book));
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
@@ -52,12 +51,23 @@ public class RequestService implements IRequestService {
     }
 
     @Override
+    public Request findRequest(Book book) {
+        List<Request> requests = requestDao.getAll();
+        for (Request request : requests) {
+            if (request.getBook().equals(book)) {
+                return request;
+            }
+        }
+        throw new ServiceException("Not request");
+    }
+
+    @Override
     public void changeCountRequest(Book book) {
         log.info("Change_Count_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
         try {
-            Request request = requestDao.get(book);
+            Request request = findRequest(book);
             request.setCountRequest(request.getCountRequest() + 1);
-            requestDao.set(request);
+            requestDao.update(request);
         } catch (DaoException e) {
             log.error("changeCountRequest book-id: {}, {}", book, book.getId());
             throw e;
@@ -66,12 +76,12 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public Request get(Book book) {
+    public Request get(Integer id) {
         try {
-            log.info("Get_Request_BY_Book: {}, id:{}", book.getNameBook(), book.getId());
-            return requestDao.get(book);
+            log.info("Get_Request_id: {}", id);
+            return requestDao.get(id);
         } catch (DaoException e) {
-            log.error("getRequest book-id: {}, {}", book, book.getId());
+            log.error("getRequest book-id: {}", id);
             throw e;
         }
     }

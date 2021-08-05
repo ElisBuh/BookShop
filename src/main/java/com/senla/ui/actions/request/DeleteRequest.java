@@ -19,9 +19,9 @@ public class DeleteRequest implements IAction {
     @Override
     public void execute() {
         try {
-            ConsoleHelper.writeMessage("Введите Id книги с которой хотите снять запрос:");
+            ConsoleHelper.writeMessage("Введите Id запроса который хотите снять:");
             int id = ConsoleHelper.readInt();
-            requestService.delete(requestService.get(bookService.get(id)));
+            requestService.delete(requestService.get(id));
         } catch (DaoException e) {
             log.error(e.toString());
             System.err.println("Такого id нет");

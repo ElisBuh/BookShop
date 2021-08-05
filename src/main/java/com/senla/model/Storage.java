@@ -4,18 +4,20 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "storage")
-public class Storage {
+public class Storage extends AEntity {
     @Id
-    private Long id;
+    @SequenceGenerator(name = "storage_id", sequenceName = "storage_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storage_id")
+    private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
 
     public Storage() {
     }
 
-    public Storage(Long id, Book book) {
+    public Storage(Integer id, Book book) {
         this.id = id;
         this.book = book;
     }
@@ -24,7 +26,7 @@ public class Storage {
         this.book = book;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

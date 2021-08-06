@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -38,7 +39,13 @@ public abstract class JpaAbstractDao<T extends AEntity> implements GenericDao<T>
         log.info("Get_{}_By_ID: {}", aClass(), id);
         try {
             Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            T entity = session.get(aClass(), id);
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteria = cb.createQuery(aClass());
+            Root<T> root = criteria.from(aClass());
+            criteria.select(root).where(cb.equal(root.get("id"),id));
+            T entity =session.createQuery(criteria).getSingleResult();
+
+//            T entity = session.get(aClass(), id);
             if (entity == null) {
                 throw new DaoException("Такого id нет");
             } else return entity;
@@ -53,11 +60,11 @@ public abstract class JpaAbstractDao<T extends AEntity> implements GenericDao<T>
         log.info("getAll-{}", this.getClass().getSimpleName());
         try {
             Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            CriteriaBuilder cd = session.getCriteriaBuilder();
-            CriteriaQuery<T> criteriaQuery = cd.createQuery(aClass());
-            Root<T> root = criteriaQuery.from(aClass());
-            criteriaQuery.select(root);
-            return session.createQuery(criteriaQuery).list();
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteria = cb.createQuery(aClass());
+            Root<T> root = criteria.from(aClass());
+            criteria.select(root);
+            return session.createQuery(criteria).list();
 
 //            return session.createQuery(query(), aClass()).list();
         } catch (DaoException e) {

@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 public class JpaOrderDao extends JpaAbstractDao<Order> implements IOrderDao {
     private static final Logger log = LoggerFactory.getLogger(JpaOrderDao.class);
 
-    @Override
-    protected String query() {
-        return "from Order";
-    }
+//    @Override
+//    protected String query() {
+//        return "from Order";
+//    }
 
     @Override
     protected Class<Order> aClass() {

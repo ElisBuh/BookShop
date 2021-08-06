@@ -11,10 +11,10 @@ import org.slf4j.LoggerFactory;
 public class JpaBookDao extends JpaAbstractDao<Book> implements IBookDao {
     private static final Logger log = LoggerFactory.getLogger(JpaBookDao.class);
 
-    @Override
-    protected String query() {
-        return "from Book";
-    }
+//    @Override
+//    protected String query() {
+//        return "from Book";
+//    }
 
     @Override
     protected Class<Book> aClass() {

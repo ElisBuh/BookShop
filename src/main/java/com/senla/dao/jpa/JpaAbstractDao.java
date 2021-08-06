@@ -8,6 +8,9 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 
@@ -50,7 +53,13 @@ public abstract class JpaAbstractDao<T extends AEntity> implements GenericDao<T>
         log.info("getAll-{}", this.getClass().getSimpleName());
         try {
             Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            return session.createQuery(query(), aClass()).list();
+            CriteriaBuilder cd = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteriaQuery = cd.createQuery(aClass());
+            Root<T> root = criteriaQuery.from(aClass());
+            criteriaQuery.select(root);
+            return session.createQuery(criteriaQuery).list();
+
+//            return session.createQuery(query(), aClass()).list();
         } catch (DaoException e) {
             log.error(this.getClass().getSimpleName(), e.getMessage());
             throw new DaoException(e);
@@ -89,7 +98,7 @@ public abstract class JpaAbstractDao<T extends AEntity> implements GenericDao<T>
         }
     }
 
-    protected abstract String query();
+//    protected abstract String query();
 
     protected abstract Class<T> aClass();
 }

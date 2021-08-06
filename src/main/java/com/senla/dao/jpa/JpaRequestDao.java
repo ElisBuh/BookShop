@@ -5,10 +5,10 @@ import com.senla.model.Request;
 
 public class JpaRequestDao extends JpaAbstractDao<Request> implements IRequestDao {
 
-    @Override
-    protected String query() {
-        return "from Request";
-    }
+//    @Override
+//    protected String query() {
+//        return "from Request";
+//    }
 
     @Override
     protected Class<Request> aClass() {

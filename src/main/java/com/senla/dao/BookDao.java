@@ -1,4 +1,4 @@
-package com.senla.dao.jpa;
+package com.senla.dao;
 
 import com.senla.api.dao.IBookDao;
 import com.senla.model.Book;
@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 
 @Singleton
-public class JpaBookDao extends JpaAbstractDao<Book> implements IBookDao {
-    private static final Logger log = LoggerFactory.getLogger(JpaBookDao.class);
+public class BookDao extends AbstractDao<Book> implements IBookDao {
+    private static final Logger log = LoggerFactory.getLogger(BookDao.class);
 
 //    @Override
 //    protected String query() {

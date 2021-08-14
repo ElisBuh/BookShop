@@ -2,6 +2,15 @@ package com.senla.model;
 
 import javax.persistence.*;
 
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "findStorageOnBook",
+                        query = "from Storage as s where s.book.id = :id"
+                )
+        }
+)
+
 @Entity
 @Table(name = "storage")
 public class Storage extends AEntity {

@@ -1,4 +1,4 @@
-package com.senla.dao.jpa;
+package com.senla.dao;
 
 import com.senla.api.dao.IOrderDao;
 import com.senla.model.Order;
@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class JpaOrderDao extends JpaAbstractDao<Order> implements IOrderDao {
-    private static final Logger log = LoggerFactory.getLogger(JpaOrderDao.class);
+public class OrderDao extends AbstractDao<Order> implements IOrderDao {
+    private static final Logger log = LoggerFactory.getLogger(OrderDao.class);
 
 //    @Override
 //    protected String query() {

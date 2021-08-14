@@ -5,9 +5,7 @@ import com.senla.api.dao.IStorageDao;
 import com.senla.api.service.IRequestService;
 import com.senla.api.service.IStorageService;
 import com.senla.exceptions.DaoException;
-import com.senla.exceptions.ServiceException;
 import com.senla.model.Book;
-import com.senla.model.Request;
 import com.senla.model.StatusBook;
 import com.senla.model.Storage;
 import com.senla.util.annotation.InjectByType;
@@ -65,7 +63,7 @@ public class StorageService implements IStorageService {
             book.setStatusBook(StatusBook.ABSENT);
             book.setDateReceipt(null);
             bookDao.update(book);
-            return storageDao.delete(findStorage(book));
+            return storageDao.delete(storageDao.findStorageOnBook(book));
         } catch (DaoException e) {
             log.error("deleteBook: {}-{}", book.getNameBook(), book.getId());
             throw e;
@@ -96,16 +94,6 @@ public class StorageService implements IStorageService {
             log.error(e.toString());
             throw e;
         }
-    }
-
-    private Storage findStorage(Book book) {
-        List<Storage> storages = storageDao.getAll();
-        for (Storage storage : storages) {
-            if (storage.getBook().equals(book)) {
-                return storage;
-            }
-        }
-        throw new ServiceException("Not request");
     }
 
     @Override

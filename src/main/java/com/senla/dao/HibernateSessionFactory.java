@@ -1,4 +1,4 @@
-package com.senla.dao.jpa;
+package com.senla.dao;
 
 import com.senla.exceptions.DaoException;
 import org.hibernate.SessionFactory;

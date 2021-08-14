@@ -6,5 +6,6 @@ import com.senla.model.Storage;
 import java.util.List;
 
 public interface IStorageDao extends GenericDao<Storage> {
+    Storage findStorageOnBook(Book book);
 
 }

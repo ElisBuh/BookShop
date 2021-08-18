@@ -1,11 +1,32 @@
 package com.senla.model;
 
+import javax.persistence.*;
 
-public class Storage {
-    private Long id;
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "findStorageOnBook",
+                        query = "from Storage as s where s.book.id = :id"
+                )
+        }
+)
+
+@Entity
+@Table(name = "storage")
+public class Storage extends AEntity {
+    @Id
+    @SequenceGenerator(name = "storage_id", sequenceName = "storage_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storage_id")
+    private Integer id;
+
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
     private Book book;
 
-    public Storage(Long id, Book book) {
+    public Storage() {
+    }
+
+    public Storage(Integer id, Book book) {
         this.id = id;
         this.book = book;
     }
@@ -14,7 +35,7 @@ public class Storage {
         this.book = book;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

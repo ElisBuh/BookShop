@@ -1,24 +1,62 @@
 package com.senla.model;
 
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
 
-public class Book implements Serializable {
+@Entity
+@Table(name = "books")
+public class Book extends AEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    @Id
+    @Column(name = "id")
+    @SequenceGenerator(name = "book_id", sequenceName = "book_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id")
+    private Integer id;
+
+    @Column(name = "name_book")
+    @NotBlank
     private String nameBook;
+
+    @Column(name = "name_author")
+    @NotBlank
     private String nameAuthor;
+
+    @Column(name = "date")
+    @NotBlank
     private LocalDate date;
+
+    @Column(name = "price")
+    @NotBlank
     private int price;
+
+    @Column(name = "status_book")
+    @Enumerated(EnumType.STRING)
     private StatusBook statusBook;
+
+    @Column(name = "data_receipt")
     private LocalDate dateReceipt;
 
+    public Book() {
+    }
 
-    public Book(int id, String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook) {
+    public Book(Integer id, String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook) {
         this.nameBook = nameBook;
         this.nameAuthor = nameAuthor;
         this.id = id;
@@ -55,7 +93,7 @@ public class Book implements Serializable {
         this.dateReceipt = dateReceipt;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -76,7 +114,7 @@ public class Book implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id && price == book.price && Objects.equals(nameBook, book.nameBook) && Objects.equals(nameAuthor, book.nameAuthor) && Objects.equals(date, book.date) && statusBook == book.statusBook && Objects.equals(dateReceipt, book.dateReceipt);
+        return price == book.price && Objects.equals(id, book.id) && Objects.equals(nameBook, book.nameBook) && Objects.equals(nameAuthor, book.nameAuthor) && Objects.equals(date, book.date) && statusBook == book.statusBook && Objects.equals(dateReceipt, book.dateReceipt);
     }
 
     @Override
@@ -86,17 +124,17 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        if (id != 0){
-        return "Книга: " +
-                "id=" + id +
-                ", Название книги: '" + nameBook + '\'' +
-                ", Имя Автора: '" + nameAuthor + '\'' +
-                ", Дата издания: " + date +
-                ", Стоимость: " + price +
-                ", Статус книги: " + statusBook + ".";
-    }else {
+        if ((id == null)){
             return "Книга: " +
                     "Название книги: '" + nameBook + '\'' +
+                    ", Имя Автора: '" + nameAuthor + '\'' +
+                    ", Дата издания: " + date +
+                    ", Стоимость: " + price +
+                    ", Статус книги: " + statusBook + ".";
+    }else {
+            return "Книга: " +
+                    "id=" + id +
+                    ", Название книги: '" + nameBook + '\'' +
                     ", Имя Автора: '" + nameAuthor + '\'' +
                     ", Дата издания: " + date +
                     ", Стоимость: " + price +

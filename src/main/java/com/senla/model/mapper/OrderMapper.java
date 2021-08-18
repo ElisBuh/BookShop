@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class OrderMapper {
 
     public Order getOrder(ResultSet resultSet, BookMapper bookMapper) throws SQLException {
-        int idOrder = resultSet.getInt("id");
+        Integer idOrder = resultSet.getInt("id");
         String nameClient = resultSet.getString("name_client");
         Book book = bookMapper.getBook(resultSet);
         StatusOrder statusOrder = StatusOrder.valueOf(resultSet.getString("status_order"));

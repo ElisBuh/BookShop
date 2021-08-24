@@ -8,7 +8,6 @@ import com.senla.model.Book;
 import com.senla.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 
 
 @Service
-@Scope(value = "singleton")
 public final class RequestService implements IRequestService {
     private static final Logger log = LoggerFactory.getLogger(RequestService.class);
     private final IRequestDao requestDao;
@@ -138,23 +136,6 @@ public final class RequestService implements IRequestService {
         return requestDao;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (RequestService) obj;
-        return Objects.equals(this.requestDao, that.requestDao);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(requestDao);
-    }
-
-    @Override
-    public String toString() {
-        return "RequestService[" +
-                "requestDao=" + requestDao + ']';
-    }
 
 }

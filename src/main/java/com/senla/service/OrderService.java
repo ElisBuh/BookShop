@@ -10,7 +10,6 @@ import com.senla.model.Order;
 import com.senla.model.StatusOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
@@ -23,7 +22,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-@Scope(value = "singleton")
 public final class OrderService implements IOrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private final IRequestService requestService;
@@ -208,25 +206,5 @@ public final class OrderService implements IOrderService {
         return orderDao;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (OrderService) obj;
-        return Objects.equals(this.requestService, that.requestService) &&
-                Objects.equals(this.orderDao, that.orderDao);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(requestService, orderDao);
-    }
-
-    @Override
-    public String toString() {
-        return "OrderService[" +
-                "requestService=" + requestService + ", " +
-                "orderDao=" + orderDao + ']';
-    }
 
 }

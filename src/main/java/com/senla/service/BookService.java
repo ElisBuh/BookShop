@@ -8,7 +8,6 @@ import com.senla.model.Book;
 import com.senla.model.StatusBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,7 +18,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Scope(value = "singleton")
 public final class BookService implements IBookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
     private final IBookDao bookDao;
@@ -88,23 +86,5 @@ public final class BookService implements IBookService {
         return bookDao;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (BookService) obj;
-        return Objects.equals(this.bookDao, that.bookDao);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bookDao);
-    }
-
-    @Override
-    public String toString() {
-        return "BookService[" +
-                "bookDao=" + bookDao + ']';
-    }
 
 }

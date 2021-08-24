@@ -1,18 +1,19 @@
 package com.senla.ui.actions.book;
 
+import com.senla.api.service.IBookService;
 import com.senla.exceptions.DaoException;
-import com.senla.service.BookService;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
-import com.senla.util.annotation.InjectByType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
+@Component
 public class AddBook implements IAction {
-    @InjectByType
-    private BookService bookService;
+
+    @Autowired
+    private IBookService bookService;
 
     @Override
     public void execute() {

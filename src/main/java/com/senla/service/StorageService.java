@@ -8,35 +8,35 @@ import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
 import com.senla.model.StatusBook;
 import com.senla.model.Storage;
-import com.senla.util.annotation.InjectByType;
-import com.senla.util.annotation.InjectProperty;
-import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Singleton
+
+@Service
 public class StorageService implements IStorageService {
     private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
-    @InjectProperty("storageService.month")
+    @Value("${storageService.month}")
     private String month;
-    @InjectProperty("storageService.permissionChangeStatusRequest")
+    @Value("${storageService.permissionChangeStatusRequest}")
     private String changeStatusRequest;
 
-    @InjectByType
-    private IStorageDao storageDao;
+    private final IStorageDao storageDao;
+    private final IBookDao bookDao;
+    private final IRequestService requestService;
 
-    @InjectByType
-    private IBookDao bookDao;
-
-    @InjectByType
-    private IRequestService requestService;
-
+    public StorageService(IStorageDao storageDao, IBookDao bookDao, IRequestService requestService) {
+        this.storageDao = storageDao;
+        this.bookDao = bookDao;
+        this.requestService = requestService;
+    }
 
     @Override
     public boolean add(Book book, LocalDate localDate) {
@@ -96,9 +96,4 @@ public class StorageService implements IStorageService {
         }
     }
 
-    @Override
-    public <T> void set(List<T> list) {
-//        log.info("Десериализация Storage");
-//        list.stream().map(e -> (Book) e).forEach(storageDao::add);
-    }
 }

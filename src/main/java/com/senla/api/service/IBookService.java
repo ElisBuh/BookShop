@@ -4,12 +4,11 @@ import com.senla.model.Book;
 import com.senla.service.TypeSortBook;
 
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 
-public interface IBookService extends AbstractService {
+public interface IBookService {
 
     void save(String nameBook, String nameAuthor, int price, LocalDate date);
 

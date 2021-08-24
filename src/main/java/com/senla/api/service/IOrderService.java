@@ -8,7 +8,7 @@ import com.senla.service.TypeSortOrder;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface IOrderService extends AbstractService {
+public interface IOrderService {
 
     void creat(String nameClient, Book book);
     void cancel(int id);

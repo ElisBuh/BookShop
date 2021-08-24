@@ -4,7 +4,9 @@ import com.senla.api.dao.IStorageDao;
 import com.senla.model.Book;
 import com.senla.model.Storage;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class StorageDao extends AbstractDao<Storage> implements IStorageDao {
     @Override
     public Storage findStorageOnBook(Book book){

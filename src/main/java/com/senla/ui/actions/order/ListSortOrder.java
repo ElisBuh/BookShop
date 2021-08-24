@@ -5,11 +5,12 @@ import com.senla.exceptions.DaoException;
 import com.senla.service.TypeSortOrder;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
-import com.senla.util.annotation.InjectByType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class ListSortOrder implements IAction {
-    @InjectByType
+    @Autowired
     private IOrderService orderService;
 
     @Override

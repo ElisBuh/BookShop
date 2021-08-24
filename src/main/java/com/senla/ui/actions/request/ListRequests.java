@@ -3,10 +3,12 @@ package com.senla.ui.actions.request;
 import com.senla.api.service.IRequestService;
 import com.senla.exceptions.DaoException;
 import com.senla.ui.actions.IAction;
-import com.senla.util.annotation.InjectByType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ListRequests implements IAction {
-    @InjectByType
+    @Autowired
     private IRequestService requestService;
 
     @Override

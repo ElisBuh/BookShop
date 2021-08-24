@@ -6,22 +6,26 @@ import com.senla.exceptions.DaoException;
 import com.senla.exceptions.ServiceException;
 import com.senla.model.Book;
 import com.senla.model.Request;
-import com.senla.util.annotation.InjectByType;
-import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Singleton
-public class RequestService implements IRequestService {
-    private static final Logger log = LoggerFactory.getLogger(RequestService.class);
 
-    @InjectByType
-    private IRequestDao requestDao;
+@Service
+public final class RequestService implements IRequestService {
+    private static final Logger log = LoggerFactory.getLogger(RequestService.class);
+    private final IRequestDao requestDao;
+
+    public RequestService(IRequestDao requestDao) {
+        this.requestDao = requestDao;
+    }
+
 
     @Override
     public boolean save(Book book) {
@@ -127,13 +131,11 @@ public class RequestService implements IRequestService {
         }
     }
 
-    @Override
-    public <T> void set(List<T> list) {
-//        if (list.size() > 0) {
-//            log.info("Десериализация Request");
-//            Request request = (Request) list.get(list.size() - 1);
-//            idRequest = request.getId();
-//            list.stream().map(e -> (Request) e).forEach(requestDao::save);
-//        }
+
+    public IRequestDao requestDao() {
+        return requestDao;
     }
+
+
+
 }

@@ -30,7 +30,6 @@
         <c3p0.version>0.9.5.2</c3p0.version>
         <javax-el.version>3.0.1-b12</javax-el.version>
         <!-- Spring -->
-<!--        <spring-contex>5.2.16.RELEASE</spring-contex>-->
         <spring-contex>5.3.9</spring-contex>
 
     </properties>

@@ -38,7 +38,6 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
             criteria.select(root).where(cb.equal(root.get("id"),id));
             T entity =session.createQuery(criteria).getSingleResult();
 
-//            T entity = session.get(aClass(), id);
             if (entity == null) {
                 throw new DaoException("Такого id нет");
             } else return entity;
@@ -53,8 +52,6 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
             Root<T> root = criteria.from(aClass());
             criteria.select(root);
             return session.createQuery(criteria).list();
-
-//            return session.createQuery(query(), aClass()).list();
     }
 
     @Override
@@ -78,8 +75,6 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
             session.close();
             return t;
     }
-
-//    protected abstract String query();
 
     protected abstract Class<T> aClass();
 }

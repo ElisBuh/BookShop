@@ -4,7 +4,11 @@ import com.senla.api.dao.IStorageDao;
 import com.senla.model.Book;
 import com.senla.model.Storage;
 import org.hibernate.Session;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@Scope(value = "singleton")
 public class StorageDao extends AbstractDao<Storage> implements IStorageDao {
     @Override
     public Storage findStorageOnBook(Book book){

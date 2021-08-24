@@ -1,21 +1,24 @@
 package com.senla.ui.menu;
 
-import com.senla.util.annotation.InjectByType;
-import com.senla.util.annotation.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.senla.ui.actions.ConsoleHelper;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.IntStream;
 
 
-@Singleton
+@Component
 public class Navigator {
     private static final Logger log = LoggerFactory.getLogger(Navigator.class);
     private Menu currentMenu;
 
-    @InjectByType
     private Builder builder;
+
+    public Navigator(Builder builder) {
+        this.builder = builder;
+    }
 
     public void printMenu() {
         try {

@@ -6,7 +6,7 @@ import com.senla.service.TypeSortRequest;
 
 import java.util.List;
 
-public interface IRequestService extends AbstractService {
+public interface IRequestService {
 
     boolean save(Book book);
 

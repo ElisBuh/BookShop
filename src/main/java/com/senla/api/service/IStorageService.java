@@ -6,7 +6,7 @@ import com.senla.model.Storage;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface IStorageService extends AbstractService {
+public interface IStorageService {
 
     boolean add(Book book, LocalDate localDate);
 

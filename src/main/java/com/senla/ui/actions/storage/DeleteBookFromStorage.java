@@ -1,20 +1,22 @@
 package com.senla.ui.actions.storage;
 
+import com.senla.api.service.IBookService;
+import com.senla.api.service.IStorageService;
 import com.senla.exceptions.DaoException;
-import com.senla.service.BookService;
-import com.senla.service.StorageService;
-import com.senla.util.annotation.InjectByType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DeleteBookFromStorage implements IAction {
     private static final Logger log = LoggerFactory.getLogger(DeleteBookFromStorage.class);
-    @InjectByType
-    private StorageService storageService;
-    @InjectByType
-    private BookService bookService;
+    @Autowired
+    private IStorageService storageService;
+    @Autowired
+    private IBookService bookService;
 
     @Override
     public void execute() {

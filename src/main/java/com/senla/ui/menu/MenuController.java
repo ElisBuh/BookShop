@@ -1,19 +1,21 @@
 package com.senla.ui.menu;
 
 import com.senla.ui.actions.ConsoleHelper;
-import com.senla.util.annotation.InjectByType;
-import com.senla.util.annotation.Singleton;
-import com.senla.util.serialization.Deserialization;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-@Singleton
+
+@Component
+@Scope(value = "singleton")
 public class MenuController {
-    @InjectByType
     private Builder builder;
-    @InjectByType
     private Navigator navigator;
-    @InjectByType
-    private Deserialization deserialization;
 
+
+    public MenuController(Builder builder, Navigator navigator) {
+        this.builder = builder;
+        this.navigator = navigator;
+    }
 
     public void run() {
 //        deserialization.deserialize();

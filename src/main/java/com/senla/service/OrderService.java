@@ -8,30 +8,32 @@ import com.senla.model.Book;
 import com.senla.model.StatusBook;
 import com.senla.model.Order;
 import com.senla.model.StatusOrder;
-import com.senla.util.annotation.InjectByType;
-import com.senla.util.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Singleton
-public class OrderService implements IOrderService {
+@Service
+@Scope(value = "singleton")
+public final class OrderService implements IOrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+    private final IRequestService requestService;
+    private final IOrderDao orderDao;
 
-    @InjectByType
-    private IRequestService requestService;
+    public OrderService(IRequestService requestService, IOrderDao orderDao) {
+        this.requestService = requestService;
+        this.orderDao = orderDao;
+    }
 
-    @InjectByType
-    private IOrderDao orderDao;
-
-    private int idOrder;
 
     @Override
     public void creat(String nameClient, Book book) {
@@ -198,13 +200,33 @@ public class OrderService implements IOrderService {
 
     }
 
-    @Override
-    public <T> void set(List<T> list) {
-//        if (list.size() > 0) {
-//            log.info("Десериализация Order");
-//            Order order = (Order) list.get(list.size() - 1);
-//            idOrder = order.getId();
-//            list.stream().map(e -> (Order) e).forEach(orderDao::save);
-//        }
+    public IRequestService requestService() {
+        return requestService;
     }
+
+    public IOrderDao orderDao() {
+        return orderDao;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (OrderService) obj;
+        return Objects.equals(this.requestService, that.requestService) &&
+                Objects.equals(this.orderDao, that.orderDao);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestService, orderDao);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderService[" +
+                "requestService=" + requestService + ", " +
+                "orderDao=" + orderDao + ']';
+    }
+
 }

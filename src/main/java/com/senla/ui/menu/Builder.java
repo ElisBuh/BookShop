@@ -1,26 +1,8 @@
 package com.senla.ui.menu;
 
-import com.senla.ui.actions.Exit;
+
 import com.senla.ui.actions.IAction;
-import com.senla.ui.actions.book.*;
-import com.senla.ui.actions.order.AddOrder;
-import com.senla.ui.actions.order.CancelOrder;
-import com.senla.ui.actions.order.ChangeOrderStatus;
-import com.senla.ui.actions.order.DeleteOrder;
-import com.senla.ui.actions.order.ListSortOrder;
-import com.senla.ui.actions.order.TimeForPeriodForTime;
-import com.senla.ui.actions.request.AddRequest;
-import com.senla.ui.actions.request.DeleteRequest;
-import com.senla.ui.actions.request.ListRequests;
-import com.senla.ui.actions.request.ListSortRequests;
-import com.senla.ui.actions.storage.AddBookToStorage;
-import com.senla.ui.actions.storage.BookNotSellMoreSixMonth;
-import com.senla.ui.actions.storage.DeleteBookFromStorage;
-import com.senla.ui.actions.storage.ListBooksInStorage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

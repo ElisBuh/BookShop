@@ -2,6 +2,7 @@ package com.senla.ui;
 
 import com.senla.util.AppConfig;
 import com.senla.ui.menu.MenuController;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
@@ -11,7 +12,7 @@ public class Starter {
 //        ApplicationContext context = Application.run("com.senla");
 //        MenuController menuController = context.getObject(MenuController.class);
 //        menuController.run();
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         MenuController menuController = ctx.getBean(MenuController.class);
         menuController.run();
 

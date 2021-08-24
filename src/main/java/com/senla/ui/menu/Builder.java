@@ -18,6 +18,7 @@ import com.senla.ui.actions.storage.DeleteBookFromStorage;
 import com.senla.ui.actions.storage.ListBooksInStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class Builder {
     @Value("${storageService.month}")
     private String month;
 
-    private final AnnotationConfigApplicationContext ctx;
+    private final ApplicationContext ctx;
 
     private Menu rootMenu;
 

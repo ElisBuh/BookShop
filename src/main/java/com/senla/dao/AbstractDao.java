@@ -4,23 +4,31 @@ import com.senla.api.dao.GenericDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.AEntity;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.List;
 
-
+@Repository
+@Transactional
 public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     protected static final Logger log = LoggerFactory.getLogger(AbstractDao.class);
+
+    @Autowired
+    protected SessionFactory sessionFactory;
 
     @Override
     public T save(T t) {
         log.info("Save {}: To BD", t.toString());
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
+            Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
             session.save(t);
             transaction.commit();
@@ -31,7 +39,7 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     @Override
     public T get(Integer id) {
         log.info("Get_{}_By_ID: {}", aClass(), id);
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
+            Session session = sessionFactory.openSession();
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = cb.createQuery(aClass());
             Root<T> root = criteria.from(aClass());
@@ -46,7 +54,7 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     @Override
     public List<T> getAll() {
         log.info("getAll-{}", this.getClass().getSimpleName());
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
+            Session session = sessionFactory.openSession();
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = cb.createQuery(aClass());
             Root<T> root = criteria.from(aClass());
@@ -57,7 +65,7 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     @Override
     public boolean delete(T t) {
         log.info("Delete {}", t.toString());
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
+            Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
             session.delete(t);
             transaction.commit();
@@ -68,7 +76,7 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     @Override
     public T update(T t) {
         log.info("Update {} To BD", t.toString());
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
+            Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
             session.update(t);
             transaction.commit();

@@ -9,6 +9,7 @@ import com.senla.model.StatusBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public final class BookService implements IBookService {
+@Transactional
+public class BookService implements IBookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
     private final IBookDao bookDao;
 
@@ -38,6 +40,7 @@ public final class BookService implements IBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> listSortBooks(TypeSortBook typeSortBook) {
         log.info("SortsBooks on {}", typeSortBook.name());
         try {
@@ -61,6 +64,7 @@ public final class BookService implements IBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Book get(int id) {
         try {
             log.info("Get_Book_BY_Id: {}", id);
@@ -72,6 +76,7 @@ public final class BookService implements IBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAll() {
         log.info("getAll-BookService");
         try {

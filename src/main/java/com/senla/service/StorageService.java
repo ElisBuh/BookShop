@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class StorageService implements IStorageService {
     private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
@@ -73,6 +75,7 @@ public class StorageService implements IStorageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Storage> BookNotSellMoreNmonth() {
         log.info("Not sell list");
         try {
@@ -86,6 +89,7 @@ public class StorageService implements IStorageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Storage> getAll() {
         log.info("get_All_Storage");
         try {

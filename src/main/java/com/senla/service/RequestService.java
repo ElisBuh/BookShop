@@ -9,6 +9,7 @@ import com.senla.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,7 +19,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public final class RequestService implements IRequestService {
+@Transactional
+public class RequestService implements IRequestService {
     private static final Logger log = LoggerFactory.getLogger(RequestService.class);
     private final IRequestDao requestDao;
 
@@ -44,6 +46,7 @@ public final class RequestService implements IRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean isRequest(Book book) {
         log.info("isRequest book: {}", book.toString());
         try {
@@ -55,6 +58,7 @@ public final class RequestService implements IRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Request findRequest(Book book) {
         List<Request> requests = requestDao.getAll();
         for (Request request : requests) {
@@ -80,6 +84,7 @@ public final class RequestService implements IRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Request get(Integer id) {
         try {
             log.info("Get_Request_id: {}", id);
@@ -102,6 +107,7 @@ public final class RequestService implements IRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Request> getAll() {
         log.info("get_All_Request");
         try {
@@ -113,6 +119,7 @@ public final class RequestService implements IRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
         log.info("SortRequest, {}", typeSortRequest);
         try {

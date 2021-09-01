@@ -11,6 +11,7 @@ import com.senla.model.StatusOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
 import java.time.LocalDate;
@@ -22,7 +23,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public final class OrderService implements IOrderService {
+@Transactional
+public class OrderService implements IOrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private final IRequestService requestService;
     private final IOrderDao orderDao;
@@ -90,6 +92,7 @@ public final class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
         log.info("ListSortOrder-OrderService");
         try {
@@ -122,6 +125,7 @@ public final class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
@@ -137,6 +141,7 @@ public final class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
@@ -151,6 +156,7 @@ public final class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
@@ -176,6 +182,7 @@ public final class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Order getOrder(int id) {
         try {
             log.info("Get_Order_BY_Id: {}", id);
@@ -187,6 +194,7 @@ public final class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Order> getAll() {
         log.info("{}-OrderService", Method.class.getName());
         try {

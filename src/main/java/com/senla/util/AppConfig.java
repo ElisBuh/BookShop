@@ -19,7 +19,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class AppConfig {
 
-    @Value("${db_drive}")
+    @Value("${db_driver}")
     private String DB_Driver;
 
     @Value("${pass}")

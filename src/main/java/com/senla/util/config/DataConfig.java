@@ -1,4 +1,4 @@
-package com.senla.util;
+package com.senla.util.config;
 
 import com.mchange.v2.c3p0.DriverManagerDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.senla")
 @PropertySource(value = "classpath:config.properties")
 @EnableTransactionManagement
-public class AppConfig {
+public class DataConfig {
 
     @Value("${db_driver}")
     private String DB_Driver;

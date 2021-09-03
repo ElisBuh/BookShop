@@ -1,12 +1,13 @@
 package com.senla.util.init;
 
+import com.senla.util.config.DataConfig;
 import com.senla.util.config.WebConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class SpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class[]{DataConfig.class};
     }
 
     @Override

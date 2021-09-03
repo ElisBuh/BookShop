@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "com.senla")
+//@ComponentScan(basePackages = "com.senla")
 @PropertySource(value = "classpath:config.properties")
 @EnableTransactionManagement
 public class DataConfig {

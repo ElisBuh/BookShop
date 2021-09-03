@@ -2,6 +2,12 @@ package com.senla.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.senla.util.LocalDateDeserializer;
+import com.senla.util.LocalDateSerializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -40,6 +46,8 @@ public class Book extends AEntity implements Serializable {
 
     @Column(name = "date")
     @NotBlank
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     @Column(name = "price")
@@ -51,6 +59,8 @@ public class Book extends AEntity implements Serializable {
     private StatusBook statusBook;
 
     @Column(name = "data_receipt")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateReceipt;
 
     public Book() {

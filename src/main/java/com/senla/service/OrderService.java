@@ -8,6 +8,7 @@ import com.senla.model.Book;
 import com.senla.model.StatusBook;
 import com.senla.model.Order;
 import com.senla.model.StatusOrder;
+import com.senla.util.utilits.TimeBetweenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -131,7 +131,7 @@ public class OrderService implements IOrderService {
         try {
             return orderDao.getAll().stream()
                     .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .filter(order -> TimeBetweenUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
                     .collect(Collectors.toList());
         } catch (DaoException e) {
@@ -146,7 +146,7 @@ public class OrderService implements IOrderService {
         log.info("{}-OrderService", Method.class.getName());
         try {
             return orderDao.getAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .filter(order -> TimeBetweenUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .mapToInt(Order::getCost)
                     .sum();
         } catch (DaoException e) {
@@ -162,7 +162,7 @@ public class OrderService implements IOrderService {
         try {
             return (int) orderDao.getAll().stream()
                     .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .filter(order -> TimeBetweenUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .count();
         } catch (DaoException e) {
             log.error(e.toString());

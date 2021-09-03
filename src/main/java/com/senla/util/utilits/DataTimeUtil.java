@@ -1,4 +1,4 @@
-package com.senla.util;
+package com.senla.util.utilits;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;

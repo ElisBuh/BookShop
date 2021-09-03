@@ -2,8 +2,8 @@ package com.senla.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.senla.util.LocalDateDeserializer;
-import com.senla.util.LocalDateSerializer;
+import com.senla.util.utilits.LocalDateDeserializer;
+import com.senla.util.utilits.LocalDateSerializer;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

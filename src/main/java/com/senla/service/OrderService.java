@@ -142,7 +142,7 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+    public int amountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
             return orderDao.getAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)

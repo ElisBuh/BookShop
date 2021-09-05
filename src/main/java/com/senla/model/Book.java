@@ -44,13 +44,11 @@ public class Book extends AEntity implements Serializable {
     private String nameAuthor;
 
     @Column(name = "date")
-    @NotBlank
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     @Column(name = "price")
-    @NotBlank
     private int price;
 
     @Column(name = "status_book")

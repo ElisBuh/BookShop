@@ -2,10 +2,11 @@ package com.senla.util.utilits;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class DataTimeUtil {
+public class DateTimeUtil {
 
-    private DataTimeUtil() {
+    private DateTimeUtil() {
     }
 
     public static Timestamp localDataToTimestamp(LocalDate localDate){
@@ -14,5 +15,10 @@ public class DataTimeUtil {
 
     public static LocalDate timestampToLocalDate(Timestamp timestamp){
         return timestamp.toLocalDateTime().toLocalDate();
+    }
+
+    public static LocalDate stringToLocalDate(String date){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return LocalDate.parse(date, dateTimeFormatter);
     }
 }

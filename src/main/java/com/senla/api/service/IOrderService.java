@@ -18,6 +18,6 @@ public interface IOrderService {
     Order getOrder(int id);
     List<Order> listSortOrder(TypeSortOrder typeSortOrder);
     List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
-    int AmountOfMoneyForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
+    int amountOfMoneyForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
     int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd);
 }

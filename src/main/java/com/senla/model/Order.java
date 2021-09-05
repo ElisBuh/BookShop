@@ -43,7 +43,6 @@ public class Order extends AEntity implements Serializable {
     private Book book;
 
     @Column(name = "cost")
-    @NotBlank
     private int cost;
 
     @Column(name = "date_complete")

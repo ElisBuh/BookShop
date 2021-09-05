@@ -3,7 +3,6 @@ package com.senla.api.service;
 import com.senla.model.Book;
 import com.senla.service.TypeSortBook;
 
-
 import java.time.LocalDate;
 import java.util.List;
 

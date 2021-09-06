@@ -14,7 +14,7 @@ public class BookNotSellMoreSixMonth implements IAction {
     @Override
     public void execute() {
         try {
-            storageService.BookNotSellMoreNmonth().forEach(System.out::println);
+            storageService.bookNotSellMoreNmonth().forEach(System.out::println);
         } catch (DaoException e) {
             System.out.println("Критическая ошибка в БД, Обратитеть в тех поддержку. Ошибка: " + e.getMessage());
         }

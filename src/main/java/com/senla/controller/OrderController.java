@@ -101,9 +101,9 @@ public class OrderController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @GetMapping("/list/{typeSortOrder}")
-    public ResponseEntity<List<Order>> allBooksSort(@PathVariable(name = "typeSortOrder") String typeSort) {
-        log.info("allBooksSort");
+    @GetMapping("/list/{typeSort}")
+    public ResponseEntity<List<Order>> readAllSort(@PathVariable(name = "typeSort") String typeSort) {
+        log.info("readAllSort");
         TypeSortOrder typeSortOrder = TypeSortOrder.valueOf(typeSort.toUpperCase(Locale.ROOT));
         return new ResponseEntity<>(orderService.listSortOrder(typeSortOrder), HttpStatus.OK);
     }

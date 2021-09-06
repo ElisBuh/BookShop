@@ -76,7 +76,7 @@ public class StorageService implements IStorageService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Storage> BookNotSellMoreNmonth() {
+    public List<Storage> bookNotSellMoreNmonth() {
         log.info("Not sell list");
         try {
             return storageDao.getAll().stream()

@@ -36,9 +36,9 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/list/{typeSortBook}")
-    public ResponseEntity<List<Book>> allBooksSort(@PathVariable(name = "typeSortBook") String typeSort) {
-        log.info("allBooksSort");
+    @GetMapping("/list/{typeSort}")
+    public ResponseEntity<List<Book>> readAllSort(@PathVariable(name = "typeSort") String typeSort) {
+        log.info("readAllSort");
         TypeSortBook typeSortBook = TypeSortBook.valueOf(typeSort.toUpperCase(Locale.ROOT));
         return new ResponseEntity<>(bookService.listSortBooks(typeSortBook), HttpStatus.OK);
     }

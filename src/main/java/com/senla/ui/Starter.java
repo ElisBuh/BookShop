@@ -1,7 +1,7 @@
 package com.senla.ui;
 
-import com.senla.util.config.DataConfig;
 import com.senla.ui.menu.MenuController;
+import com.senla.util.config.DataConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

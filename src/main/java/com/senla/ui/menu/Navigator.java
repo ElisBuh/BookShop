@@ -1,9 +1,9 @@
 package com.senla.ui.menu;
 
 
+import com.senla.ui.actions.ConsoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.senla.ui.actions.ConsoleHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.IntStream;

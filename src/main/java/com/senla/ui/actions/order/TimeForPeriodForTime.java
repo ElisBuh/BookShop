@@ -30,9 +30,9 @@ public class TimeForPeriodForTime implements IAction {
                             "Сделайте выбор:");
             int point = ConsoleHelper.readInt();
             if (point == 1) {
-                orderService.listOrderCompleteForPeriodForTime(dateStart, dateEnd).forEach(System.out::println);
+                orderService.listOrderCompleteForPeriodForTime(ConsoleHelper.readInt(), ConsoleHelper.readInt(), dateStart, dateEnd).forEach(System.out::println);
             } else if (point == 2) {
-                ConsoleHelper.writeMessage(orderService.AmountOfMoneyForPeriodForTime(dateStart, dateEnd) + "");
+                ConsoleHelper.writeMessage(orderService.amountOfMoneyForPeriodForTime(dateStart, dateEnd) + "");
             } else if (point == 3) {
                 ConsoleHelper.writeMessage(orderService.countCompleteOrders(dateStart, dateEnd) + "");
             }

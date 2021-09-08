@@ -5,9 +5,10 @@ import com.senla.api.service.IOrderService;
 import com.senla.api.service.IRequestService;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
-import com.senla.model.StatusBook;
 import com.senla.model.Order;
+import com.senla.model.StatusBook;
 import com.senla.model.StatusOrder;
+import com.senla.util.utilits.TimeBetweenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -93,10 +93,10 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
+    public List<Order> listSortOrder(int pageNumber, int pageSize, TypeSortOrder typeSortOrder) {
         log.info("ListSortOrder-OrderService");
         try {
-            return orderDao.getAll().stream()
+            return orderDao.getAll(pageNumber, pageSize).stream()
                     .filter(predicate(typeSortOrder))
                     .sorted(comparator(typeSortOrder))
                     .collect(Collectors.toList());
@@ -126,12 +126,12 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+    public List<Order> listOrderCompleteForPeriodForTime(int pageNumber, int pageSize, LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
             return orderDao.getAll().stream()
                     .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .filter(order -> TimeBetweenUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .sorted(Comparator.comparing(order -> order.getBook().getNameBook()))
                     .collect(Collectors.toList());
         } catch (DaoException e) {
@@ -142,11 +142,11 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public int AmountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+    public int amountOfMoneyForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
             return orderDao.getAll().stream().filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .filter(order -> TimeBetweenUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .mapToInt(Order::getCost)
                     .sum();
         } catch (DaoException e) {
@@ -162,7 +162,7 @@ public class OrderService implements IOrderService {
         try {
             return (int) orderDao.getAll().stream()
                     .filter(order -> order.getStatusOrder() == StatusOrder.COMPLETED)
-                    .filter(order -> TimeUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
+                    .filter(order -> TimeBetweenUtil.isBetweenHalfOpen(order.getDateComplete(), localDateStart, localDateEnd))
                     .count();
         } catch (DaoException e) {
             log.error(e.toString());
@@ -195,10 +195,10 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> getAll() {
+    public List<Order> getAll(int pageNumber, int pageSize) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-            return new ArrayList<>(orderDao.getAll());
+            return new ArrayList<>(orderDao.getAll(pageNumber, pageSize));
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;

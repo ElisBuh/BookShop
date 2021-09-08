@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,10 +40,10 @@ public class BookService implements IBookService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> listSortBooks(TypeSortBook typeSortBook) {
+    public List<Book> listSortBooks(int pageNumber, int pageSize, TypeSortBook typeSortBook) {
         log.info("SortsBooks on {}", typeSortBook.name());
         try {
-            return bookDao.getAll().stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
+            return bookDao.getAll(pageNumber, pageSize).stream().sorted(comparator(typeSortBook)).collect(Collectors.toList());
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
@@ -77,10 +76,10 @@ public class BookService implements IBookService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> getAll() {
+    public List<Book> getAll(int pageNumber, int pageSize) {
         log.info("getAll-BookService");
         try {
-            return new ArrayList<>(bookDao.getAll());
+            return new ArrayList<>(bookDao.getAll(pageNumber, pageSize));
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;

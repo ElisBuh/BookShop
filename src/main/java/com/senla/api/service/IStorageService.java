@@ -12,7 +12,7 @@ public interface IStorageService {
 
     boolean delete(Book book);
 
-    List<Storage> BookNotSellMoreNmonth();
+    List<Storage> bookNotSellMoreNmonth(int pageNumber, int pageSize);
 
-    List<Storage> getAll();
+    List<Storage> getAll(int pageNumber, int pageSize);
 }

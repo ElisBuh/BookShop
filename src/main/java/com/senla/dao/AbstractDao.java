@@ -3,6 +3,7 @@ package com.senla.dao;
 import com.senla.api.dao.GenericDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.AEntity;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -52,14 +55,44 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     }
 
     @Override
+    public List<T> getAll(int pageNumber, int pageSize) {
+        log.info("getAll-{}", this.getClass().getSimpleName());
+//        int pageNumber = 1;
+//        int pageSize = 10;
+        Session session = sessionFactory.openSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+        CriteriaQuery<Long> countQuery = criteriaBuilder
+                .createQuery(Long.class);
+        countQuery.select(criteriaBuilder
+                .count(countQuery.from(aClass())));
+        Long count = session.createQuery(countQuery)
+                .getSingleResult();
+
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder
+                .createQuery(aClass());
+        Root<T> from = criteriaQuery.from(aClass());
+        CriteriaQuery<T> select = criteriaQuery.select(from);
+
+        TypedQuery<T> typedQuery = session.createQuery(select);
+        while (pageNumber < count.intValue()) {
+            typedQuery.setFirstResult(pageNumber - 1);
+            typedQuery.setMaxResults(pageSize);
+            log.info("Current page: {}", pageNumber);
+            pageNumber += pageSize;
+        }
+        return typedQuery.getResultList();
+    }
+
+    @Override
     public List<T> getAll() {
         log.info("getAll-{}", this.getClass().getSimpleName());
-            Session session = sessionFactory.openSession();
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<T> criteria = cb.createQuery(aClass());
-            Root<T> root = criteria.from(aClass());
-            criteria.select(root);
-            return session.createQuery(criteria).list();
+        Session session = sessionFactory.openSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<T> criteria = cb.createQuery(aClass());
+        Root<T> root = criteria.from(aClass());
+        criteria.select(root);
+        return session.createQuery(criteria).list();
     }
 
     @Override

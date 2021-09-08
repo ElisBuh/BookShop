@@ -13,11 +13,11 @@ public interface IOrderService {
     void creat(String nameClient, Book book);
     void cancel(int id);
     void changeStatusOrder(int id, StatusOrder statusOrder);
-    List<Order> getAll();
+    List<Order> getAll(int pageNumber, int pageSize);
     void delete(int id);
     Order getOrder(int id);
-    List<Order> listSortOrder(TypeSortOrder typeSortOrder);
-    List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
-    int AmountOfMoneyForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
+    List<Order> listSortOrder(int pageNumber, int pageSize, TypeSortOrder typeSortOrder);
+    List<Order> listOrderCompleteForPeriodForTime(int pageNumber, int pageSize, LocalDate localDateStart,LocalDate localDateEnd);
+    int amountOfMoneyForPeriodForTime(LocalDate localDateStart,LocalDate localDateEnd);
     int countCompleteOrders(LocalDate localDateStart, LocalDate localDateEnd);
 }

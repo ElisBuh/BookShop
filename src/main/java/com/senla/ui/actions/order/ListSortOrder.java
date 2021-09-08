@@ -34,7 +34,7 @@ public class ListSortOrder implements IAction {
 
         }
         try {
-        orderService.listSortOrder(typeSortOrder).forEach(System.out::println);
+        orderService.listSortOrder(ConsoleHelper.readInt(), ConsoleHelper.readInt(), typeSortOrder).forEach(System.out::println);
         } catch (DaoException e){
             System.out.println("Критическая ошибка в БД, Обратитеть в тех поддержку. Ошибка: " + e.getMessage());
         }

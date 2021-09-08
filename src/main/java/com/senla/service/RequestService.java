@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -108,10 +107,10 @@ public class RequestService implements IRequestService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Request> getAll() {
+    public List<Request> getAll(int pageNumber, int pageSize) {
         log.info("get_All_Request");
         try {
-            return new ArrayList<>(requestDao.getAll());
+            return new ArrayList<>(requestDao.getAll(pageNumber, pageSize));
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
@@ -120,10 +119,10 @@ public class RequestService implements IRequestService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Request> sortRequest(TypeSortRequest typeSortRequest) {
+    public List<Request> sortRequest(int pageNumber, int pageSize, TypeSortRequest typeSortRequest) {
         log.info("SortRequest, {}", typeSortRequest);
         try {
-            return requestDao.getAll().stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
+            return requestDao.getAll(pageNumber, pageSize).stream().sorted(comparator(typeSortRequest)).collect(Collectors.toList());
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;
@@ -142,7 +141,6 @@ public class RequestService implements IRequestService {
     public IRequestDao requestDao() {
         return requestDao;
     }
-
 
 
 }

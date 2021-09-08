@@ -1,12 +1,6 @@
 package com.senla.model;
 
 
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.senla.util.utilits.LocalDateDeserializer;
-import com.senla.util.utilits.LocalDateSerializer;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -36,16 +29,12 @@ public class Book extends AEntity implements Serializable {
     private Integer id;
 
     @Column(name = "name_book")
-    @NotBlank
     private String nameBook;
 
     @Column(name = "name_author")
-    @NotBlank
     private String nameAuthor;
 
     @Column(name = "date")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     @Column(name = "price")
@@ -56,8 +45,6 @@ public class Book extends AEntity implements Serializable {
     private StatusBook statusBook;
 
     @Column(name = "data_receipt")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateReceipt;
 
     public Book() {
@@ -131,14 +118,14 @@ public class Book extends AEntity implements Serializable {
 
     @Override
     public String toString() {
-        if ((id == null)){
+        if ((id == null)) {
             return "Книга: " +
                     "Название книги: '" + nameBook + '\'' +
                     ", Имя Автора: '" + nameAuthor + '\'' +
                     ", Дата издания: " + date +
                     ", Стоимость: " + price +
                     ", Статус книги: " + statusBook + ".";
-    }else {
+        } else {
             return "Книга: " +
                     "id=" + id +
                     ", Название книги: '" + nameBook + '\'' +

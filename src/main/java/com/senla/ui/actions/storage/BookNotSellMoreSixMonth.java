@@ -2,6 +2,7 @@ package com.senla.ui.actions.storage;
 
 import com.senla.api.service.IStorageService;
 import com.senla.exceptions.DaoException;
+import com.senla.ui.actions.ConsoleHelper;
 import com.senla.ui.actions.IAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ public class BookNotSellMoreSixMonth implements IAction {
     @Override
     public void execute() {
         try {
-            storageService.bookNotSellMoreNmonth().forEach(System.out::println);
+            storageService.bookNotSellMoreNmonth(ConsoleHelper.readInt(), ConsoleHelper.readInt()).forEach(System.out::println);
         } catch (DaoException e) {
             System.out.println("Критическая ошибка в БД, Обратитеть в тех поддержку. Ошибка: " + e.getMessage());
         }

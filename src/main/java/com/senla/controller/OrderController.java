@@ -5,8 +5,10 @@ import com.senla.api.service.IOrderService;
 import com.senla.model.Book;
 import com.senla.model.Order;
 import com.senla.model.StatusOrder;
+import com.senla.model.dto.OrderDTO;
 import com.senla.service.TypeSortOrder;
 import com.senla.util.utilits.DateTimeUtil;
+import com.senla.util.utilits.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,28 +27,29 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping(value = "/order")
+@RequestMapping(value = "/orders")
 public class OrderController {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
-    private IOrderService orderService;
-    private IBookService bookService;
+    private final IOrderService orderService;
+    private final IBookService bookService;
+    private final Mapper mapper;
 
-    public OrderController(IOrderService orderService, IBookService bookService) {
+    public OrderController(IOrderService orderService, IBookService bookService, Mapper mapper) {
         this.orderService = orderService;
         this.bookService = bookService;
+        this.mapper = mapper;
     }
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<?> create(@RequestParam(name = "nameClient") String nameClient,
-                                    @RequestParam(name = "idBook") Integer idBook) {
+    @PostMapping(value = "/")
+    public ResponseEntity<?> create(@RequestBody OrderDTO orderDTO) {
         log.info("create");
-        Book book = bookService.get(idBook);
-        orderService.creat(nameClient, book);
+        Book book = bookService.get(orderDTO.getIdBook());
+        orderService.creat(orderDTO.getNameClient(), book);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/cancel/{id}")
+    @PostMapping(value = "/{id}")
     public ResponseEntity<?> cancel(@PathVariable(name = "id") Integer id) {
         log.info("cancel");
         orderService.cancel(id);
@@ -53,36 +57,49 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> read(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<OrderDTO> read(@PathVariable(name = "id") Integer id) {
         log.info("read");
         Order order = orderService.getOrder(id);
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        OrderDTO orderDTO = mapper.convertOrderToOrderDto(order);
+        return new ResponseEntity<>(orderDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Order>> readAll() {
-        log.info("readAll");
-        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
+    @GetMapping("/")
+    public ResponseEntity<List<OrderDTO>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
+                                                  @RequestParam(name = "pageSize") int pageSize,
+                                                  @RequestParam(name = "typeSort", defaultValue = "not") String typeSort,
+                                                  @RequestParam(name = "dateStart", required = false) String dateStart,
+                                                  @RequestParam(name = "dateEnd", required = false) String dateEnd) {
+        if (typeSort.equals("not")) {
+            log.info("readAll");
+            List<Order> orders = orderService.getAll(pageNumber, pageSize);
+            List<OrderDTO> orderDTOList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
+            return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+        } else if (typeSort.equals("orderComplete")) {
+            log.info("listOrderCompleteForPeriodForTime");
+            LocalDate localDateStart = DateTimeUtil.stringToLocalDate(dateStart);
+            LocalDate localDateEnd = DateTimeUtil.stringToLocalDate(dateEnd);
+            List<Order> orders = orderService.listOrderCompleteForPeriodForTime(pageNumber, pageSize, localDateStart, localDateEnd);
+            List<OrderDTO> orderDTOList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
+            return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+        } else {
+            log.info("readAllSort");
+            TypeSortOrder typeSortOrder = TypeSortOrder.valueOf(typeSort.toUpperCase(Locale.ROOT));
+            List<Order> orders = orderService.listSortOrder(pageNumber, pageSize, typeSortOrder);
+            List<OrderDTO> orderDTOList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
+            return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Integer id) {
         log.info("delete");
         orderService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/list/listOrderComplete")
-    public ResponseEntity<List<Order>> listOrderCompleteForPeriodForTime(@RequestParam(name = "dateStart") String dateStart,
-                                                                         @RequestParam(name = "dateEnd") String dateEnd) {
-        log.info("listOrderCompleteForPeriodForTime");
-        LocalDate localDateStart = DateTimeUtil.stringToLocalDate(dateStart);
-        LocalDate localDateEnd = DateTimeUtil.stringToLocalDate(dateEnd);
-        List<Order> orders = orderService.listOrderCompleteForPeriodForTime(localDateStart, localDateEnd);
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
-    @GetMapping("/changeStatus")
+    @PostMapping("/status")
     public ResponseEntity<?> changeStatus(@RequestParam(name = "id") Integer id,
                                           @RequestParam(name = "status") String status) {
         log.info("changeStatus");
@@ -91,7 +108,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/list/countComplete")
+    @GetMapping("/countComplete")
     public ResponseEntity<Integer> countCompleteOrders(@RequestParam(name = "dateStart") String dateStart,
                                                        @RequestParam(name = "dateEnd") String dateEnd) {
         log.info("countCompleteOrders");
@@ -101,14 +118,7 @@ public class OrderController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @GetMapping("/list/{typeSort}")
-    public ResponseEntity<List<Order>> readAllSort(@PathVariable(name = "typeSort") String typeSort) {
-        log.info("readAllSort");
-        TypeSortOrder typeSortOrder = TypeSortOrder.valueOf(typeSort.toUpperCase(Locale.ROOT));
-        return new ResponseEntity<>(orderService.listSortOrder(typeSortOrder), HttpStatus.OK);
-    }
-
-    @GetMapping("/list/amountOfMoney")
+    @GetMapping("/amountOfMoney")
     public ResponseEntity<Integer> amountOfMoneyForPeriodForTime(@RequestParam(name = "dateStart") String dateStart,
                                                                  @RequestParam(name = "dateEnd") String dateEnd) {
         log.info("amountOfMoneyForPeriodForTime");

@@ -2,6 +2,8 @@ package com.senla.controller;
 
 import com.senla.api.service.IBookService;
 import com.senla.model.Book;
+import com.senla.util.utilits.Mapper;
+import com.senla.model.dto.BookDTO;
 import com.senla.service.TypeSortBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,40 +22,53 @@ import java.util.Locale;
 
 
 @RestController
-@RequestMapping(value = "/book")
+@RequestMapping(value = "/books")
 public class BookController {
     private static final Logger log = LoggerFactory.getLogger(BookController.class);
 
-    private IBookService bookService;
+    private final IBookService bookService;
+    private final Mapper mapper;
 
-    public BookController(IBookService bookService) {
+    public BookController(IBookService bookService, Mapper mapper) {
         this.bookService = bookService;
+        this.mapper = mapper;
     }
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<?> create(@RequestBody Book book) {
+    @PostMapping(value = "/")
+    public ResponseEntity<?> create(@RequestBody BookDTO bookDTO) {
         log.info("create");
-        bookService.save(book.getNameBook(),book.getNameAuthor(),book.getPrice(),book.getDate());
+        System.out.println(bookDTO);
+        Book book = mapper.convertBookDtoToBook(bookDTO);
+        System.out.println(book.toString());
+        bookService.save(book.getNameBook(), book.getNameAuthor(), book.getPrice(), book.getDate());
         return new ResponseEntity<>(HttpStatus.CREATED);
+
     }
 
-    @GetMapping("/list/{typeSort}")
-    public ResponseEntity<List<Book>> readAllSort(@PathVariable(name = "typeSort") String typeSort) {
-        log.info("readAllSort");
-        TypeSortBook typeSortBook = TypeSortBook.valueOf(typeSort.toUpperCase(Locale.ROOT));
-        return new ResponseEntity<>(bookService.listSortBooks(typeSortBook), HttpStatus.OK);
-    }
+    @GetMapping("/")
+    public ResponseEntity<List<BookDTO>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
+                                                 @RequestParam(name = "pageSize") int pageSize,
+                                                 @RequestParam(name = "typeSort", defaultValue = "not") String typeSort) {
+        if (typeSort.equals("not")) {
+            log.info("readAll");
+            List<Book> books = bookService.getAll(pageNumber, pageSize);
+            List<BookDTO> bookDTOList = Mapper.convertList(books, mapper::convertBookToBookDto);
+            return new ResponseEntity<>(bookDTOList, HttpStatus.OK);
+        } else {
+            log.info("readAllSort");
+            TypeSortBook typeSortBook = TypeSortBook.valueOf(typeSort.toUpperCase(Locale.ROOT));
+            List<Book> books = bookService.listSortBooks(pageNumber, pageSize, typeSortBook);
+            List<BookDTO> bookDTOList = Mapper.convertList(books, mapper::convertBookToBookDto);
+            return new ResponseEntity<>(bookDTOList, HttpStatus.OK);
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Book>> readAll(){
-        log.info("readAll");
-        return new ResponseEntity<>(bookService.getAll(), HttpStatus.OK);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> read(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<BookDTO> read(@PathVariable(name = "id") Integer id) {
         log.info("read");
         Book book = bookService.get(id);
-        return new ResponseEntity<>(book, HttpStatus.OK);
+        BookDTO bookDTO = mapper.convertBookToBookDto(book);
+        return new ResponseEntity<>(bookDTO, HttpStatus.OK);
     }
 }

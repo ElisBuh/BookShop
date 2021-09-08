@@ -13,7 +13,7 @@ public interface IBookService {
 
     Book get(int id);
 
-    List<Book> listSortBooks(TypeSortBook typeSortBook);
+    List<Book> listSortBooks(int pageNumber, int pageSize, TypeSortBook typeSortBook);
 
-    List<Book> getAll();
+    List<Book> getAll(int pageNumber, int pageSize);
 }

@@ -18,9 +18,9 @@ public interface IRequestService {
 
     Request get(Integer id);
 
-    List<Request> sortRequest(TypeSortRequest typeSortRequest);
+    List<Request> sortRequest(int pageNumber, int pageSize, TypeSortRequest typeSortRequest);
 
-    List<Request> getAll();
+    List<Request> getAll(int pageNumber, int pageSize);
 
     Request findRequest(Book book);
 }

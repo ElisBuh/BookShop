@@ -76,10 +76,10 @@ public class StorageService implements IStorageService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Storage> bookNotSellMoreNmonth() {
+    public List<Storage> bookNotSellMoreNmonth(int pageNumber, int pageSize) {
         log.info("Not sell list");
         try {
-            return storageDao.getAll().stream()
+            return storageDao.getAll(pageNumber, pageSize).stream()
                     .filter(storage -> LocalDate.now().minusMonths(Integer.parseInt(month)).isAfter(storage.getBook().getDateReceipt()))
                     .collect(Collectors.toList());
         } catch (DaoException e) {
@@ -90,10 +90,10 @@ public class StorageService implements IStorageService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Storage> getAll() {
+    public List<Storage> getAll(int pageNumber, int pageSize) {
         log.info("get_All_Storage");
         try {
-            return new ArrayList<>(storageDao.getAll());
+            return new ArrayList<>(storageDao.getAll(pageNumber, pageSize));
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;

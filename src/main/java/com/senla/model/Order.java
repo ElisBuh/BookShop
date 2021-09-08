@@ -1,10 +1,5 @@
 package com.senla.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.senla.util.utilits.LocalDateDeserializer;
-import com.senla.util.utilits.LocalDateSerializer;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,8 +41,6 @@ public class Order extends AEntity implements Serializable {
     private int cost;
 
     @Column(name = "date_complete")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateComplete;
 
     @Column(name = "status_order")

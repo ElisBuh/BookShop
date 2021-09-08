@@ -5,8 +5,8 @@ import com.senla.api.service.IOrderService;
 import com.senla.api.service.IRequestService;
 import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
-import com.senla.model.StatusBook;
 import com.senla.model.Order;
+import com.senla.model.StatusBook;
 import com.senla.model.StatusOrder;
 import com.senla.util.utilits.TimeBetweenUtil;
 import org.slf4j.Logger;
@@ -93,10 +93,10 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> listSortOrder(TypeSortOrder typeSortOrder) {
+    public List<Order> listSortOrder(int pageNumber, int pageSize, TypeSortOrder typeSortOrder) {
         log.info("ListSortOrder-OrderService");
         try {
-            return orderDao.getAll().stream()
+            return orderDao.getAll(pageNumber, pageSize).stream()
                     .filter(predicate(typeSortOrder))
                     .sorted(comparator(typeSortOrder))
                     .collect(Collectors.toList());
@@ -126,7 +126,7 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> listOrderCompleteForPeriodForTime(LocalDate localDateStart, LocalDate localDateEnd) {
+    public List<Order> listOrderCompleteForPeriodForTime(int pageNumber, int pageSize, LocalDate localDateStart, LocalDate localDateEnd) {
         log.info("{}-OrderService", Method.class.getName());
         try {
             return orderDao.getAll().stream()
@@ -195,10 +195,10 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> getAll() {
+    public List<Order> getAll(int pageNumber, int pageSize) {
         log.info("{}-OrderService", Method.class.getName());
         try {
-            return new ArrayList<>(orderDao.getAll());
+            return new ArrayList<>(orderDao.getAll(pageNumber, pageSize));
         } catch (DaoException e) {
             log.error(e.toString());
             throw e;

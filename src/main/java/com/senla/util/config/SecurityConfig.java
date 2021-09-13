@@ -1,6 +1,8 @@
 package com.senla.util.config;
 
+import com.senla.util.jwt.JwtAuthenticationEntryPoint;
 import com.senla.util.jwt.JwtFilter;
+import com.senla.util.jwt.JwtAccessDeniedHandler;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,10 +17,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtFilter jwtFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler accessDeniedHandler;
 
 
-    public SecurityConfig(JwtFilter jwtFilter) {
+    public SecurityConfig(JwtFilter jwtFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler accessDeniedHandler) {
         this.jwtFilter = jwtFilter;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Override
@@ -33,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/orders/*").hasAnyRole("USER" , "ADMIN" )
                 .antMatchers("/register", "/auth").not().fullyAuthenticated()
                 .antMatchers("/books/*").permitAll()
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -1,8 +1,9 @@
 package com.senla.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.senla.model.StatusBook;
+import com.senla.model.StatusOrder;
 import com.senla.util.utilits.LocalDateDeserializer;
 import com.senla.util.utilits.LocalDateSerializer;
 import lombok.Data;
@@ -12,20 +13,19 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class BookDTO {
+public class OrderDto {
+
     private Integer id;
-    private String nameBook;
-    private String nameAuthor;
+    private String nameClient;
+
+    @JsonProperty("book")
+    private BookDto bookDTO;
+    private Integer idBook;
+    private int cost;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate date;
+    private LocalDate dateComplete;
 
-    private int price;
-    private StatusBook statusBook;
-
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate dateReceipt;
-
+    private StatusOrder statusOrder;
 }

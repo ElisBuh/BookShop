@@ -3,7 +3,7 @@ package com.senla.controller;
 import com.senla.api.service.IBookService;
 import com.senla.api.service.IRequestService;
 import com.senla.model.Request;
-import com.senla.model.dto.RequestDTO;
+import com.senla.model.dto.RequestDto;
 import com.senla.service.TypeSortRequest;
 import com.senla.util.utilits.Mapper;
 import org.slf4j.Logger;
@@ -38,9 +38,9 @@ public class RequestController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<?> create(@RequestBody RequestDTO requestDTO) {
+    public ResponseEntity<?> create(@RequestBody RequestDto requestDto) {
         log.info("create");
-        requestService.save(bookService.get(requestDTO.getId()));
+        requestService.save(bookService.get(requestDto.getId()));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -52,20 +52,20 @@ public class RequestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<RequestDTO>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
+    public ResponseEntity<List<RequestDto>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
                                                     @RequestParam(name = "pageSize") int pageSize,
                                                     @RequestParam(name = "typeSort", defaultValue = "not") String typeSort) {
         if (typeSort.equals("not")) {
             log.info("readAll");
             List<Request> requests = requestService.getAll(pageNumber, pageSize);
-            List<RequestDTO> requestDTOList = Mapper.convertList(requests, mapper::convertRequestToRequestDto);
-            return new ResponseEntity<>(requestDTOList, HttpStatus.OK);
+            List<RequestDto> requestDtoList = Mapper.convertList(requests, mapper::convertRequestToRequestDto);
+            return new ResponseEntity<>(requestDtoList, HttpStatus.OK);
         } else {
             log.info("readAllSort");
             TypeSortRequest typeSortRequest = TypeSortRequest.valueOf(typeSort.toUpperCase(Locale.ROOT));
             List<Request> requests = requestService.sortRequest(pageNumber, pageSize, typeSortRequest);
-            List<RequestDTO> requestDTOList = Mapper.convertList(requests, mapper::convertRequestToRequestDto);
-            return new ResponseEntity<>(requestDTOList, HttpStatus.OK);
+            List<RequestDto> requestDtoList = Mapper.convertList(requests, mapper::convertRequestToRequestDto);
+            return new ResponseEntity<>(requestDtoList, HttpStatus.OK);
 
         }
 

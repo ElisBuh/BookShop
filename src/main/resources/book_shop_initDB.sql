@@ -2,16 +2,22 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS requests;
 DROP TABLE IF EXISTS storage;
 DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
 
 DROP SEQUENCE IF EXISTS book_id;
 DROP SEQUENCE IF EXISTS order_id;
 DROP SEQUENCE IF EXISTS request_id;
 DROP SEQUENCE IF EXISTS storage_id;
+DROP SEQUENCE IF EXISTS role_id;
+DROP SEQUENCE IF EXISTS user_id;
 
 CREATE SEQUENCE book_id START WITH 100000;
 CREATE SEQUENCE order_id START WITH 100000;
 CREATE SEQUENCE request_id START WITH 100000;
 CREATE SEQUENCE storage_id START WITH 100000;
+CREATE SEQUENCE role_id START WITH 100000;
+CREATE SEQUENCE user_id START WITH 100000;
 
 CREATE TABLE books
 (
@@ -55,3 +61,21 @@ CREATE TABLE storage
     PRIMARY KEY (id),
     FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
+
+CREATE TABLE roles
+(
+    id integer DEFAULT nextval('role_id'),
+    name varchar(20) NOT NULL ,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE users
+(
+    id integer DEFAULT nextval('user_id'),
+    login text NOT NULL UNIQUE ,
+    passwords text NOT NULL ,
+    role_id integer default '100000',
+    PRIMARY KEY (id),
+    Foreign Key (role_id) REFERENCES roles(id)
+
+)

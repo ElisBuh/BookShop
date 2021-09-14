@@ -5,7 +5,7 @@ import com.senla.api.service.IOrderService;
 import com.senla.model.Book;
 import com.senla.model.Order;
 import com.senla.model.StatusOrder;
-import com.senla.model.dto.OrderDTO;
+import com.senla.model.dto.OrderDto;
 import com.senla.service.TypeSortOrder;
 import com.senla.util.utilits.DateTimeUtil;
 import com.senla.util.utilits.Mapper;
@@ -42,10 +42,10 @@ public class OrderController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<?> create(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<?> create(@RequestBody OrderDto orderDto) {
         log.info("create");
-        Book book = bookService.get(orderDTO.getIdBook());
-        orderService.creat(orderDTO.getNameClient(), book);
+        Book book = bookService.get(orderDto.getIdBook());
+        orderService.creat(orderDto.getNameClient(), book);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -57,15 +57,15 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> read(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<OrderDto> read(@PathVariable(name = "id") Integer id) {
         log.info("read");
         Order order = orderService.getOrder(id);
-        OrderDTO orderDTO = mapper.convertOrderToOrderDto(order);
-        return new ResponseEntity<>(orderDTO, HttpStatus.OK);
+        OrderDto orderDto = mapper.convertOrderToOrderDto(order);
+        return new ResponseEntity<>(orderDto, HttpStatus.OK);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<OrderDTO>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
+    public ResponseEntity<List<OrderDto>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
                                                   @RequestParam(name = "pageSize") int pageSize,
                                                   @RequestParam(name = "typeSort", defaultValue = "not") String typeSort,
                                                   @RequestParam(name = "dateStart", required = false) String dateStart,
@@ -73,21 +73,21 @@ public class OrderController {
         if (typeSort.equals("not")) {
             log.info("readAll");
             List<Order> orders = orderService.getAll(pageNumber, pageSize);
-            List<OrderDTO> orderDTOList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
-            return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+            List<OrderDto> orderDtoList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
+            return new ResponseEntity<>(orderDtoList, HttpStatus.OK);
         } else if (typeSort.equals("orderComplete")) {
             log.info("listOrderCompleteForPeriodForTime");
             LocalDate localDateStart = DateTimeUtil.stringToLocalDate(dateStart);
             LocalDate localDateEnd = DateTimeUtil.stringToLocalDate(dateEnd);
             List<Order> orders = orderService.listOrderCompleteForPeriodForTime(pageNumber, pageSize, localDateStart, localDateEnd);
-            List<OrderDTO> orderDTOList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
-            return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+            List<OrderDto> orderDtoList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
+            return new ResponseEntity<>(orderDtoList, HttpStatus.OK);
         } else {
             log.info("readAllSort");
             TypeSortOrder typeSortOrder = TypeSortOrder.valueOf(typeSort.toUpperCase(Locale.ROOT));
             List<Order> orders = orderService.listSortOrder(pageNumber, pageSize, typeSortOrder);
-            List<OrderDTO> orderDTOList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
-            return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+            List<OrderDto> orderDtoList = Mapper.convertList(orders, mapper::convertOrderToOrderDto);
+            return new ResponseEntity<>(orderDtoList, HttpStatus.OK);
 
         }
     }

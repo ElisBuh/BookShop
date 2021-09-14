@@ -2,11 +2,15 @@ DELETE FROM orders;
 DELETE FROM requests;
 DELETE FROM storage;
 DELETE FROM books;
+DELETE FROM roles;
+DELETE FROM books;
 
 ALTER SEQUENCE book_id RESTART WITH 100000;
 ALTER SEQUENCE order_id RESTART WITH 100000;
 ALTER SEQUENCE request_id RESTART WITH 100000;
 ALTER SEQUENCE storage_id RESTART WITH 100000;
+ALTER SEQUENCE role_id RESTART WITH 100000;
+ALTER SEQUENCE user_id RESTART WITH 100000;
 
 INSERT INTO books (name_book, name_author, date, price)
 VALUES ('Война и Мир', 'Лев Толстой', '2020-01-30', 25),
@@ -57,3 +61,7 @@ WHERE book_id = 100002;
 UPDATE orders
 SET status_order = 'CANCEL'
 WHERE book_id = 100005;
+
+INSERT INTO roles (name)
+VALUES ('ROLE_ADMIN'),
+       ('ROLE_USER');

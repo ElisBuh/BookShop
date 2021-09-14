@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RequestDTO {
+public class RequestDto {
 
     private Integer id;
 
     @JsonProperty("book")
-    private BookDTO bookDTO;
+    private BookDto bookDTO;
 
     private Integer countRequest;
 }

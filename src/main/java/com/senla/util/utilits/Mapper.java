@@ -4,10 +4,10 @@ import com.senla.model.Book;
 import com.senla.model.Order;
 import com.senla.model.Request;
 import com.senla.model.Storage;
-import com.senla.model.dto.BookDTO;
-import com.senla.model.dto.OrderDTO;
-import com.senla.model.dto.RequestDTO;
-import com.senla.model.dto.StorageDTO;
+import com.senla.model.dto.BookDto;
+import com.senla.model.dto.OrderDto;
+import com.senla.model.dto.RequestDto;
+import com.senla.model.dto.StorageDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -26,32 +26,32 @@ public class Mapper {
     }
 
 
-    public BookDTO convertBookToBookDto(Book book) {
-        return modelMapper.map(book, BookDTO.class);
+    public BookDto convertBookToBookDto(Book book) {
+        return modelMapper.map(book, BookDto.class);
     }
 
-    public Book convertBookDtoToBook(BookDTO bookDTO) {
+    public Book convertBookDtoToBook(BookDto bookDTO) {
         return modelMapper.map(bookDTO, Book.class);
     }
 
-    public OrderDTO convertOrderToOrderDto(Order order) {
-        OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
+    public OrderDto convertOrderToOrderDto(Order order) {
+        OrderDto orderDTO = modelMapper.map(order, OrderDto.class);
         orderDTO.setBookDTO(convertBookToBookDto(order.getBook()));
         return orderDTO;
     }
 
-    public Order convertOrderDtoToOrder(OrderDTO orderDTO) {
+    public Order convertOrderDtoToOrder(OrderDto orderDTO) {
         return modelMapper.map(orderDTO, Order.class);
     }
 
-    public RequestDTO convertRequestToRequestDto(Request request) {
-        RequestDTO requestDTO = modelMapper.map(request, RequestDTO.class);
+    public RequestDto convertRequestToRequestDto(Request request) {
+        RequestDto requestDTO = modelMapper.map(request, RequestDto.class);
         requestDTO.setBookDTO(convertBookToBookDto(request.getBook()));
         return requestDTO;
     }
 
-    public StorageDTO convertStorageToStorageDto(Storage storage) {
-        StorageDTO storageDTO = modelMapper.map(storage, StorageDTO.class);
+    public StorageDto convertStorageToStorageDto(Storage storage) {
+        StorageDto storageDTO = modelMapper.map(storage, StorageDto.class);
         storageDTO.setBookDTO(convertBookToBookDto(storage.getBook()));
         return storageDTO;
     }

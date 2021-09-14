@@ -3,7 +3,7 @@ package com.senla.controller;
 import com.senla.api.service.IBookService;
 import com.senla.api.service.IStorageService;
 import com.senla.model.Storage;
-import com.senla.model.dto.StorageDTO;
+import com.senla.model.dto.StorageDto;
 import com.senla.util.utilits.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +36,9 @@ public class StorageController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<?> create(@RequestBody StorageDTO storageDTO) {
+    public ResponseEntity<?> create(@RequestBody StorageDto storageDto) {
         log.info("create");
-        storageService.add(bookService.get(storageDTO.getIdBook()), storageDTO.getDateReceipt());
+        storageService.add(bookService.get(storageDto.getIdBook()), storageDto.getDateReceipt());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -50,19 +50,19 @@ public class StorageController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<StorageDTO>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
+    public ResponseEntity<List<StorageDto>> readAll(@RequestParam(name = "pageNumber") int pageNumber,
                                                     @RequestParam(name = "pageSize") int pageSize,
                                                     @RequestParam(name = "typeSort", defaultValue = "not") String typeSort) {
         if (typeSort.equals("bookNotSell")) {
             log.info("bookNotSell");
             List<Storage> storages = storageService.bookNotSellMoreNmonth(pageNumber, pageSize);
-            List<StorageDTO> storageDTOList = Mapper.convertList(storages, mapper::convertStorageToStorageDto);
-            return new ResponseEntity<>(storageDTOList, HttpStatus.OK);
+            List<StorageDto> storageDtoList = Mapper.convertList(storages, mapper::convertStorageToStorageDto);
+            return new ResponseEntity<>(storageDtoList, HttpStatus.OK);
         } else {
             log.info("readAll");
             List<Storage> storages = storageService.getAll(pageNumber, pageSize);
-            List<StorageDTO> storageDTOList = Mapper.convertList(storages, mapper::convertStorageToStorageDto);
-            return new ResponseEntity<>(storageDTOList, HttpStatus.OK);
+            List<StorageDto> storageDtoList = Mapper.convertList(storages, mapper::convertStorageToStorageDto);
+            return new ResponseEntity<>(storageDtoList, HttpStatus.OK);
         }
     }
 

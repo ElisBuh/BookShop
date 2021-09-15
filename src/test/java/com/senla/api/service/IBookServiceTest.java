@@ -15,14 +15,17 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import util.Config;
+import util.HsqldbDataConfig;
 
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration(classes = HsqldbDataConfig.class)
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-//@Sql(scripts = "classpath:book_shop_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+//@Sql(scripts = "classpath:book_shop_populateDB_hsqldb.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = "classpath:book_shop_initDB_hsqldb.sql")
+@Sql(scripts = "classpath:book_shop_populateDB_hsqldb.sql")
 public class IBookServiceTest {
 
     @Autowired

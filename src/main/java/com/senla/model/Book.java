@@ -67,6 +67,25 @@ public class Book extends AEntity implements Serializable {
         this.statusBook = statusBook;
     }
 
+    public Book(Integer id, String nameBook, String nameAuthor, LocalDate date, int price, StatusBook statusBook, LocalDate dateReceipt) {
+        this.id = id;
+        this.nameBook = nameBook;
+        this.nameAuthor = nameAuthor;
+        this.date = date;
+        this.price = price;
+        this.statusBook = statusBook;
+        this.dateReceipt = dateReceipt;
+    }
+    public Book(Book book) {
+        this.id = book.getId();
+        this.nameBook = book.getNameBook();
+        this.nameAuthor = book.getNameAuthor();
+        this.date = book.getDate();
+        this.price = book.getPrice();
+        this.statusBook = book.getStatusBook();
+        this.dateReceipt = book.getDateReceipt();
+    }
+
     public String getNameBook() {
         return nameBook;
     }

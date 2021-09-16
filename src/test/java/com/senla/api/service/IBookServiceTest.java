@@ -1,61 +1,82 @@
 package com.senla.api.service;
 
+import DataTest.BookTestData;
+import com.senla.exceptions.DaoException;
 import com.senla.model.Book;
-import com.senla.model.StatusBook;
-import com.senla.util.config.DataConfig;
-import com.senla.util.init.SpringMvcDispatcherSerlvetIntitializer;
-import org.junit.Assert;
-import org.junit.Before;
+import com.senla.service.TypeSortBook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import util.Config;
 import util.HsqldbDataConfig;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 @ContextConfiguration(classes = HsqldbDataConfig.class)
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-//@Sql(scripts = "classpath:book_shop_populateDB_hsqldb.sql", config = @SqlConfig(encoding = "UTF-8"))
 @Sql(scripts = "classpath:book_shop_initDB_hsqldb.sql")
 @Sql(scripts = "classpath:book_shop_populateDB_hsqldb.sql")
 public class IBookServiceTest {
 
     @Autowired
-    private IBookService service;
+    private IBookService bookService;
 
-    private static final Book book = new Book(100000,"Война и Мир","Лев Толстой", LocalDate.of(2020,1,30), 25, StatusBook.ABSENT);
-
-//    public IBookServiceTest(IBookService service) {
-//        this.service = service;
-//    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void save() {
+        bookService.save("newBook", "newAuthor", 10, LocalDate.of(2000, 1, 1));
+        Book book = bookService.get(100009);
+        assertEquals(book, BookTestData.NEW_BOOK);
     }
 
     @Test
     public void get() {
-        Book book2 = service.get(100000);
-        Assert.assertEquals(book, book2);
+        Book book = bookService.get(100000);
+        assertEquals(book, BookTestData.BOOK_1);
+    }
+
+    @Test
+    public void getNotBook() {
+        assertThrows(DaoException.class, () -> bookService.get(1));
     }
 
     @Test
     public void listSortBooks() {
+        assertEquals(
+                bookService.listSortBooks(1, 10, TypeSortBook.NAME_BOOK),
+                BookTestData.BOOK_LIST.stream()
+                        .sorted(Comparator.comparing(Book::getNameBook))
+                        .collect(Collectors.toList()));
+        assertEquals(
+                bookService.listSortBooks(1, 10, TypeSortBook.DATE),
+                BookTestData.BOOK_LIST.stream()
+                        .sorted(Comparator.comparing(Book::getDate))
+                        .collect(Collectors.toList()));
+        assertEquals(
+                bookService.listSortBooks(1, 10, TypeSortBook.PRICE),
+                BookTestData.BOOK_LIST.stream()
+                        .sorted(Comparator.comparing(Book::getPrice))
+                        .collect(Collectors.toList()));
+        assertEquals(
+                bookService.listSortBooks(1, 10, TypeSortBook.IN_STOCK),
+                BookTestData.BOOK_LIST.stream()
+                        .sorted(Comparator.comparing(Book::getStatusBook))
+                        .collect(Collectors.toList()));
     }
 
     @Test
     public void getAll() {
+        List<Book> books = bookService.getAll(1, 10);
+        assertEquals(books, BookTestData.BOOK_LIST);
     }
 }

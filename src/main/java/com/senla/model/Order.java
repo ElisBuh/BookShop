@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
@@ -74,6 +75,23 @@ public class Order extends AEntity implements Serializable {
         this.statusOrder = statusOrder;
     }
 
+    public Order(Integer id, String nameClient, Book book, int cost, StatusOrder statusOrder) {
+        this.id = id;
+        this.nameClient = nameClient;
+        this.book = book;
+        this.cost = cost;
+        this.statusOrder = statusOrder;
+    }
+
+    public Order(Integer id, String nameClient, Book book, int cost, LocalDate dateComplete, StatusOrder statusOrder) {
+        this.id = id;
+        this.nameClient = nameClient;
+        this.book = book;
+        this.cost = cost;
+        this.dateComplete = dateComplete;
+        this.statusOrder = statusOrder;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -124,5 +142,18 @@ public class Order extends AEntity implements Serializable {
                     ", Дата выполнения: " + dateComplete +
                     ", Статус заказа: " + statusOrder;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return cost == order.cost && Objects.equals(id, order.id) && Objects.equals(nameClient, order.nameClient) && Objects.equals(book, order.book) && Objects.equals(dateComplete, order.dateComplete) && statusOrder == order.statusOrder;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameClient, book, cost, dateComplete, statusOrder);
     }
 }

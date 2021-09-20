@@ -58,7 +58,7 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
 //                throw new DaoException("Такого id нет");
 //            } else return entity;
         }catch (NoResultException e){
-            throw new DaoException("Такого id нет");
+            throw new DaoException("Такого id нет", e);
         }
     }
 

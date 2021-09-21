@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "requests")
@@ -78,5 +79,18 @@ public class Request extends AEntity implements Serializable {
                 "id:" + id +
                 ", Книга " + book +
                 ", Количество запросов: " + countRequest;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Request request = (Request) o;
+        return Objects.equals(id, request.id) && Objects.equals(book, request.book) && Objects.equals(countRequest, request.countRequest);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, book, countRequest);
     }
 }

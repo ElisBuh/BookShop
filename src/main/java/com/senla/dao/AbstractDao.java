@@ -3,7 +3,9 @@ package com.senla.dao;
 import com.senla.api.dao.GenericDao;
 import com.senla.exceptions.DaoException;
 import com.senla.model.AEntity;
+import javassist.NotFoundException;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,16 +45,21 @@ public abstract class AbstractDao<T extends AEntity> implements GenericDao<T> {
     @Override
     public T get(Integer id) {
         log.info("Get_{}_By_ID: {}", aClass(), id);
+        try {
+
             Session session = sessionFactory.openSession();
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = cb.createQuery(aClass());
             Root<T> root = criteria.from(aClass());
             criteria.select(root).where(cb.equal(root.get("id"),id));
-            T entity =session.createQuery(criteria).getSingleResult();
-
-            if (entity == null) {
-                throw new DaoException("Такого id нет");
-            } else return entity;
+            return session.createQuery(criteria).getSingleResult();
+//
+//            if (entity == null) {
+//                throw new DaoException("Такого id нет");
+//            } else return entity;
+        }catch (NoResultException e){
+            throw new DaoException("Такого id нет", e);
+        }
     }
 
     @Override

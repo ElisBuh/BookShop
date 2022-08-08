@@ -20,7 +20,7 @@
         <slf4j.version>1.7.32</slf4j.version>
 
         <!-- PostgreSql Driver -->
-        <postgresql.version>42.2.23</postgresql.version>
+        <postgresql.version>42.4.1</postgresql.version>
 
         <!-- reflections.org -->
         <reflections.version>0.9.12</reflections.version>

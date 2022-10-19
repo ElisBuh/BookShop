@@ -27,7 +27,7 @@
         <!-- Hibernate -->
         <hibernate.version>5.5.5.Final</hibernate.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
-        <c3p0.version>0.9.5.2</c3p0.version>
+        <c3p0.version>0.9.5.4</c3p0.version>
         <javax-el.version>3.0.1-b12</javax-el.version>
         <!-- Spring -->
         <spring-contex>5.3.9</spring-contex>
